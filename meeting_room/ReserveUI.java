@@ -10,7 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-public class Reserve extends JFrame implements ActionListener{
+public class ReserveUI extends JFrame implements ActionListener{
 	
 	JLabel reserve_lb = new JLabel("미팅룸 예약하기");
 	JLabel room2_lb = new JLabel("2인");
@@ -42,7 +42,7 @@ public class Reserve extends JFrame implements ActionListener{
 
 	
 	
-	public Reserve() {
+	public ReserveUI() {
 		setTitle("미팅룸 예약하기");
 		setSize(800, 750);
 		
@@ -182,7 +182,7 @@ public class Reserve extends JFrame implements ActionListener{
 
 
 	public static void main(String[] args) {
-		Reserve rsv = new Reserve();
+		ReserveUI rsv = new ReserveUI();
 
 	}
 

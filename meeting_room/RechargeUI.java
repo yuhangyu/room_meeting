@@ -13,7 +13,7 @@ import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-public class Recharge extends JFrame implements ActionListener{
+public class RechargeUI extends JFrame implements ActionListener{
 	ImageIcon icon = new ImageIcon("src/MeetingRoomProject/img.png"); // 로고에 사용할 이미지 아이콘
 	JLabel logo_lb = new JLabel(icon); // 로고 레이블
 	
@@ -30,7 +30,7 @@ public class Recharge extends JFrame implements ActionListener{
 	JButton recharge_btn = new JButton("충전하기");
 	JButton cancel_btn = new JButton("취소");
 	
-	public Recharge(){
+	public RechargeUI(){
 		setTitle("충전");
 		setSize(800, 600);
 		
@@ -66,14 +66,7 @@ public class Recharge extends JFrame implements ActionListener{
         
         recharge_btn.setBounds(250 , 400, 120, 70);
         cancel_btn.setBounds(400, 400, 120, 70);
-        
-        charge_1000_btn.addActionListener(this);
-        charge_5000_btn.addActionListener(this);
-        charge_10000_btn.addActionListener(this);
-        charge_30000_btn.addActionListener(this);
-        charge_50000_btn.addActionListener(this);
-        recharge_btn.addActionListener(this);
-        cancel_btn.addActionListener(this);
+   
 		
         c.add(logo_lb);
         
@@ -97,6 +90,17 @@ public class Recharge extends JFrame implements ActionListener{
 						
 		setVisible(true);
 		setResizable(false);
+		
+		
+		// 1000 ~ 50000 버튼의 이벤트 구현 - 현재 충전금액에서 누른 버튼의 금액만큼 더하기 
+ 		Recharge rc = new Recharge(recharge_value_tf);
+		charge_1000_btn.addActionListener(rc);
+		charge_5000_btn.addActionListener(rc);
+        charge_10000_btn.addActionListener(rc);
+        charge_30000_btn.addActionListener(rc);
+        charge_50000_btn.addActionListener(rc);	
+        // 취소 
+        cancel_btn.addActionListener(rc);
 	}
 	
 	@Override
@@ -104,7 +108,7 @@ public class Recharge extends JFrame implements ActionListener{
 	}
 
 	public static void main(String[] args) {
-		Recharge rcg = new Recharge();
+		RechargeUI rcg = new RechargeUI();
 
 	}
 

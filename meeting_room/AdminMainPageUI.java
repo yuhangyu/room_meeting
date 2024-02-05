@@ -1,6 +1,6 @@
 package meeting_room;
 
-public class AdminMainPage {
+public class AdminMainPageUI {
 
 	public static void main(String[] args) {
 

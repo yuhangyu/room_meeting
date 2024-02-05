@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class Login extends JFrame implements ActionListener{
+public class LoginUI extends JFrame implements ActionListener{
 	
 	//요소생성
 	JLabel id_lb = new JLabel("아이디");	
@@ -25,7 +25,7 @@ public class Login extends JFrame implements ActionListener{
 	JCheckBox check_admin = new JCheckBox("관리자 로그인");
 	
 	
-	public Login() {
+	public LoginUI() {
 		setTitle("로그인");
 		setSize(300, 230);
 
@@ -72,7 +72,7 @@ public class Login extends JFrame implements ActionListener{
 	}
 
 	public static void main(String[] args) {
-		Login login = new Login();
+		LoginUI login = new LoginUI();
 
 	}
 

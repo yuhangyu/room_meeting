@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-public class MyInfo extends JFrame implements ActionListener{
+public class MyInfoUI extends JFrame implements ActionListener{
 	JLabel id_lb = new JLabel("아이디");
 	JLabel pw_lb = new JLabel("비밀번호");
 	JLabel name_lb = new JLabel("이름");
@@ -25,7 +25,7 @@ public class MyInfo extends JFrame implements ActionListener{
 	JButton modify_info_btn = new JButton("정보 수정");
 	JButton ok_btn = new JButton("확인");
 	
-	public MyInfo() {
+	public MyInfoUI() {
 		setTitle("내 정보");
 		setSize(400, 500);
 		
@@ -87,7 +87,7 @@ public class MyInfo extends JFrame implements ActionListener{
 	}
 
 	public static void main(String[] args) {
-		MyInfo myinfo = new MyInfo();
+		MyInfoUI myinfo = new MyInfoUI();
 	}
 
 	

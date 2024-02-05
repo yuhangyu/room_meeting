@@ -10,7 +10,7 @@ import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SignUp extends JFrame implements ActionListener{
+public class SignUpUI extends JFrame implements ActionListener{
 	
 	//요소 생성
 	JLabel id_lb = new JLabel("아이디");
@@ -29,7 +29,7 @@ public class SignUp extends JFrame implements ActionListener{
 	JButton signup_btn = new JButton("회원가입");
 	JButton cancel_btn = new JButton("취소");
 	
-	public SignUp() {
+	public SignUpUI() {
 		setTitle("회원가입");
 		setSize(320, 400);
 		
@@ -94,7 +94,7 @@ public class SignUp extends JFrame implements ActionListener{
 	
 
 	public static void main(String[] args) {
-		SignUp signup = new SignUp();
+		SignUpUI signup = new SignUpUI();
 
 	}
 

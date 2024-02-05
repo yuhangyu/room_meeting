@@ -10,7 +10,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 
-public class MainPage extends JFrame implements ActionListener{
+public class MainPageUI extends JFrame implements ActionListener{
+	private MainPage mainPage;
+	
 	//요소 생성
 	JLabel memberinfo_lb = new JLabel("회원정보");	
 	JLabel name_lb = new JLabel("이름");
@@ -26,7 +28,7 @@ public class MainPage extends JFrame implements ActionListener{
 	JButton myinfo_btn = new JButton("내 정보");
 
 	
-	public MainPage() {
+	public MainPageUI() {
 		setTitle("메인 페이지");
 		setSize(600, 350);
 		
@@ -59,13 +61,11 @@ public class MainPage extends JFrame implements ActionListener{
 		myinfo_btn.setBounds(380, 170, 100, 40);
 		
 				
-		//버튼 이벤트 추가
-		reserve_btn.addActionListener(this);
-		deposit_btn.addActionListener(this);
+	
 		purchasefood_btn.addActionListener(this);
 		rentgame_btn.addActionListener(this);
-		logout_btn.addActionListener(this);
-		myinfo_btn.addActionListener(this);
+	
+		
 				
 		//요소 추가
 		c.add(memberinfo_lb);
@@ -78,7 +78,16 @@ public class MainPage extends JFrame implements ActionListener{
 		c.add(rentgame_btn);
 		c.add(logout_btn);
 		c.add(myinfo_btn);
-				
+		
+		mainPage = new MainPage(this);
+		
+		//버튼 이벤트 추가
+		reserve_btn.addActionListener(mainPage);
+		deposit_btn.addActionListener(mainPage);
+		logout_btn.addActionListener(mainPage);
+		myinfo_btn.addActionListener(mainPage);
+		
+		
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);
 		//프로그램 종료할 때 프로세스까지 함께 종료
@@ -94,7 +103,7 @@ public class MainPage extends JFrame implements ActionListener{
 	}
 
 	public static void main(String[] args) {
-		MainPage mainpage = new MainPage();
+		MainPageUI mainpage = new MainPageUI();
 
 	}
 
