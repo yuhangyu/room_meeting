@@ -138,6 +138,7 @@ public class ReserveUI extends JFrame implements ActionListener{
 		//room4_2_btn.setEnabled(false); // 사용중인 룸 예시로 디폴트 설정 
 		//room4_2_btn.setBackground(new Color(255, 180, 180)); // 사용중인 방 색 변경 
 		
+		
 		cancel_btn.setFont(font2);
 		
 		c.add(reserve_lb);
