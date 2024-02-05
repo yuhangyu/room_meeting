@@ -6,7 +6,11 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path=""/>
+<<<<<<< HEAD
 	<classpathentry kind="lib" path="D:/Java/eclipse-workspace/mysql-connector-java-8.0.30.jar">
+=======
+	<classpathentry kind="lib" path="C:/Java/eclipse-workspace/mysql-connector-java-8.0.30.jar">
+>>>>>>> branch 'master' of https://github.com/yuhangyu/room_meeting.git
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

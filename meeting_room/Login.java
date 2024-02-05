@@ -89,6 +89,7 @@ public class Login extends JFrame implements ActionListener, ItemListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+<<<<<<< HEAD
 		Object obj = e.getSource();
 		
 		if(obj == signup_btn) {//회원가입 버튼 동작
@@ -135,6 +136,8 @@ public class Login extends JFrame implements ActionListener, ItemListener{
         	check_action = 0;
         	System.out.println("체크박스가 선택 해제되었습니다."+check_action);
         }
+=======
+>>>>>>> branch 'master' of https://github.com/yuhangyu/room_meeting.git
 		
 	}
 

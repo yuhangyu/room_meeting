@@ -55,8 +55,8 @@ public class MainPage extends JFrame implements ActionListener{
 		deposit_btn.setBounds(180, 10, 150, 100);
 		purchasefood_btn.setBounds(10, 120, 150, 100);
 		rentgame_btn.setBounds(180, 120, 150, 100);
-		logout_btn.setBounds(380, 120, 100, 40);
-		myinfo_btn.setBounds(380, 170, 100, 40);
+		myinfo_btn.setBounds(380, 120, 100, 40);
+		logout_btn.setBounds(380, 170, 100, 40);
 		
 				
 		//버튼 이벤트 추가
