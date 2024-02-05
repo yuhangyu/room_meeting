@@ -31,11 +31,8 @@ public class Login extends JFrame implements ActionListener, ItemListener{
 	JCheckBox check_admin = new JCheckBox("관리자 로그인");
 	
 	int check_action = 1;
-	
 	private Statement stmt;
-
 	private DBConnection pool;
-
 
 	public Login() {
 		setTitle("로그인");
