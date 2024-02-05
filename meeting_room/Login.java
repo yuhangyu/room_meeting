@@ -96,46 +96,43 @@ public class Login extends JFrame implements ActionListener, ItemListener{
 		}else if(obj == login_btn) {
 			if (check_action == 1) {//관리자 로그인 시
 				try {
-		            ResultSet rs = stmt.executeQuery("SELECT * FROM admin WHERE admin_id='" + id_tf.getText() + "' AND admin_pw='" + pw_tf.getText() + "'");
-		            if (rs.next()) {
-		                JOptionPane.showMessageDialog(this, "로그인 성공!");
-		                AdminMainPage admin = new AdminMainPage();
-		                dispose();
-		            } else {
-		                JOptionPane.showMessageDialog(this, "로그인 실패. 다시 시도하세요.");
-		            }
-		        } catch (Exception ex) {
-		            ex.printStackTrace();
-		        }
+					ResultSet rs = stmt.executeQuery("SELECT * FROM admin WHERE admin_id='" + id_tf.getText() + "' AND admin_pw='" + pw_tf.getText() + "'");
+					if (rs.next()) {
+						JOptionPane.showMessageDialog(this, "로그인 성공!");
+						AdminMainPage admin = new AdminMainPage();
+						dispose();
+					} else {
+						JOptionPane.showMessageDialog(this, "로그인 실패. 다시 시도하세요.");
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
 			} else if (check_action == 0) {//비관리자 로그인 시
 				try {
-		            ResultSet rs = stmt.executeQuery("SELECT * FROM member WHERE member_id='" + id_tf.getText() + "' AND member_pw='" + pw_tf.getText() + "'");
-		            if (rs.next()) {
-		                JOptionPane.showMessageDialog(this, "로그인 성공!");
-		                MainPage mainpage = new MainPage();
-		                dispose();
-		            } else {
-		                JOptionPane.showMessageDialog(this, "로그인 실패. 다시 시도하세요.");
-		            }
-		        } catch (Exception ex) {
-		            ex.printStackTrace();
-		        }
+					ResultSet rs = stmt.executeQuery("SELECT * FROM member WHERE member_id='" + id_tf.getText() + "' AND member_pw='" + pw_tf.getText() + "'");
+					if (rs.next()) {
+						JOptionPane.showMessageDialog(this, "로그인 성공!");
+						MainPage mainpage = new MainPage();
+						dispose();
+					} else {
+						JOptionPane.showMessageDialog(this, "로그인 실패. 다시 시도하세요.");
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
 			}
 		}
 	}
 	
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		 if (e.getStateChange() == ItemEvent.SELECTED) {
-            // 체크박스가 선택되면 실행되는 코드
-			 check_action = 1;
-            System.out.println("체크박스가 선택되었습니다."+check_action);
-        } else {
-            // 체크박스가 선택 해제되면 실행되는 코드
-        	check_action = 0;
-        	System.out.println("체크박스가 선택 해제되었습니다."+check_action);
-        }
-		
+		if (e.getStateChange() == ItemEvent.SELECTED) {
+			// 체크박스가 선택되면 실행되는 코드
+			check_action = 1;
+		} else {
+			// 체크박스가 선택 해제되면 실행되는 코드
+			check_action = 0;
+		}
 	}
 
 	public static void main(String[] args) {
