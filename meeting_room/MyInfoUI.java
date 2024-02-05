@@ -40,6 +40,18 @@ public class MyInfoUI extends JFrame implements ActionListener {
 		setTitle("내 정보");
 		setSize(400, 500);
 		
+		mgr = new MyInfoMgr();
+		MyInfoBean bean = mgr.select("user");
+
+		id = bean.getID();
+		pw = bean.getPW();
+		name = bean.getName();
+		phone = bean.getPhone();
+		
+		id_tf.setText(id);
+		name_tf.setText(name);
+		phone_tf.setText(phone);
+		
 		//컨텐츠 패널의 객체 메소드 호출
 		Container c = getContentPane();
 		c.setLayout(null); //컨텐츠 패널 초기
@@ -57,7 +69,6 @@ public class MyInfoUI extends JFrame implements ActionListener {
 		my_usage_btn.setBounds(85, 250, 200, 70);
 		modify_info_btn.setBounds(85, 340, 90, 70);
 		ok_btn.setBounds(195, 340, 90, 70);
-		
 		
 		Font font = new Font("Dialog", Font.BOLD, 18);
 		
