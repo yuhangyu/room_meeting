@@ -30,7 +30,7 @@ public class Login extends JFrame implements ActionListener, ItemListener{
 	//JLabel admin_lb = new JLabel("관리자 로그인");
 	JCheckBox check_admin = new JCheckBox("관리자 로그인");
 	
-	int check_action = 0;
+	int check_action = 1;
 	
 	private Statement stmt;
 
@@ -85,6 +85,8 @@ public class Login extends JFrame implements ActionListener, ItemListener{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+			
+		
 	}
 	
 	@Override
@@ -94,9 +96,9 @@ public class Login extends JFrame implements ActionListener, ItemListener{
 		if(obj == signup_btn) {//회원가입 버튼 동작
 			SignUp signup = new SignUp();
 		}else if(obj == login_btn) {
-			if (check_action == 1) {//관리자 로그인 시
+			if (check_action == 2) {//관리자 로그인 시
 				try {
-					ResultSet rs = stmt.executeQuery("SELECT * FROM admin WHERE admin_id='" + id_tf.getText() + "' AND admin_pw='" + pw_tf.getText() + "'");
+					ResultSet rs = stmt.executeQuery("SELECT * FROM member WHERE member_id='" + id_tf.getText() + "' AND member_pw='" + pw_tf.getText() + "' AND member_level='" + check_action + "'");
 					if (rs.next()) {
 						JOptionPane.showMessageDialog(this, "로그인 성공!");
 						AdminMainPage admin = new AdminMainPage();
@@ -107,9 +109,9 @@ public class Login extends JFrame implements ActionListener, ItemListener{
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
-			} else if (check_action == 0) {//비관리자 로그인 시
+			} else if (check_action == 1) {//비관리자 로그인 시
 				try {
-					ResultSet rs = stmt.executeQuery("SELECT * FROM member WHERE member_id='" + id_tf.getText() + "' AND member_pw='" + pw_tf.getText() + "'");
+					ResultSet rs = stmt.executeQuery("SELECT * FROM member WHERE member_id='" + id_tf.getText() + "' AND member_pw='" + pw_tf.getText() + "' AND member_level='"+check_action+"'");
 					if (rs.next()) {
 						JOptionPane.showMessageDialog(this, "로그인 성공!");
 						MainPage mainpage = new MainPage();
@@ -128,10 +130,10 @@ public class Login extends JFrame implements ActionListener, ItemListener{
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getStateChange() == ItemEvent.SELECTED) {
 			// 체크박스가 선택되면 실행되는 코드
-			check_action = 1;
+			check_action = 2;
 		} else {
 			// 체크박스가 선택 해제되면 실행되는 코드
-			check_action = 0;
+			check_action = 1;
 		}
 	}
 
