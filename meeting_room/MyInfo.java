@@ -110,15 +110,9 @@ public class MyInfo extends JFrame implements ActionListener{
 		Object obj = e.getSource();
 		
 		if (obj == modify_info_btn) {
-			if (id_tf.getText().equals(id) && name_tf.getText().equals(name) && phone_tf.getText().equals(phone)) {
-				if ("".equals(pw_tf.getText()) || pw_tf.getText().equals(pw)) {
-					//수정되지 않은 경우
-					JOptionPane.showMessageDialog(this, "변경할 정보가 없습니다.");
-				} else {
-					//비밀번호만 변경된 경우
-					change();
-				}
-			} else if ("".equals(id_tf.getText()) || "".equals(name_tf.getText()) || "".equals(phone_tf.getText())) {
+			if (id_tf.getText().equals(id) && name_tf.getText().equals(name) && phone_tf.getText().equals(phone) && pw_tf.getText().equals(pw)) {
+				JOptionPane.showMessageDialog(this, "변경할 정보가 없습니다.");
+			} else if ("".equals(id_tf.getText()) || "".equals(name_tf.getText()) || "".equals(phone_tf.getText()) || "".equals(pw_tf.getText())) {
 				JOptionPane.showMessageDialog(this, "공백으로 정보를 변경할 수 없습니다.");
 			} else { //아이디, 이름, 전화번호가 변경된 경우
 				change();
