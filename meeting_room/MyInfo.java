@@ -9,6 +9,7 @@ import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class MyInfo extends JFrame implements ActionListener{
@@ -37,7 +38,7 @@ public class MyInfo extends JFrame implements ActionListener{
 	
 	public MyInfo() {
 		setTitle("내 정보");
-		setSize(400, 500);
+		setSize(395, 430);
 		
 		mgr = new MyInfoMgr();
 		MyInfoBean bean = mgr.select("user");
@@ -55,19 +56,19 @@ public class MyInfo extends JFrame implements ActionListener{
 		Container c = getContentPane();
 		c.setLayout(null); //컨텐츠 패널 초기
 		
-		id_lb.setBounds(85,  30,  100,  40);
-		pw_lb.setBounds(85,  80,  100,  40);
-		name_lb.setBounds(85,  130,  100,  40);
-		phone_lb.setBounds(85,  180,  100,  40);
+		id_lb.setBounds(60,  30,  100,  40);
+		pw_lb.setBounds(60,  80,  100,  40);
+		name_lb.setBounds(60,  130,  100,  40);
+		phone_lb.setBounds(60,  180,  100,  40);
 		
-		id_tf.setBounds(180, 30, 100, 40);
-		pw_tf.setBounds(180, 80, 100, 40);
-		name_tf.setBounds(180, 130, 100, 40);
-		phone_tf.setBounds(180, 180, 100, 40);
+		id_tf.setBounds(165, 37, 155, 25);
+		pw_tf.setBounds(165, 87, 155, 25);
+		name_tf.setBounds(165, 137, 155, 25);
+		phone_tf.setBounds(165, 187, 155, 25);
 		
-		my_usage_btn.setBounds(85, 250, 200, 70);
-		modify_info_btn.setBounds(85, 340, 90, 70);
-		ok_btn.setBounds(195, 340, 90, 70);
+		my_usage_btn.setBounds(65, 240, 250, 45);
+		modify_info_btn.setBounds(65, 310, 110, 50);
+		ok_btn.setBounds(205, 310, 110, 50);
 		
 		
 		Font font = new Font("Dialog", Font.BOLD, 18);
@@ -112,21 +113,32 @@ public class MyInfo extends JFrame implements ActionListener{
 			if (id_tf.getText().equals(id) && name_tf.getText().equals(name) && phone_tf.getText().equals(phone)) {
 				if ("".equals(pw_tf.getText()) || pw_tf.getText().equals(pw)) {
 					//수정되지 않은 경우
+					JOptionPane.showMessageDialog(this, "변경할 정보가 없습니다.");
 				} else {
 					//비밀번호만 변경된 경우
-					MyInfoBean bean = new MyInfoBean();
-					bean.setID(id_tf.getText());
-					bean.setPW(pw_tf.getText());
-					bean.setName(name_tf.getText());
-					bean.setPhone(phone_tf.getText());
-					if(mgr.update(bean)) {
-						System.out.println("수정완료");
-					}
+					change();
 				}
 			} else { //아이디, 이름, 전화번호가 변경된 경우
-				System.out.println("dㅇ");
+				change();
 			}
 		}
+	}
+	
+	public void change() {
+		MyInfoBean bean = new MyInfoBean();
+		bean.setID(id_tf.getText());
+		bean.setPW(pw_tf.getText());
+		bean.setName(name_tf.getText());
+		bean.setPhone(phone_tf.getText());
+		if(mgr.update(bean)) {
+			System.out.println("수정완료");
+			id = bean.getID();
+			pw = bean.getPW();
+			name = bean.getName();
+			phone = bean.getPhone();
+			JOptionPane.showMessageDialog(this, "정보가 변경되었습니다.");
+		}
+		
 	}
 
 	public static void main(String[] args) {
