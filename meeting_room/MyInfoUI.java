@@ -43,11 +43,9 @@ public class MyInfoUI extends JFrame implements ActionListener {
 	public MyInfoUI() {
 		setTitle("³» Á¤º¸");
 		setSize(400, 500);
-		
-		mgr = new MyInfoMgr();
-		
+
 		id = LoginUI.getInstance().getLoginID();
-		
+		mgr = new MyInfoMgr();
 		MyInfoBean bean = mgr.select(id);
 		
 		id = bean.getID();
