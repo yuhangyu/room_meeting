@@ -97,8 +97,4 @@ public class SignUp extends JFrame implements ActionListener{
 		SignUp signup = new SignUp();
 
 	}
-
-	
-	
-
 }
