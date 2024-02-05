@@ -70,7 +70,6 @@ public class MyInfo extends JFrame implements ActionListener{
 		modify_info_btn.setBounds(65, 310, 110, 50);
 		ok_btn.setBounds(205, 310, 110, 50);
 		
-		
 		Font font = new Font("Dialog", Font.BOLD, 18);
 		
 		id_lb.setFont(font);
