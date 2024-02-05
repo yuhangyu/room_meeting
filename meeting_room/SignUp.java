@@ -12,12 +12,12 @@ import java.awt.event.ActionListener;
 
 public class SignUp extends JFrame implements ActionListener{
 	
-	//ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-	JLabel id_lb = new JLabel("ï¿½ï¿½ï¿½Ìµï¿½");
-	JLabel pw_lb = new JLabel("ï¿½ï¿½Ð¹ï¿½È£");
-	JLabel pwcheck_lb = new JLabel("ï¿½ï¿½Ð¹ï¿½È£È®ï¿½ï¿½");
-	JLabel name_lb = new JLabel("ï¿½Ì¸ï¿½");	
-	JLabel phone_lb = new JLabel("ï¿½ï¿½È­ï¿½ï¿½È£");
+	//¿ä¼Ò »ý¼º
+	JLabel id_lb = new JLabel("¾ÆÀÌµð");
+	JLabel pw_lb = new JLabel("ºñ¹Ð¹øÈ£");
+	JLabel pwcheck_lb = new JLabel("ºñ¹Ð¹øÈ£È®ÀÎ");
+	JLabel name_lb = new JLabel("ÀÌ¸§");	
+	JLabel phone_lb = new JLabel("ÀüÈ­¹øÈ£");
 	
 	JTextField id_tf = new JTextField(40);
 	JTextField pw_tf = new JPasswordField(40);
@@ -25,19 +25,19 @@ public class SignUp extends JFrame implements ActionListener{
 	JTextField name_tf = new JTextField(40);
 	JTextField phone_tf = new JTextField(40);
 	
-	JButton id_check_btn = new JButton("ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ßºï¿½È®ï¿½ï¿½");
-	JButton signup_btn = new JButton("È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
-	JButton cancel_btn = new JButton("ï¿½ï¿½ï¿½");
+	JButton id_check_btn = new JButton("¾ÆÀÌµð Áßº¹È®ÀÎ");
+	JButton signup_btn = new JButton("È¸¿ø°¡ÀÔ");
+	JButton cancel_btn = new JButton("Ãë¼Ò");
 	
 	public SignUp() {
-		setTitle("È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
+		setTitle("È¸¿ø°¡ÀÔ");
 		setSize(320, 400);
 		
-		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½Þ¼Òµï¿½ È£ï¿½ï¿½
+		//ÄÁÅÙÃ÷ ÆÐ³ÎÀÇ °´Ã¼ ¸Þ¼Òµå È£Ãâ
 		Container c = getContentPane();
-		c.setLayout(null); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ ï¿½Ê±ï¿½È­
+		c.setLayout(null); //ÄÁÅÙÃ÷ ÆÐ³Î ÃÊ±âÈ­
 		
-		//ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
+		//¿ä¼Ò À§Ä¡ ÁöÁ¤
 		id_lb.setBounds(30, 20, 90, 25);
 		pw_lb.setBounds(30, 100, 90, 25);
 		pwcheck_lb.setBounds(30, 145, 90, 25);
@@ -54,12 +54,12 @@ public class SignUp extends JFrame implements ActionListener{
 		signup_btn.setBounds(40, 290, 100, 40);
 		cancel_btn.setBounds(168, 290, 100, 40);
 				
-		//ï¿½ï¿½Æ° ï¿½Ìºï¿½Æ® ï¿½ß°ï¿½
+		//¹öÆ° ÀÌº¥Æ® Ãß°¡
 		id_check_btn.addActionListener(this);
 		signup_btn.addActionListener(this);
 		cancel_btn.addActionListener(this);
 				
-		//ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
+		//¿ä¼Ò Ãß°¡
 		c.add(id_lb);
 		c.add(pw_lb);
 		c.add(pwcheck_lb);
@@ -76,9 +76,9 @@ public class SignUp extends JFrame implements ActionListener{
 		c.add(signup_btn);
 		c.add(cancel_btn);
 				
-		//È­ï¿½ï¿½ ï¿½ß¾Ó¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		//È­¸é Áß¾Ó¿¡ ¿À°Ô ¼³Á¤
 		setLocationRelativeTo(null);
-		//ï¿½ï¿½ï¿½Î±×·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô²ï¿½ ï¿½ï¿½ï¿½ï¿½
+		//ÇÁ·Î±×·¥ Á¾·áÇÒ ¶§ ÇÁ·Î¼¼½º±îÁö ÇÔ²² Á¾·á
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		setVisible(true);

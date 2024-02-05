@@ -14,35 +14,35 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 public class Recharge extends JFrame implements ActionListener{
-	ImageIcon icon = new ImageIcon("src/MeetingRoomProject/img.png"); // ï¿½Î°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-	JLabel logo_lb = new JLabel(icon); // ï¿½Î°ï¿½ ï¿½ï¿½ï¿½Ìºï¿½
+	ImageIcon icon = new ImageIcon("src/MeetingRoomProject/img.png"); // ·Î°í¿¡ »ç¿ëÇÒ ÀÌ¹ÌÁö ¾ÆÀÌÄÜ
+	JLabel logo_lb = new JLabel(icon); // ·Î°í ·¹ÀÌºí
 	
-	JButton charge_1000_btn = new JButton("1000ï¿½ï¿½");
-	JButton charge_5000_btn = new JButton("5000ï¿½ï¿½");
-	JButton charge_10000_btn = new JButton("10000ï¿½ï¿½");
-	JButton charge_30000_btn = new JButton("30000ï¿½ï¿½");
-	JButton charge_50000_btn = new JButton("50000ï¿½ï¿½");
+	JButton charge_1000_btn = new JButton("1000¿ø");
+	JButton charge_5000_btn = new JButton("5000¿ø");
+	JButton charge_10000_btn = new JButton("10000¿ø");
+	JButton charge_30000_btn = new JButton("30000¿ø");
+	JButton charge_50000_btn = new JButton("50000¿ø");
 	
-	JLabel recharge_amount_lb = new JLabel("ï¿½ï¿½ï¿½ï¿½ï¿½Ý¾ï¿½");
+	JLabel recharge_amount_lb = new JLabel("ÃæÀü±Ý¾×");
 	JTextField recharge_value_tf = new JTextField("0", 30);
-	JLabel won_lb = new JLabel("ï¿½ï¿½");
+	JLabel won_lb = new JLabel("¿ø");
 	
-	JButton recharge_btn = new JButton("ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½");
-	JButton cancel_btn = new JButton("ï¿½ï¿½ï¿½");
+	JButton recharge_btn = new JButton("ÃæÀüÇÏ±â");
+	JButton cancel_btn = new JButton("Ãë¼Ò");
 	
 	public Recharge(){
-		setTitle("ï¿½ï¿½ï¿½ï¿½");
+		setTitle("ÃæÀü");
 		setSize(800, 600);
 		
-		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½Þ¼Òµï¿½ È£ï¿½ï¿½
+		//ÄÁÅÙÃ÷ ÆÐ³ÎÀÇ °´Ã¼ ¸Þ¼Òµå È£Ãâ
 		Container c = getContentPane();
-		c.setLayout(null); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ ï¿½Ê±ï¿½
+		c.setLayout(null); //ÄÁÅÙÃ÷ ÆÐ³Î ÃÊ±â
 		
-		// ï¿½Ì¹ï¿½ï¿½ï¿½ Å©ï¿½â¿¡ ï¿½Â°ï¿½ JLabel Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
+		// ÀÌ¹ÌÁö Å©±â¿¡ ¸Â°Ô JLabel Å©±â Á¶Àý 
         Dimension imageSize = new Dimension(icon.getIconWidth(), icon.getIconHeight());
         logo_lb.setPreferredSize(imageSize);
        
-        // ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß¾ï¿½, ï¿½ï¿½ï¿½ï¿½Ú°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½Å´
+        // ÀÌ¹ÌÁö¸¦ ¼öÆòÀ¸·Î Áß¾Ó, »ç¿ëÀÚ°¡ Á¤ÇÑ ¼¼·Î ÁÂÇ¥¿¡ À§Ä¡½ÃÅ´
         int x = (getWidth() - imageSize.width) / 2;
         logo_lb.setBounds(x, 35, imageSize.width, imageSize.height);
         
@@ -57,7 +57,7 @@ public class Recharge extends JFrame implements ActionListener{
         
         recharge_amount_lb.setBounds(250, 330, 120, 35);
         recharge_value_tf.setBounds(350, 330, 120, 35);
-        // ï¿½Ø½ï¿½Æ® ï¿½Êµå¸¦ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        // ÅØ½ºÆ® ÇÊµå¸¦ ¿ìÃøÀ¸·Î Á¤·Ä
         recharge_value_tf.setHorizontalAlignment(SwingConstants.RIGHT);
         won_lb.setBounds(485, 330, 50, 35);
         
@@ -90,9 +90,9 @@ public class Recharge extends JFrame implements ActionListener{
         c.add(cancel_btn);
         
         
-		//È­ï¿½ï¿½ ï¿½ß¾Ó¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		//È­¸é Áß¾Ó¿¡ ¿À°Ô ¼³Á¤
 		setLocationRelativeTo(null);
-		//ï¿½ï¿½ï¿½Î±×·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô²ï¿½ ï¿½ï¿½ï¿½ï¿½
+		//ÇÁ·Î±×·¥ Á¾·áÇÒ ¶§ ÇÁ·Î¼¼½º±îÁö ÇÔ²² Á¾·á
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 						
 		setVisible(true);

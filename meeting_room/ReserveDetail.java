@@ -20,42 +20,42 @@ import javax.swing.text.AbstractDocument;
 
 public class ReserveDetail extends JFrame implements ActionListener{
 	
-	JLabel reserve_lb = new JLabel("ï¿½ï¿½ï¿½Ã·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
-	JLabel chosen_room_lb = new JLabel("ï¿½ï¿½ï¿½Ãµï¿½ ï¿½ï¿½  ");
-	JLabel chosen_room_info_lb = new JLabel("2ï¿½ï¿½ 1ï¿½ï¿½ï¿½ï¿½");
-	JLabel time_lb = new JLabel("ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½  ");
-	JLabel add_person_lb = new JLabel("ï¿½ß°ï¿½ ï¿½Î¿ï¿½ ");
-	JLabel start_time_lb = new JLabel("ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ");
-	JLabel start_hour_lb = new JLabel("ï¿½ï¿½");
-	JLabel start_min_lb = new JLabel("ï¿½ï¿½");
+	JLabel reserve_lb = new JLabel("¹ÌÆÃ·ë ¿¹¾àÇÏ±â »ó¼¼Á¤º¸");
+	JLabel chosen_room_lb = new JLabel("¼±ÅÃµÈ ·ë  ");
+	JLabel chosen_room_info_lb = new JLabel("2ÀÎ 1¹ø·ë");
+	JLabel time_lb = new JLabel("»ç¿ë ½Ã°£  ");
+	JLabel add_person_lb = new JLabel("Ãß°¡ ÀÎ¿ø ");
+	JLabel start_time_lb = new JLabel("½ÃÀÛ ½Ã°£ ");
+	JLabel start_hour_lb = new JLabel("½Ã");
+	JLabel start_min_lb = new JLabel("ºÐ");
 	
 	
-	JLabel time_price_lb = new JLabel("ï¿½Ã°ï¿½ ï¿½Ý¾ï¿½");
-	JLabel person_price_lb = new JLabel("ï¿½Î¿ï¿½ ï¿½Ý¾ï¿½");
-	JLabel time_price_value_lb = new JLabel("0 ï¿½ï¿½");
-	JLabel person_price_value_lb = new JLabel("0 ï¿½ï¿½");
+	JLabel time_price_lb = new JLabel("½Ã°£ ±Ý¾×");
+	JLabel person_price_lb = new JLabel("ÀÎ¿ø ±Ý¾×");
+	JLabel time_price_value_lb = new JLabel("0 ¿ø");
+	JLabel person_price_value_lb = new JLabel("0 ¿ø");
 	
-	JLabel total_price_lb = new JLabel("ï¿½ï¿½ ï¿½Ý¾ï¿½");
-	JLabel total_price_value_lb = new JLabel("0 ï¿½ï¿½");
+	JLabel total_price_lb = new JLabel("ÃÑ ±Ý¾×");
+	JLabel total_price_value_lb = new JLabel("0 ¿ø");
 	
 	
 	
-	JTextField time_tf = new JTextField(1); // ï¿½Ã°ï¿½ ï¿½Ô·Â¹ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Æ® ï¿½Êµï¿½
-	// JLabel selected_add_person;  ï¿½ß°ï¿½ ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ 
+	JTextField time_tf = new JTextField(1); // ½Ã°£ ÀÔ·Â¹ÞÀ» ÅØ½ºÆ® ÇÊµå
+	// JLabel selected_add_person;  Ãß°¡ ÀÎ¿ø ¼±ÅÃ ·¹ÀÌºí 
 	
-	String items[] = {"ï¿½ï¿½ï¿½ï¿½", "1ï¿½ï¿½", "2ï¿½ï¿½"}; // ï¿½Þºï¿½ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½ï¿½î°¥ ï¿½×¸ï¿½
+	String items[] = {"¾øÀ½", "1¸í", "2¸í"}; // ÄÞº¸¹Ú½º¿¡ µé¾î°¥ Ç×¸ñ
 	JComboBox<String> select_add_person = new JComboBox<>(items);
 	
-	JButton payment_btn = new JButton("ï¿½ï¿½ï¿½ï¿½");
-	JButton cancel_btn = new JButton("ï¿½ï¿½ï¿½");
+	JButton payment_btn = new JButton("°áÁ¦");
+	JButton cancel_btn = new JButton("Ãë¼Ò");
 	
-	JLabel hour_lb = new JLabel("ï¿½Ã°ï¿½");
+	JLabel hour_lb = new JLabel("½Ã°£");
 	
-	// SpinnerNumberModelï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ JSpinner ï¿½Ê±ï¿½È­ (9ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, 24ï¿½ï¿½ï¿½ï¿½) ï¿½Ã¸ï¿½ ï¿½ï¿½ï¿½ï¿½
+	// SpinnerNumberModelÀ» »ç¿ëÇÏ¿© JSpinner ÃÊ±âÈ­ (9ºÎÅÍ ½ÃÀÛ, 24±îÁö) ½Ã¸¦ Á¶Á¤
     SpinnerNumberModel spinnerNumberModel1 = new SpinnerNumberModel(9, 9, 24, 1);
     JSpinner hourSpinner = new JSpinner(spinnerNumberModel1);
     
-    // SpinnerNumberModelï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ JSpinner ï¿½Ê±ï¿½È­ (0ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, 50ï¿½ï¿½ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    // SpinnerNumberModelÀ» »ç¿ëÇÏ¿© JSpinner ÃÊ±âÈ­ (0ºÎÅÍ ½ÃÀÛ, 50±îÁö) ºÐÀ» Á¶Á¤
     SpinnerNumberModel spinnerNumberModel2 = new SpinnerNumberModel(0, 0, 50, 10);
     JSpinner minSpinner = new JSpinner(spinnerNumberModel2);
 	
@@ -63,12 +63,12 @@ public class ReserveDetail extends JFrame implements ActionListener{
 	
 	
 	public ReserveDetail() {
-		setTitle("ï¿½ï¿½ï¿½Ã·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
+		setTitle("¹ÌÆÃ·ë ¿¹¾àÇÏ±â »ó¼¼Á¤º¸");
 		setSize(400, 600);
 		
-		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½Þ¼Òµï¿½ È£ï¿½ï¿½
+		//ÄÁÅÙÃ÷ ÆÐ³ÎÀÇ °´Ã¼ ¸Þ¼Òµå È£Ãâ
 		Container c = getContentPane();
-		c.setLayout(null); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ ï¿½Ê±ï¿½
+		c.setLayout(null); //ÄÁÅÙÃ÷ ÆÐ³Î ÃÊ±â
 		
 		reserve_lb.setBounds(35,  10,  500,  40);
 		chosen_room_lb.setBounds(80,  70,  90,  25);
@@ -83,15 +83,15 @@ public class ReserveDetail extends JFrame implements ActionListener{
 		start_hour_lb.setBounds(235, 190, 50, 25);
 		start_min_lb.setBounds(315, 190, 50, 25);
 		
-		// DocumentFilterï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½Ø½ï¿½Æ® ï¿½Êµï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		// DocumentFilter¸¦ »ç¿ëÇÏ¿© ÅØ½ºÆ® ÇÊµåÀÇ ÀÔ·ÂÀ» Á¦ÇÑ
         ((AbstractDocument) time_tf.getDocument()).setDocumentFilter(new DocumentFilter() {
             public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
                     throws BadLocationException {
-                // ï¿½Ô·Â°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì°ï¿½, ï¿½Ö´ï¿½ 1ï¿½Ú¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+                // ÀÔ·Â°ªÀÌ ¼ýÀÚÀÌ°í, ÃÖ´ë 1ÀÚ¸®±îÁö¸¸ ÀÔ·Â °¡´ÉÇÏµµ·Ï Á¦ÇÑ
                 if (text.matches("\\d") && fb.getDocument().getLength() + text.length() <= 1) {
                     super.replace(fb, offset, length, text, attrs);
-                    // ï¿½ï¿½ï¿½â¼­ ï¿½Ý¾ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ß°ï¿½ ï¿½Û¾ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö½ï¿½ï¿½Ï´ï¿½.
-                    updatePrice(); // ï¿½ï¿½ï¿½Ã·ï¿½ ï¿½ß°ï¿½ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½ È£ï¿½ï¿½
+                    // ¿©±â¼­ ±Ý¾× °è»ê µî Ãß°¡ ÀÛ¾÷À» ÇÒ ¼ö ÀÖ½À´Ï´Ù.
+                    updatePrice(); // ¿¹½Ã·Î Ãß°¡µÈ ¸Þ¼­µå È£Ãâ
                 }
             }
         });
@@ -115,8 +115,8 @@ public class ReserveDetail extends JFrame implements ActionListener{
 		cancel_btn.addActionListener(this);
 		
 		
-		//Font ï¿½ï¿½ï¿½ï¿½
-		Font font = new Font("Dialog", Font.BOLD, 25); // ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½
+		//Font ÁöÁ¤
+		Font font = new Font("Dialog", Font.BOLD, 25); // ÆùÆ®±½°Ô
 		Font font2 = new Font("Dialog", Font.PLAIN, 17);
 		
 		reserve_lb.setFont(font);
@@ -170,9 +170,9 @@ public class ReserveDetail extends JFrame implements ActionListener{
 		c.add(minSpinner);
 		
 		
-		//È­ï¿½ï¿½ ï¿½ß¾Ó¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		//È­¸é Áß¾Ó¿¡ ¿À°Ô ¼³Á¤
 		setLocationRelativeTo(null);
-		//ï¿½ï¿½ï¿½Î±×·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô²ï¿½ ï¿½ï¿½ï¿½ï¿½
+		//ÇÁ·Î±×·¥ Á¾·áÇÒ ¶§ ÇÁ·Î¼¼½º±îÁö ÇÔ²² Á¾·á
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 						
 		setVisible(true);
@@ -180,7 +180,7 @@ public class ReserveDetail extends JFrame implements ActionListener{
 		
 	}
 	
-	private void updatePrice() {} // ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½Ò¶ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½ 
+	private void updatePrice() {} // ½Ã°£À» ÀÔ·ÂÇÒ¶§ ¾÷µ¥ÀÌÆ®ÇÒ ¸Þ¼­µå 
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {

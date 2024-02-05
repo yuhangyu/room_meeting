@@ -13,27 +13,27 @@ import javax.swing.JTextField;
 
 public class Login extends JFrame implements ActionListener{
 	
-	//ìš”ì†Œìƒì„±
-	JLabel id_lb = new JLabel("ì•„ì´ë””");	
-	JLabel pw_lb = new JLabel("ë¹„ë°€ë²ˆí˜¸");
+	//¿ä¼Ò»ı¼º
+	JLabel id_lb = new JLabel("¾ÆÀÌµğ");	
+	JLabel pw_lb = new JLabel("ºñ¹Ğ¹øÈ£");
 	JTextField id_tf = new JTextField(20);
 	JTextField pw_tf = new JPasswordField(20);
-	JButton signup_btn = new JButton("íšŒì›ê°€ì…");
-	JButton login_btn = new JButton("ë¡œê·¸ì¸");
+	JButton signup_btn = new JButton("È¸¿ø°¡ÀÔ");
+	JButton login_btn = new JButton("·Î±×ÀÎ");
 	
-	//JLabel admin_lb = new JLabel("ê´€ë¦¬ì ë¡œê·¸ì¸");
-	JCheckBox check_admin = new JCheckBox("ê´€ë¦¬ì ë¡œê·¸ì¸");
+	//JLabel admin_lb = new JLabel("°ü¸®ÀÚ ·Î±×ÀÎ");
+	JCheckBox check_admin = new JCheckBox("°ü¸®ÀÚ ·Î±×ÀÎ");
 	
 	
 	public Login() {
-		setTitle("ë¡œê·¸ì¸");
+		setTitle("·Î±×ÀÎ");
 		setSize(300, 230);
 
-		//ì»¨í…ì¸  íŒ¨ë„ì˜ ê°ì²´ ë©”ì†Œë“œ í˜¸ì¶œ
+		//ÄÁÅÙÃ÷ ÆĞ³ÎÀÇ °´Ã¼ ¸Ş¼Òµå È£Ãâ
 		Container c = getContentPane();
-		c.setLayout(null);  //ì»¨í…ì¸  íŒ¨ë„ ì´ˆê¸°í™”
+		c.setLayout(null);  //ÄÁÅÙÃ÷ ÆĞ³Î ÃÊ±âÈ­
 		
-		//ìš”ì†Œ ìœ„ì¹˜ ì§€ì •
+		//¿ä¼Ò À§Ä¡ ÁöÁ¤
 		id_lb.setBounds(30,  22,  50,  25);
 		pw_lb.setBounds(30,  58,  50,  25);
 		id_tf.setBounds(90, 22, 170, 25);
@@ -44,11 +44,11 @@ public class Login extends JFrame implements ActionListener{
 		//admin_lb.setBounds(50, 94, 170, 25);
 		check_admin.setBounds(30, 94, 150, 25);
 		
-		//ë²„íŠ¼ ì´ë²¤íŠ¸ ì¶”ê°€
+		//¹öÆ° ÀÌº¥Æ® Ãß°¡
 		signup_btn.addActionListener(this);
 		login_btn.addActionListener(this);
 		
-		//ìš”ì†Œ ì¶”ê°€
+		//¿ä¼Ò Ãß°¡
 		c.add(id_lb);
 		c.add(pw_lb);
 		c.add(id_tf);
@@ -58,9 +58,9 @@ public class Login extends JFrame implements ActionListener{
 		//c.add(admin_lb);
 		c.add(check_admin);
 		
-		//í™”ë©´ ì¤‘ì•™ì— ì˜¤ê²Œ ì„¤ì •
+		//È­¸é Áß¾Ó¿¡ ¿À°Ô ¼³Á¤
 		setLocationRelativeTo(null);
-		//í”„ë¡œê·¸ë¨ ì¢…ë£Œí•  ë•Œ í”„ë¡œì„¸ìŠ¤ê¹Œì§€ í•¨ê»˜ ì¢…ë£Œ
+		//ÇÁ·Î±×·¥ Á¾·áÇÒ ¶§ ÇÁ·Î¼¼½º±îÁö ÇÔ²² Á¾·á
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		setVisible(true);

@@ -11,27 +11,27 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 public class MyInfo extends JFrame implements ActionListener{
-	JLabel id_lb = new JLabel("ï¿½ï¿½ï¿½Ìµï¿½");
-	JLabel pw_lb = new JLabel("ï¿½ï¿½Ð¹ï¿½È£");
-	JLabel name_lb = new JLabel("ï¿½Ì¸ï¿½");
-	JLabel phone_lb = new JLabel("ï¿½ï¿½È­ï¿½ï¿½È£");
+	JLabel id_lb = new JLabel("¾ÆÀÌµð");
+	JLabel pw_lb = new JLabel("ºñ¹Ð¹øÈ£");
+	JLabel name_lb = new JLabel("ÀÌ¸§");
+	JLabel phone_lb = new JLabel("ÀüÈ­¹øÈ£");
 	
 	JTextField id_tf = new JTextField("DefaultID", 10);
 	JTextField pw_tf = new JTextField(10);
 	JTextField name_tf = new JTextField("UserName", 10);
 	JTextField phone_tf = new JTextField("PhoneNum", 10);
 	
-	JButton my_usage_btn = new JButton("ï¿½Ì¿ï¿½ ï¿½ï¿½ï¿½ï¿½");
-	JButton modify_info_btn = new JButton("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
-	JButton ok_btn = new JButton("È®ï¿½ï¿½");
+	JButton my_usage_btn = new JButton("ÀÌ¿ë ³»¿ª");
+	JButton modify_info_btn = new JButton("Á¤º¸ ¼öÁ¤");
+	JButton ok_btn = new JButton("È®ÀÎ");
 	
 	public MyInfo() {
-		setTitle("ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
+		setTitle("³» Á¤º¸");
 		setSize(400, 500);
 		
-		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½Þ¼Òµï¿½ È£ï¿½ï¿½
+		//ÄÁÅÙÃ÷ ÆÐ³ÎÀÇ °´Ã¼ ¸Þ¼Òµå È£Ãâ
 		Container c = getContentPane();
-		c.setLayout(null); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ ï¿½Ê±ï¿½
+		c.setLayout(null); //ÄÁÅÙÃ÷ ÆÐ³Î ÃÊ±â
 		
 		id_lb.setBounds(85,  30,  100,  40);
 		pw_lb.setBounds(85,  80,  100,  40);
@@ -73,9 +73,9 @@ public class MyInfo extends JFrame implements ActionListener{
 		c.add(modify_info_btn);
 		c.add(ok_btn);		
 		
-		//È­ï¿½ï¿½ ï¿½ß¾Ó¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		//È­¸é Áß¾Ó¿¡ ¿À°Ô ¼³Á¤
 		setLocationRelativeTo(null);
-		//ï¿½ï¿½ï¿½Î±×·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô²ï¿½ ï¿½ï¿½ï¿½ï¿½
+		//ÇÁ·Î±×·¥ Á¾·áÇÒ ¶§ ÇÁ·Î¼¼½º±îÁö ÇÔ²² Á¾·á
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 								
 		setVisible(true);

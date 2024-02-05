@@ -12,43 +12,43 @@ import javax.swing.JLabel;
 
 public class Reserve extends JFrame implements ActionListener{
 	
-	JLabel reserve_lb = new JLabel("ï¿½ï¿½ï¿½Ã·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½");
-	JLabel room2_lb = new JLabel("2ï¿½ï¿½");
-	JLabel room4_lb = new JLabel("4ï¿½ï¿½");
-	JLabel room8_lb = new JLabel("8ï¿½ï¿½");
+	JLabel reserve_lb = new JLabel("¹ÌÆÃ·ë ¿¹¾àÇÏ±â");
+	JLabel room2_lb = new JLabel("2ÀÎ");
+	JLabel room4_lb = new JLabel("4ÀÎ");
+	JLabel room8_lb = new JLabel("8ÀÎ");
 	
-	JLabel memberinfo_lb = new JLabel("È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");	
-	JLabel name_lb = new JLabel("ï¿½Ì¸ï¿½");
-	JLabel balance_lb = new JLabel("ï¿½Ü¾ï¿½ : ");
-	JLabel balance_value_lb = new JLabel("300000ï¿½ï¿½");
+	JLabel memberinfo_lb = new JLabel("È¸¿øÁ¤º¸");	
+	JLabel name_lb = new JLabel("ÀÌ¸§");
+	JLabel balance_lb = new JLabel("ÀÜ¾× : ");
+	JLabel balance_value_lb = new JLabel("300000¿ø");
 	
-	JButton room2_1_btn = new JButton("1ï¿½ï¿½ ï¿½ï¿½");
-	JButton room2_2_btn = new JButton("2ï¿½ï¿½ ï¿½ï¿½");
-	JButton room2_3_btn = new JButton("3ï¿½ï¿½ ï¿½ï¿½");
-	JButton room2_4_btn = new JButton("4ï¿½ï¿½ ï¿½ï¿½");
+	JButton room2_1_btn = new JButton("1¹ø ·ë");
+	JButton room2_2_btn = new JButton("2¹ø ·ë");
+	JButton room2_3_btn = new JButton("3¹ø ·ë");
+	JButton room2_4_btn = new JButton("4¹ø ·ë");
 	
-	JButton room4_1_btn = new JButton("1ï¿½ï¿½ ï¿½ï¿½");
-	JButton room4_2_btn = new JButton("ï¿½ï¿½ï¿½ ï¿½ï¿½");
-	JButton room4_3_btn = new JButton("3ï¿½ï¿½ ï¿½ï¿½");
-	JButton room4_4_btn = new JButton("4ï¿½ï¿½ ï¿½ï¿½");
-	JButton room4_5_btn = new JButton("5ï¿½ï¿½ ï¿½ï¿½");
-	JButton room4_6_btn = new JButton("6ï¿½ï¿½ ï¿½ï¿½");
+	JButton room4_1_btn = new JButton("1¹ø ·ë");
+	JButton room4_2_btn = new JButton("»ç¿ë Áß");
+	JButton room4_3_btn = new JButton("3¹ø ·ë");
+	JButton room4_4_btn = new JButton("4¹ø ·ë");
+	JButton room4_5_btn = new JButton("5¹ø ·ë");
+	JButton room4_6_btn = new JButton("6¹ø ·ë");
 	
-	JButton room8_1_btn = new JButton("1ï¿½ï¿½ ï¿½ï¿½");
-	JButton room8_2_btn = new JButton("2ï¿½ï¿½ ï¿½ï¿½");
+	JButton room8_1_btn = new JButton("1¹ø ·ë");
+	JButton room8_2_btn = new JButton("2¹ø ·ë");
 	
-	JButton reserve_btn = new JButton("ï¿½ï¿½ï¿½ï¿½");
-	JButton cancel_btn = new JButton("ï¿½ï¿½ï¿½");
+	JButton reserve_btn = new JButton("¿¹¾à");
+	JButton cancel_btn = new JButton("Ãë¼Ò");
 
 	
 	
 	public Reserve() {
-		setTitle("ï¿½ï¿½ï¿½Ã·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½");
+		setTitle("¹ÌÆÃ·ë ¿¹¾àÇÏ±â");
 		setSize(800, 750);
 		
-		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½Þ¼Òµï¿½ È£ï¿½ï¿½
+		//ÄÁÅÙÃ÷ ÆÐ³ÎÀÇ °´Ã¼ ¸Þ¼Òµå È£Ãâ
 		Container c = getContentPane();
-		c.setLayout(null); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ ï¿½Ê±ï¿½
+		c.setLayout(null); //ÄÁÅÙÃ÷ ÆÐ³Î ÃÊ±â
 		
 		reserve_lb.setBounds(5,  2,  500,  40);
 		room2_lb.setBounds(65, 75, 100, 20);
@@ -98,8 +98,8 @@ public class Reserve extends JFrame implements ActionListener{
 		reserve_btn.addActionListener(this);
 		cancel_btn.addActionListener(this);
 		
-		//Font ï¿½ï¿½ï¿½ï¿½
-		Font font = new Font("Dialog", Font.BOLD, 30); // ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½
+		//Font ÁöÁ¤
+		Font font = new Font("Dialog", Font.BOLD, 30); // ÆùÆ®±½°Ô
 		Font font2 = new Font("Dialog", Font.PLAIN, 23); 
 		Font font3 = new Font("Dialog", Font.PLAIN, 18);
 		
@@ -128,11 +128,11 @@ public class Reserve extends JFrame implements ActionListener{
 		room8_2_btn.setFont(font2);
 		
 		reserve_btn.setFont(font2);
-		reserve_btn.setEnabled(false); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­ ï¿½Çµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-									   // ï¿½ï¿½ï¿½ï¿½Æ® = false
+		reserve_btn.setEnabled(false); // ¿¹¾à ¹öÆ°Àº ¹ÌÆÃ·ëÀ» ¼±ÅÃÇá¾ß È°¼ºÈ­ µÇµµ·Ï ¼³Á¤
+									   // µðÆúÆ® = false
 		
-		room4_2_btn.setEnabled(false); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ã·ï¿½ ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ 
-		room4_2_btn.setBackground(new Color(255, 180, 180)); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
+		room4_2_btn.setEnabled(false); // »ç¿ëÁßÀÎ ·ë ¿¹½Ã·Î µðÆúÆ® ¼³Á¤ 
+		room4_2_btn.setBackground(new Color(255, 180, 180)); // »ç¿ëÁßÀÎ ¹æ »ö º¯°æ 
 		
 		cancel_btn.setFont(font2);
 		
@@ -167,9 +167,9 @@ public class Reserve extends JFrame implements ActionListener{
 		
 		
 		
-		//È­ï¿½ï¿½ ï¿½ß¾Ó¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		//È­¸é Áß¾Ó¿¡ ¿À°Ô ¼³Á¤
 		setLocationRelativeTo(null);
-		//ï¿½ï¿½ï¿½Î±×·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô²ï¿½ ï¿½ï¿½ï¿½ï¿½
+		//ÇÁ·Î±×·¥ Á¾·áÇÒ ¶§ ÇÁ·Î¼¼½º±îÁö ÇÔ²² Á¾·á
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				
 		setVisible(true);

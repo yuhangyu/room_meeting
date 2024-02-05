@@ -11,41 +11,41 @@ import javax.swing.JLabel;
 
 
 public class MainPage extends JFrame implements ActionListener{
-	//ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-	JLabel memberinfo_lb = new JLabel("È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");	
-	JLabel name_lb = new JLabel("ï¿½Ì¸ï¿½");
-	JLabel balance_lb = new JLabel("ï¿½Ü¾ï¿½ : ");
-	JLabel balance_value_lb = new JLabel("300000ï¿½ï¿½");
+	//¿ä¼Ò »ý¼º
+	JLabel memberinfo_lb = new JLabel("È¸¿øÁ¤º¸");	
+	JLabel name_lb = new JLabel("ÀÌ¸§");
+	JLabel balance_lb = new JLabel("ÀÜ¾× : ");
+	JLabel balance_value_lb = new JLabel("300000¿ø");
 	
-	//Swingï¿½ï¿½ï¿½ï¿½ \nï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¹Ù²ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Æ¼ï¿½, HTMLï¿½ï¿½ È°ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¹Ù²ï¿½
-	JButton reserve_btn = new JButton("<html><div style='text-align: center;'>ï¿½ï¿½ï¿½Ã·ï¿½<br>ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½</div></html>");
-	JButton deposit_btn = new JButton("ï¿½ï¿½ï¿½ï¿½");
-	JButton purchasefood_btn = new JButton("ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¹ï¿½ï¿½Ï±ï¿½");
-	JButton rentgame_btn = new JButton("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ë¿©");
-	JButton logout_btn = new JButton("ï¿½Î±×¾Æ¿ï¿½");
-	JButton myinfo_btn = new JButton("ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
+	//Swing¿¡¼­ \nÀ» ÅëÇÑ ÁÙ¹Ù²ÞÀ» Áö¿øÇÏÁö ¾Ê¾Æ¼­, HTMLÀ» È°¿ëÇÏ¿© ¹öÆ° ³»ÀÇ ÁÙ¹Ù²Þ
+	JButton reserve_btn = new JButton("<html><div style='text-align: center;'>¹ÌÆÃ·ë<br>¿¹¾àÇÏ±â</div></html>");
+	JButton deposit_btn = new JButton("ÃæÀü");
+	JButton purchasefood_btn = new JButton("À½½Ä ÁÖ¹®ÇÏ±â");
+	JButton rentgame_btn = new JButton("º¸µå°ÔÀÓ ´ë¿©");
+	JButton logout_btn = new JButton("·Î±×¾Æ¿ô");
+	JButton myinfo_btn = new JButton("³» Á¤º¸");
 
 	
 	public MainPage() {
-		setTitle("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
+		setTitle("¸ÞÀÎ ÆäÀÌÁö");
 		setSize(600, 350);
 		
-		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½Þ¼Òµï¿½ È£ï¿½ï¿½
+		//ÄÁÅÙÃ÷ ÆÐ³ÎÀÇ °´Ã¼ ¸Þ¼Òµå È£Ãâ
 		Container c = getContentPane();
-		c.setLayout(null); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ ï¿½Ê±ï¿½È­
+		c.setLayout(null); //ÄÁÅÙÃ÷ ÆÐ³Î ÃÊ±âÈ­
 		
-		//ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
+		//¿ä¼Ò À§Ä¡ ÁöÁ¤
 		memberinfo_lb.setBounds(380,  3,  100,  40);
 		name_lb.setBounds(380,  40,  100,  40);	
 		balance_lb.setBounds(380, 77, 100, 40);
 		balance_value_lb.setBounds(430, 77, 150, 40);
 		
-		//Font ï¿½ï¿½ï¿½ï¿½
-		Font font = new Font("Dialog", Font.PLAIN, 18); // ï¿½ï¿½Æ®ï¿½ï¿½ Å©ï¿½â¸¸ ï¿½ï¿½ï¿½ï¿½ 
-		memberinfo_lb.setFont(font); // È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½ï¿½ï¿½ 
-		name_lb.setFont(font); // È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½ï¿½ï¿½ 
-		balance_lb.setFont(font); // È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½ï¿½ï¿½ 
-		balance_value_lb.setFont(font); // È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½ï¿½ï¿½ 
+		//Font ÁöÁ¤
+		Font font = new Font("Dialog", Font.PLAIN, 18); // ÆùÆ®ÀÇ Å©±â¸¸ º¯°æ 
+		memberinfo_lb.setFont(font); // È¸¿øÁ¤º¸ ·¹ÀÌºí¿¡ Àû¿ë 
+		name_lb.setFont(font); // È¸¿øÁ¤º¸ ·¹ÀÌºí¿¡ Àû¿ë 
+		balance_lb.setFont(font); // È¸¿øÁ¤º¸ ·¹ÀÌºí¿¡ Àû¿ë 
+		balance_value_lb.setFont(font); // È¸¿øÁ¤º¸ ·¹ÀÌºí¿¡ Àû¿ë 
 		reserve_btn.setFont(font);
 		deposit_btn.setFont(font);
 		purchasefood_btn.setFont(font);
@@ -59,7 +59,7 @@ public class MainPage extends JFrame implements ActionListener{
 		myinfo_btn.setBounds(380, 170, 100, 40);
 		
 				
-		//ï¿½ï¿½Æ° ï¿½Ìºï¿½Æ® ï¿½ß°ï¿½
+		//¹öÆ° ÀÌº¥Æ® Ãß°¡
 		reserve_btn.addActionListener(this);
 		deposit_btn.addActionListener(this);
 		purchasefood_btn.addActionListener(this);
@@ -67,7 +67,7 @@ public class MainPage extends JFrame implements ActionListener{
 		logout_btn.addActionListener(this);
 		myinfo_btn.addActionListener(this);
 				
-		//ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
+		//¿ä¼Ò Ãß°¡
 		c.add(memberinfo_lb);
 		c.add(name_lb);
 		c.add(balance_lb);
@@ -79,9 +79,9 @@ public class MainPage extends JFrame implements ActionListener{
 		c.add(logout_btn);
 		c.add(myinfo_btn);
 				
-		//È­ï¿½ï¿½ ï¿½ß¾Ó¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		//È­¸é Áß¾Ó¿¡ ¿À°Ô ¼³Á¤
 		setLocationRelativeTo(null);
-		//ï¿½ï¿½ï¿½Î±×·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô²ï¿½ ï¿½ï¿½ï¿½ï¿½
+		//ÇÁ·Î±×·¥ Á¾·áÇÒ ¶§ ÇÁ·Î¼¼½º±îÁö ÇÔ²² Á¾·á
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				
 		setVisible(true);

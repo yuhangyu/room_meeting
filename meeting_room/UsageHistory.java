@@ -11,17 +11,17 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 public class UsageHistory extends JFrame implements ActionListener{
-	JLabel usage_history_lb = new JLabel("ï¿½Ì¿ï¿½ ï¿½ï¿½ï¿½ï¿½");
-	JLabel start_date_lb = new JLabel("ï¿½Ë»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
-	JLabel end_date_lb = new JLabel("ï¿½Ë»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
+	JLabel usage_history_lb = new JLabel("ÀÌ¿ë ³»¿ª");
+	JLabel start_date_lb = new JLabel("°Ë»ö ½ÃÀÛÀÏ");
+	JLabel end_date_lb = new JLabel("°Ë»ö Á¾·áÀÏ");
 
 	UsageHistory(){
-		setTitle("ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
+		setTitle("³» Á¤º¸");
 		setSize(750, 500);
 		
-		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½Þ¼Òµï¿½ È£ï¿½ï¿½
+		//ÄÁÅÙÃ÷ ÆÐ³ÎÀÇ °´Ã¼ ¸Þ¼Òµå È£Ãâ
 		Container c = getContentPane();
-		c.setLayout(null); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ ï¿½Ê±ï¿½
+		c.setLayout(null); //ÄÁÅÙÃ÷ ÆÐ³Î ÃÊ±â
 		
 		usage_history_lb.setBounds(20,  10,  200,  40);
 		start_date_lb.setBounds(40, 50, 150, 50);
@@ -40,9 +40,9 @@ public class UsageHistory extends JFrame implements ActionListener{
 		
 		
 		
-		//È­ï¿½ï¿½ ï¿½ß¾Ó¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		//È­¸é Áß¾Ó¿¡ ¿À°Ô ¼³Á¤
 		setLocationRelativeTo(null);
-		//ï¿½ï¿½ï¿½Î±×·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô²ï¿½ ï¿½ï¿½ï¿½ï¿½
+		//ÇÁ·Î±×·¥ Á¾·áÇÒ ¶§ ÇÁ·Î¼¼½º±îÁö ÇÔ²² Á¾·á
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 										
 		setVisible(true);
