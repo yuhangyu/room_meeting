@@ -15,9 +15,10 @@ public class MainPageUI extends JFrame implements ActionListener{
 	
 	//요소 생성
 	JLabel memberinfo_lb = new JLabel("회원정보");	
-	JLabel name_lb = new JLabel("이름");
+	JLabel name_lb = new JLabel("이름 : ");
+	JLabel name_value_lb = new JLabel("집가고싶다");
 	JLabel balance_lb = new JLabel("잔액 : ");
-	JLabel balance_value_lb = new JLabel("300000원");
+	JLabel balance_value_lb = new JLabel("<TEST>원");
 	
 	//Swing에서 \n을 통한 줄바꿈을 지원하지 않아서, HTML을 활용하여 버튼 내의 줄바꿈
 	JButton reserve_btn = new JButton("<html><div style='text-align: center;'>미팅룸<br>예약하기</div></html>");
@@ -39,6 +40,7 @@ public class MainPageUI extends JFrame implements ActionListener{
 		//요소 위치 지정
 		memberinfo_lb.setBounds(380,  3,  100,  40);
 		name_lb.setBounds(380,  40,  100,  40);	
+		name_value_lb.setBounds(430, 40, 100, 40);
 		balance_lb.setBounds(380, 77, 100, 40);
 		balance_value_lb.setBounds(430, 77, 150, 40);
 		
@@ -46,6 +48,7 @@ public class MainPageUI extends JFrame implements ActionListener{
 		Font font = new Font("Dialog", Font.PLAIN, 18); // 폰트의 크기만 변경 
 		memberinfo_lb.setFont(font); // 회원정보 레이블에 적용 
 		name_lb.setFont(font); // 회원정보 레이블에 적용 
+		name_value_lb.setFont(font);
 		balance_lb.setFont(font); // 회원정보 레이블에 적용 
 		balance_value_lb.setFont(font); // 회원정보 레이블에 적용 
 		reserve_btn.setFont(font);
@@ -70,6 +73,7 @@ public class MainPageUI extends JFrame implements ActionListener{
 		//요소 추가
 		c.add(memberinfo_lb);
 		c.add(name_lb);
+		c.add(name_value_lb);
 		c.add(balance_lb);
 		c.add(balance_value_lb);
 		c.add(reserve_btn);
