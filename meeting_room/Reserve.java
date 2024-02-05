@@ -48,7 +48,6 @@ public class Reserve implements ActionListener {
 			reserveUI.dispose();
 		}
         
-		
 	}	
 }
 	
