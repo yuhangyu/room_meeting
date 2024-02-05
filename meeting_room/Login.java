@@ -85,8 +85,6 @@ public class Login extends JFrame implements ActionListener, ItemListener{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-			
-		
 	}
 	
 	@Override
