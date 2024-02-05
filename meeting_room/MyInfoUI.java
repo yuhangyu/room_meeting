@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-public class MyInfo extends JFrame implements ActionListener{
+public class MyInfoUI extends JFrame implements ActionListener {
 	
 	Vector<MyInfoBean> vlist;
 	MyInfoMgr mgr;
@@ -27,48 +27,36 @@ public class MyInfo extends JFrame implements ActionListener{
 	JLabel name_lb = new JLabel("이름");
 	JLabel phone_lb = new JLabel("전화번호");
 	
-	JTextField id_tf = new JTextField(10);
+	JTextField id_tf = new JTextField("DefaultID", 10);
 	JTextField pw_tf = new JTextField(10);
-	JTextField name_tf = new JTextField(10);
-	JTextField phone_tf = new JTextField(10);
+	JTextField name_tf = new JTextField("UserName", 10);
+	JTextField phone_tf = new JTextField("PhoneNum", 10);
 	
 	JButton my_usage_btn = new JButton("이용 내역");
 	JButton modify_info_btn = new JButton("정보 수정");
 	JButton ok_btn = new JButton("확인");
 	
-	public MyInfo() {
+	public MyInfoUI() {
 		setTitle("내 정보");
-		setSize(395, 430);
-		
-		mgr = new MyInfoMgr();
-		MyInfoBean bean = mgr.select("user");
-
-		id = bean.getID();
-		pw = bean.getPW();
-		name = bean.getName();
-		phone = bean.getPhone();
-		
-		id_tf.setText(id);
-		name_tf.setText(name);
-		phone_tf.setText(phone);
+		setSize(400, 500);
 		
 		//컨텐츠 패널의 객체 메소드 호출
 		Container c = getContentPane();
 		c.setLayout(null); //컨텐츠 패널 초기
 		
-		id_lb.setBounds(60,  30,  100,  40);
-		pw_lb.setBounds(60,  80,  100,  40);
-		name_lb.setBounds(60,  130,  100,  40);
-		phone_lb.setBounds(60,  180,  100,  40);
+		id_lb.setBounds(85,  30,  100,  40);
+		pw_lb.setBounds(85,  80,  100,  40);
+		name_lb.setBounds(85,  130,  100,  40);
+		phone_lb.setBounds(85,  180,  100,  40);
 		
-		id_tf.setBounds(165, 37, 155, 25);
-		pw_tf.setBounds(165, 87, 155, 25);
-		name_tf.setBounds(165, 137, 155, 25);
-		phone_tf.setBounds(165, 187, 155, 25);
+		id_tf.setBounds(180, 30, 100, 40);
+		pw_tf.setBounds(180, 80, 100, 40);
+		name_tf.setBounds(180, 130, 100, 40);
+		phone_tf.setBounds(180, 180, 100, 40);
 		
-		my_usage_btn.setBounds(65, 240, 250, 45);
-		modify_info_btn.setBounds(65, 310, 110, 50);
-		ok_btn.setBounds(205, 310, 110, 50);
+		my_usage_btn.setBounds(85, 250, 200, 70);
+		modify_info_btn.setBounds(85, 340, 90, 70);
+		ok_btn.setBounds(195, 340, 90, 70);
 		
 		
 		Font font = new Font("Dialog", Font.BOLD, 18);
@@ -136,6 +124,9 @@ public class MyInfo extends JFrame implements ActionListener{
 	}
 
 	public static void main(String[] args) {
-		MyInfo myinfo = new MyInfo();
+		MyInfoUI myinfo = new MyInfoUI();
 	}
+
+	
+
 }

@@ -18,7 +18,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.AbstractDocument;
 
-public class ReserveDetail extends JFrame implements ActionListener{
+public class ReserveDetailUI extends JFrame implements ActionListener{
 	
 	JLabel reserve_lb = new JLabel("미팅룸 예약하기 상세정보");
 	JLabel chosen_room_lb = new JLabel("선택된 룸  ");
@@ -62,7 +62,7 @@ public class ReserveDetail extends JFrame implements ActionListener{
 	
 	
 	
-	public ReserveDetail() {
+	public ReserveDetailUI() {
 		setTitle("미팅룸 예약하기 상세정보");
 		setSize(400, 600);
 		
@@ -187,7 +187,7 @@ public class ReserveDetail extends JFrame implements ActionListener{
 	}
 	
 	public static void main(String[] args) {
-		ReserveDetail rsvdetail = new ReserveDetail();
+		ReserveDetailUI rsvdetail = new ReserveDetailUI();
 	}
 
 	
