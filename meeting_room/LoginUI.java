@@ -3,15 +3,24 @@ package meeting_room;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class LoginUI extends JFrame implements ActionListener{
+public class LoginUI extends JFrame implements ActionListener, ItemListener{
+	
+	String id;
+	private static LoginUI instance;
 	
 	//요소생성
 	JLabel id_lb = new JLabel("아이디");	
@@ -24,7 +33,10 @@ public class LoginUI extends JFrame implements ActionListener{
 	//JLabel admin_lb = new JLabel("관리자 로그인");
 	JCheckBox check_admin = new JCheckBox("관리자 로그인");
 	
-	
+	int check_action = 1;
+	private Statement stmt;
+	private DBConnection pool;
+
 	public LoginUI() {
 		setTitle("로그인");
 		setSize(300, 230);
@@ -47,7 +59,7 @@ public class LoginUI extends JFrame implements ActionListener{
 		//버튼 이벤트 추가
 		signup_btn.addActionListener(this);
 		login_btn.addActionListener(this);
-		
+		check_admin.addItemListener(this);
 		//요소 추가
 		c.add(id_lb);
 		c.add(pw_lb);
@@ -65,16 +77,82 @@ public class LoginUI extends JFrame implements ActionListener{
 		
 		setVisible(true);
 		setResizable(false);
+		
+		try {
+			pool = DBConnection.getInstance();
+			Connection con = pool.getConnection();
+			stmt = con.createStatement();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		Object obj = e.getSource();
+		
+		if(obj == signup_btn) {//회원가입 버튼 동작
+			SignUp signup = new SignUp();
+		}else if(obj == login_btn) {
+			if (check_action == 2) {//관리자 로그인 시
+				try {
+					ResultSet rs = stmt.executeQuery("SELECT * FROM member WHERE member_id='" + id_tf.getText() + "' AND member_pw='" + pw_tf.getText() + "' AND member_level='" + check_action + "'");
+					if (rs.next()) {
+						JOptionPane.showMessageDialog(this, "로그인 성공!");
+						LoginUI.getInstance().setLoginID(id_tf.getText());
+						AdminMainPage admin = new AdminMainPage();
+						dispose();
+					} else {
+						JOptionPane.showMessageDialog(this, "로그인 실패. 다시 시도하세요.");
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			} else if (check_action == 1) {//비관리자 로그인 시
+				try {
+					ResultSet rs = stmt.executeQuery("SELECT * FROM member WHERE member_id='" + id_tf.getText() + "' AND member_pw='" + pw_tf.getText() + "' AND member_level='"+check_action+"'");
+					if (rs.next()) {
+						JOptionPane.showMessageDialog(this, "로그인 성공!");
+						LoginUI.getInstance().setLoginID(id_tf.getText());
+						MainPageUI mainpage = new MainPageUI();
+						dispose();
+					} else {
+						JOptionPane.showMessageDialog(this, "로그인 실패. 다시 시도하세요.");
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public static LoginUI getInstance() {
+		if (instance == null) {
+			instance = new LoginUI();
+		}
+		return instance;
+	}
+	
+	public void setLoginID(String id) {
+		this.id = id;
+	}
+	
+	public String getLoginID() {
+		return id;
+	}
+	
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		if (e.getStateChange() == ItemEvent.SELECTED) {
+			// 체크박스가 선택되면 실행되는 코드
+			check_action = 2;
+		} else {
+			// 체크박스가 선택 해제되면 실행되는 코드
+			check_action = 1;
+		}
 	}
 
 	public static void main(String[] args) {
 		LoginUI login = new LoginUI();
-
 	}
-
-	
 }

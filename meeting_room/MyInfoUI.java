@@ -36,13 +36,20 @@ public class MyInfoUI extends JFrame implements ActionListener {
 	JButton modify_info_btn = new JButton("정보 수정");
 	JButton ok_btn = new JButton("확인");
 	
+	public String getID(MyInfoBean bean) {
+		return bean.getID();
+	}
+	
 	public MyInfoUI() {
 		setTitle("내 정보");
 		setSize(400, 500);
 		
 		mgr = new MyInfoMgr();
-		MyInfoBean bean = mgr.select("user");
-
+		
+		id = LoginUI.getInstance().getLoginID();
+		
+		MyInfoBean bean = mgr.select(id);
+		
 		id = bean.getID();
 		pw = bean.getPW();
 		name = bean.getName();
