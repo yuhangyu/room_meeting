@@ -19,8 +19,7 @@ import javax.swing.JTextField;
 
 public class LoginUI extends JFrame implements ActionListener, ItemListener{
 	
-	String id;
-	private static LoginUI instance;
+	public static String ID;
 	
 	//요소생성
 	JLabel id_lb = new JLabel("아이디");	
@@ -99,9 +98,9 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener{
 					ResultSet rs = stmt.executeQuery("SELECT * FROM member WHERE member_id='" + id_tf.getText() + "' AND member_pw='" + pw_tf.getText() + "' AND member_level='" + check_action + "'");
 					if (rs.next()) {
 						JOptionPane.showMessageDialog(this, "로그인 성공!");
-						LoginUI.getInstance().setLoginID(id_tf.getText());
-						AdminMainPage admin = new AdminMainPage();
 						dispose();
+						setLoginID(id_tf.getText());
+						AdminMainPage admin = new AdminMainPage();
 					} else {
 						JOptionPane.showMessageDialog(this, "로그인 실패. 다시 시도하세요.");
 					}
@@ -113,9 +112,9 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener{
 					ResultSet rs = stmt.executeQuery("SELECT * FROM member WHERE member_id='" + id_tf.getText() + "' AND member_pw='" + pw_tf.getText() + "' AND member_level='"+check_action+"'");
 					if (rs.next()) {
 						JOptionPane.showMessageDialog(this, "로그인 성공!");
-						LoginUI.getInstance().setLoginID(id_tf.getText());
-						MainPageUI mainpage = new MainPageUI();
 						dispose();
+						setLoginID(id_tf.getText());
+						MainPageUI mainpage = new MainPageUI();
 					} else {
 						JOptionPane.showMessageDialog(this, "로그인 실패. 다시 시도하세요.");
 					}
@@ -126,19 +125,12 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener{
 		}
 	}
 	
-	public static LoginUI getInstance() {
-		if (instance == null) {
-			instance = new LoginUI();
-		}
-		return instance;
+	public static void setLoginID(String id) {
+		ID = id;
 	}
 	
-	public void setLoginID(String id) {
-		this.id = id;
-	}
-	
-	public String getLoginID() {
-		return id;
+	public static String getLoginID() {
+		return ID;
 	}
 	
 	@Override

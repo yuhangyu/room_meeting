@@ -11,10 +11,8 @@ public class MainPage implements ActionListener{
 	
 	public MainPage(MainPageUI mainPageUI) {
 		this.mainPageUI = mainPageUI;
-		
 	}
 
-	
 	@Override
     public void actionPerformed(ActionEvent e) {
         JButton sourceButton = (JButton) e.getSource();
@@ -61,5 +59,3 @@ public class MainPage implements ActionListener{
         }
 	}
 }
-
-
