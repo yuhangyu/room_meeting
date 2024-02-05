@@ -14,7 +14,6 @@ public class MainPage implements ActionListener{
 		this.mainPageUI = mainPageUI;
 		
 	}
-
 	
 	
 	@Override

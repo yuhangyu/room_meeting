@@ -10,7 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-
 public class MainPageUI extends JFrame implements ActionListener{
 	private MainPage mainPage;
 	

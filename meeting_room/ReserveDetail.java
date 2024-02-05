@@ -24,6 +24,5 @@ public class ReserveDetail implements ActionListener{
 			// 결제 이벤ㅌ 구현부
 		}
 	}
-
 	
 }

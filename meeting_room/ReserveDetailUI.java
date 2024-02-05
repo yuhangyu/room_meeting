@@ -194,5 +194,4 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 		ReserveDetailUI rsvdetail = new ReserveDetailUI(selectedRoomInfo);
 	}
 
-
 }
