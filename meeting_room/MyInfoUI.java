@@ -4,13 +4,24 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-public class MyInfoUI extends JFrame implements ActionListener{
+public class MyInfoUI extends JFrame implements ActionListener {
+	
+	Vector<MyInfoBean> vlist;
+	MyInfoMgr mgr;
+	
+	String id;
+	String pw;
+	String name;
+	String phone;
+	
 	JLabel id_lb = new JLabel("아이디");
 	JLabel pw_lb = new JLabel("비밀번호");
 	JLabel name_lb = new JLabel("이름");
@@ -84,6 +95,32 @@ public class MyInfoUI extends JFrame implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		Object obj = e.getSource();
+		
+		if (obj == modify_info_btn) {
+			if (!id_tf.getText().equals(id)) {
+				JOptionPane.showMessageDialog(this, "아이디는 변경할 수 없습니다.");
+			} else if (name_tf.getText().equals(name) && phone_tf.getText().equals(phone) && pw_tf.getText().equals(pw)) {
+				JOptionPane.showMessageDialog(this, "변경할 정보가 없습니다.");
+			} else if ("".equals(name_tf.getText()) || "".equals(phone_tf.getText()) || "".equals(pw_tf.getText())) {
+				JOptionPane.showMessageDialog(this, "공백으로 정보를 변경할 수 없습니다.");
+			} else {
+				change();
+			}
+		}
+	}
+	
+	public void change() {
+		MyInfoBean bean = new MyInfoBean();
+		bean.setPW(pw_tf.getText());
+		bean.setName(name_tf.getText());
+		bean.setPhone(phone_tf.getText());
+		if(mgr.update(bean)) {
+			pw = bean.getPW();
+			name = bean.getName();
+			phone = bean.getPhone();
+			JOptionPane.showMessageDialog(this, "정보가 변경되었습니다.");
+		}
 	}
 
 	public static void main(String[] args) {
