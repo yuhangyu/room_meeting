@@ -114,7 +114,14 @@ public class MyInfo extends JFrame implements ActionListener{
 					//수정되지 않은 경우
 				} else {
 					//비밀번호만 변경된 경우
-					System.out.println("d");
+					MyInfoBean bean = new MyInfoBean();
+					bean.setID(id_tf.getText());
+					bean.setPW(pw_tf.getText());
+					bean.setName(name_tf.getText());
+					bean.setPhone(phone_tf.getText());
+					if(mgr.update(bean)) {
+						System.out.println("수정완료");
+					}
 				}
 			} else { //아이디, 이름, 전화번호가 변경된 경우
 				System.out.println("dㅇ");
