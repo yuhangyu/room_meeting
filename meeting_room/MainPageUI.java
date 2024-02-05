@@ -33,7 +33,6 @@ public class MainPageUI extends JFrame implements ActionListener{
 	JButton logout_btn = new JButton("로그아웃");
 	JButton myinfo_btn = new JButton("내 정보");
 
-	
 	public MainPageUI() {
 		setTitle("메인 페이지");
 		setSize(600, 350);
