@@ -123,6 +123,8 @@ public class MyInfoUI extends JFrame implements ActionListener {
 			} else {
 				change();
 			}
+		} else if (obj == ok_btn) {
+			dispose();
 		}
 	}
 	
