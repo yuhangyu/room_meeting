@@ -127,7 +127,6 @@ public class MyInfo extends JFrame implements ActionListener{
 		bean.setName(name_tf.getText());
 		bean.setPhone(phone_tf.getText());
 		if(mgr.update(bean)) {
-			System.out.println("수정완료");
 			id = bean.getID();
 			pw = bean.getPW();
 			name = bean.getName();
