@@ -118,6 +118,8 @@ public class MyInfo extends JFrame implements ActionListener{
 					//비밀번호만 변경된 경우
 					change();
 				}
+			} else if ("".equals(id_tf.getText()) || "".equals(name_tf.getText()) || "".equals(phone_tf.getText())) {
+				JOptionPane.showMessageDialog(this, "공백으로 정보를 변경할 수 없습니다.");
 			} else { //아이디, 이름, 전화번호가 변경된 경우
 				change();
 			}
