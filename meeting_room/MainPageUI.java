@@ -107,7 +107,6 @@ public class MainPageUI extends JFrame implements ActionListener{
 				
 		setVisible(true);
 		setResizable(false);
-		
 	}
 	
 	public static void setIDMoney(int money) {
