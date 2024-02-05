@@ -36,7 +36,11 @@ public class Reserve implements ActionListener {
 		
 		// 예약하기 버튼 클릭시
 		else if (clickedButton == reserveUI.reserve_btn) {
-			// 예약하기 이벤트 구현
+			String selectedRoomInfo = previousSelectedButton.getText();
+			// 이전에 클릭한 방 버튼의 텍스트
+			
+			ReserveDetailUI rdUI = new ReserveDetailUI(selectedRoomInfo);
+            rdUI.setVisible(true);
 		}
 		
 		// 취소 버튼 클릭시

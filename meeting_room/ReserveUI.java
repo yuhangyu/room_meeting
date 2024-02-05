@@ -24,20 +24,20 @@ public class ReserveUI extends JFrame implements ActionListener{
 	JLabel balance_lb = new JLabel("ÀÜ¾× : ");
 	JLabel balance_value_lb = new JLabel("<TEST> ¿ø");
 	
-	JButton room2_1_btn = new JButton("1¹ø ·ë");
-	JButton room2_2_btn = new JButton("2¹ø ·ë");
-	JButton room2_3_btn = new JButton("3¹ø ·ë");
-	JButton room2_4_btn = new JButton("4¹ø ·ë");
+	JButton room2_1_btn = new JButton("2ÀÎ 1¹ø ·ë");
+	JButton room2_2_btn = new JButton("2ÀÎ 2¹ø ·ë");
+	JButton room2_3_btn = new JButton("2ÀÎ 3¹ø ·ë");
+	JButton room2_4_btn = new JButton("2ÀÎ 4¹ø ·ë");
 	
-	JButton room4_1_btn = new JButton("1¹ø ·ë");
-	JButton room4_2_btn = new JButton("2¹ø ·ë");
-	JButton room4_3_btn = new JButton("3¹ø ·ë");
-	JButton room4_4_btn = new JButton("4¹ø ·ë");
-	JButton room4_5_btn = new JButton("5¹ø ·ë");
-	JButton room4_6_btn = new JButton("6¹ø ·ë");
+	JButton room4_1_btn = new JButton("4ÀÎ 1¹ø ·ë");
+	JButton room4_2_btn = new JButton("4ÀÎ 2¹ø ·ë");
+	JButton room4_3_btn = new JButton("4ÀÎ 3¹ø ·ë");
+	JButton room4_4_btn = new JButton("4ÀÎ 4¹ø ·ë");
+	JButton room4_5_btn = new JButton("4ÀÎ 5¹ø ·ë");
+	JButton room4_6_btn = new JButton("4ÀÎ 6¹ø ·ë");
 	
-	JButton room8_1_btn = new JButton("1¹ø ·ë");
-	JButton room8_2_btn = new JButton("2¹ø ·ë");
+	JButton room8_1_btn = new JButton("4ÀÎ 1¹ø ·ë");
+	JButton room8_2_btn = new JButton("4ÀÎ 2¹ø ·ë");
 	
 	JButton reserve_btn = new JButton("¿¹¾à");
 	JButton cancel_btn = new JButton("Ãë¼Ò");
@@ -169,8 +169,6 @@ public class ReserveUI extends JFrame implements ActionListener{
 		
 		c.add(reserve_btn);
 		c.add(cancel_btn);
-		
-		
 		
 		
 		//È­¸é Áß¾Ó¿¡ ¿À°Ô ¼³Á¤

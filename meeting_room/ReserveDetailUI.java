@@ -19,10 +19,11 @@ import javax.swing.text.DocumentFilter;
 import javax.swing.text.AbstractDocument;
 
 public class ReserveDetailUI extends JFrame implements ActionListener{
+	private ReserveDetail rsvdetail;
 	
 	JLabel reserve_lb = new JLabel("미팅룸 예약하기 상세정보");
 	JLabel chosen_room_lb = new JLabel("선택된 룸  ");
-	JLabel chosen_room_info_lb = new JLabel("2인 1번룸");
+	JLabel chosen_room_info_lb;
 	JLabel time_lb = new JLabel("사용 시간  ");
 	JLabel add_person_lb = new JLabel("추가 인원 ");
 	JLabel start_time_lb = new JLabel("시작 시간 ");
@@ -62,7 +63,7 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 	
 	
 	
-	public ReserveDetailUI() {
+	public ReserveDetailUI(String selectedRoomInfo) {
 		setTitle("미팅룸 예약하기 상세정보");
 		setSize(400, 600);
 		
@@ -72,6 +73,7 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 		
 		reserve_lb.setBounds(35,  10,  500,  40);
 		chosen_room_lb.setBounds(80,  70,  90,  25);
+		chosen_room_info_lb = new JLabel(selectedRoomInfo);
 		chosen_room_info_lb.setBounds(180, 70, 90, 25);
 		time_lb.setBounds(80, 110, 90, 25);
 		time_tf.setBounds(180, 110, 30, 25);
@@ -110,9 +112,10 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 		cancel_btn.setBounds(200, 410, 140, 60);
 		
 		
+		rsvdetail = new ReserveDetail(this);
 		
-		payment_btn.addActionListener(this);
-		cancel_btn.addActionListener(this);
+		payment_btn.addActionListener(rsvdetail);
+		cancel_btn.addActionListener(rsvdetail);
 		
 		
 		//Font 지정
@@ -187,7 +190,8 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 	}
 	
 	public static void main(String[] args) {
-		ReserveDetailUI rsvdetail = new ReserveDetailUI();
+		String selectedRoomInfo = "잘못된 접근";
+		ReserveDetailUI rsvdetail = new ReserveDetailUI(selectedRoomInfo);
 	}
 
 	
