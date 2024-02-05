@@ -110,9 +110,11 @@ public class MyInfo extends JFrame implements ActionListener{
 		Object obj = e.getSource();
 		
 		if (obj == modify_info_btn) {
-			if (id_tf.getText().equals(id) && name_tf.getText().equals(name) && phone_tf.getText().equals(phone) && pw_tf.getText().equals(pw)) {
+			if (!id_tf.getText().equals(id)) {
+				JOptionPane.showMessageDialog(this, "아이디는 변경할 수 없습니다.");
+			} else if (name_tf.getText().equals(name) && phone_tf.getText().equals(phone) && pw_tf.getText().equals(pw)) {
 				JOptionPane.showMessageDialog(this, "변경할 정보가 없습니다.");
-			} else if ("".equals(id_tf.getText()) || "".equals(name_tf.getText()) || "".equals(phone_tf.getText()) || "".equals(pw_tf.getText())) {
+			} else if ("".equals(name_tf.getText()) || "".equals(phone_tf.getText()) || "".equals(pw_tf.getText())) {
 				JOptionPane.showMessageDialog(this, "공백으로 정보를 변경할 수 없습니다.");
 			} else { //아이디, 이름, 전화번호가 변경된 경우
 				change();
@@ -122,12 +124,10 @@ public class MyInfo extends JFrame implements ActionListener{
 	
 	public void change() {
 		MyInfoBean bean = new MyInfoBean();
-		bean.setID(id_tf.getText());
 		bean.setPW(pw_tf.getText());
 		bean.setName(name_tf.getText());
 		bean.setPhone(phone_tf.getText());
 		if(mgr.update(bean)) {
-			id = bean.getID();
 			pw = bean.getPW();
 			name = bean.getName();
 			phone = bean.getPhone();
