@@ -138,7 +138,6 @@ public class MyInfo extends JFrame implements ActionListener{
 			phone = bean.getPhone();
 			JOptionPane.showMessageDialog(this, "정보가 변경되었습니다.");
 		}
-		
 	}
 
 	public static void main(String[] args) {
