@@ -104,6 +104,7 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		//엔터키로 로그인 실행
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			Login();
 		}

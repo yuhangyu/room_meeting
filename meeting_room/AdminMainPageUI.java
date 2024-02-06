@@ -62,10 +62,8 @@ public class AdminMainPageUI extends JFrame implements ActionListener{
 		Member_info.setFont(font);
 		
 		setLocationRelativeTo(null);
-		
 		setVisible(true);
 		setResizable(false);
-			
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
