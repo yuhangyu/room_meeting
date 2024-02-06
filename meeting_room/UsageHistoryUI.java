@@ -9,11 +9,15 @@ import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-
-
+import javax.swing.JList;
+import javax.swing.JScrollPane;
 // JSpinner 사용
 import javax.swing.JSpinner;
+import javax.swing.JTable;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatter;
 
 import java.util.Calendar;
@@ -21,15 +25,28 @@ import java.util.Date;
 
 
 public class UsageHistoryUI extends JFrame implements ActionListener{
+	private UsageHistory uh;
+	
 	JLabel usage_history_lb = new JLabel("이용 내역");
 	JLabel start_date_lb = new JLabel("검색 시작일");
 	JLabel end_date_lb = new JLabel("검색 종료일");
 	JButton ok_btn = new JButton("확인");
 	JButton search_btn = new JButton("검색");
 	
+    
+    JTable historyTable;
+    JScrollPane historyPane;
+    
+        
 	UsageHistoryUI(){
+		uh = new UsageHistory(this);
+		
+		//버튼 이벤트 추가
+		ok_btn.addActionListener(uh);
+		search_btn.addActionListener(uh);
+		
 		setTitle("내 정보");
-		setSize(750, 500);
+		setSize(850, 500);
 		
 		//컨텐츠 패널의 객체 메소드 호출
 		Container c = getContentPane();
@@ -37,9 +54,15 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
 		
 		usage_history_lb.setBounds(20,  10,  200,  40);
 		start_date_lb.setBounds(40, 50, 150, 50);
-		end_date_lb.setBounds(320, 50, 150, 50);
-		//ok_btn.setBounds(520, 20, 140, 70);
-		search_btn.setBounds(540, 60, 140, 70);
+		end_date_lb.setBounds(420, 50, 150, 50);
+		ok_btn.setBounds(640, 320, 140, 70);
+		search_btn.setBounds(640, 60, 140, 70);
+		
+		viewhistoryPane(); // 테이블 활성화 메서드 
+		historyPane.setBounds(40, 150, 550, 270); 
+        
+      
+		
 		
 		// 현재 날짜를 얻어옴
         Date currentDate = new Date();
@@ -71,11 +94,11 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
         
         
         YearSpinner1.setBounds(40, 100, 50, 30);
-		YearSpinner2.setBounds(320, 100, 50, 30);
+		YearSpinner2.setBounds(420, 100, 50, 30);
 		MonthSpinner1.setBounds(100, 100, 40, 30);
-		MonthSpinner2.setBounds(380, 100, 40, 30);
+		MonthSpinner2.setBounds(480, 100, 40, 30);
 		DaySpinner1.setBounds(150, 100, 40, 30);
-		DaySpinner2.setBounds(430, 100, 40, 30);
+		DaySpinner2.setBounds(530, 100, 40, 30);
 		
 		Font font = new Font("Dialog", Font.BOLD, 27);
 		Font font1 = new Font("Dialog", Font.BOLD, 18);
@@ -96,7 +119,9 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
 		c.add(DaySpinner2);
 		c.add(ok_btn);
 		c.add(search_btn);
+		c.add(historyPane);
 		
+			
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -120,12 +145,49 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
         YearSpinner2.setEditor(editor2);
 	}
 	
+	public void viewhistoryPane() {
+		// 데이터 및 컬럼명 배열 정의
+	    String[] columnNames = {"예약 번호", "ID", "이름", "전화번호", "이용 룸", "예약 날짜", "이용 시간", "이용 인원"};
+	    String[][] data = {{"TEST_01", "admin", "셰계최강귀요미", "010-0000-0000", "2인 1번", "2024-02-06", "2시간", "3명"}};
+	
+	    // DefaultTableModel을 사용하여 JTable에 데이터 설정
+	    DefaultTableModel model = new DefaultTableModel(data, columnNames);
+	    historyTable = new JTable(model);
+	    historyPane = new JScrollPane(historyTable);
+
+	    
+	    
+	    
+	    // 수평 스크롤바 비활성화
+	    historyPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+	    // 컬럼 너비 조절
+	    historyTable.getColumnModel().getColumn(0).setPreferredWidth(80);
+	    historyTable.getColumnModel().getColumn(1).setPreferredWidth(80);
+	    historyTable.getColumnModel().getColumn(2).setPreferredWidth(80);
+	    historyTable.getColumnModel().getColumn(3).setPreferredWidth(140);
+	    historyTable.getColumnModel().getColumn(4).setPreferredWidth(80);
+	    historyTable.getColumnModel().getColumn(5).setPreferredWidth(120);
+	    historyTable.getColumnModel().getColumn(6).setPreferredWidth(80);
+	    historyTable.getColumnModel().getColumn(7).setPreferredWidth(80);
+
+	    // 행 높이 조절
+	    historyTable.setRowHeight(20);
+	    
+	    DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for (int i = 0; i < historyTable.getColumnCount(); i++) {
+            historyTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 	}
 
 	public static void main(String[] args) {
 		UsageHistoryUI uh = new UsageHistoryUI();
+		
 
 	}
 

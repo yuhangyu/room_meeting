@@ -1,6 +1,7 @@
 package meeting_room;
 
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -40,22 +41,30 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 
 	public LoginUI() {
 		setTitle("로그인");
-		setSize(300, 230);
+		setSize(800, 630);
 
 		//컨텐츠 패널의 객체 메소드 호출
 		Container c = getContentPane();
 		c.setLayout(null);  //컨텐츠 패널 초기화
 		
 		//요소 위치 지정
-		id_lb.setBounds(30,  22,  50,  25);
-		pw_lb.setBounds(30,  58,  50,  25);
-		id_tf.setBounds(90, 22, 170, 25);
-		pw_tf.setBounds(90, 58, 170, 25);
-		signup_btn.setBounds(28, 130, 100, 40);
-		login_btn.setBounds(156, 130, 100, 40);
+		id_lb.setBounds(255,  322,  100,  25);
+		pw_lb.setBounds(255,  358,  100,  25);
+		id_tf.setBounds(365, 322, 170, 25);
+		pw_tf.setBounds(365, 358, 170, 25);
+		signup_btn.setBounds(243, 440, 130, 70);
+		login_btn.setBounds(401, 440, 130, 70);
 		
 		//admin_lb.setBounds(50, 94, 170, 25);
-		check_admin.setBounds(30, 94, 150, 25);
+		check_admin.setBounds(250, 394, 250, 25);
+		
+		//Font 지정
+		Font font = new Font("Dialog", Font.BOLD, 13); // 폰트굵게
+		Font font2 = new Font("Dialog", Font.BOLD, 22);
+		
+		id_lb.setFont(font2);
+		pw_lb.setFont(font2);
+		check_admin.setFont(font);
 		
 		//버튼 이벤트 추가
 		signup_btn.addActionListener(this);
