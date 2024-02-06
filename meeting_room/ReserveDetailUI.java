@@ -87,17 +87,46 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 		start_min_lb.setBounds(315, 190, 50, 25);
 		
 		// DocumentFilter를 사용하여 텍스트 필드의 입력을 제한
-        ((AbstractDocument) time_tf.getDocument()).setDocumentFilter(new DocumentFilter() {
-            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
-                    throws BadLocationException {
-                // 입력값이 숫자이고, 최대 1자리까지만 입력 가능하도록 제한
-                if (text.matches("\\d") && fb.getDocument().getLength() + text.length() <= 1) {
-                    super.replace(fb, offset, length, text, attrs);
-                    // 여기서 금액 계산 등 추가 작업을 할 수 있습니다.
-                    updatePrice(); // 예시로 추가된 메서드 호출
-                }
+		((AbstractDocument) time_tf.getDocument()).setDocumentFilter(new DocumentFilter() {
+		    @Override
+		    public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+		            throws BadLocationException {
+		        // 입력값이 숫자이거나 백스페이스 키일 때만 처리, 최대 입력 자릿수를 1자리로 제한 
+		        if ((text == null || text.matches("\\d")) && fb.getDocument().getLength() + (text == null ? 0 : text.length()) - length <= 1) {
+		            super.replace(fb, offset, length, text, attrs);
+		            // 여기서 금액 계산 등 추가 작업을 할 수 있습니다.
+		            updatePrice(); // 예시로 추가된 메서드 호출
+		        }
+		    }
+		});
+		
+        // 텍스트 필드의 값이 바뀔 때 마다 time_price_value_lb 값 갱신 
+        time_tf.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                updatePrice();
+            }
+
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                updatePrice();
+            }
+
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                updatePrice();
             }
         });
+        
+//        // 콤보 박스의 값이 변경될 때 마다 
+//        select_add_person.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                updatePrice(); // 콤보박스 값이 변경될 때마다 updatePrice 메서드 호출
+//            }
+//        });
+        
+        
 		
         hourSpinner.setBounds(180, 190, 50, 30);
         minSpinner.setBounds(260, 190, 50, 30);
