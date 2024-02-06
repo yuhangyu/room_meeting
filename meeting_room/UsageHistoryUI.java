@@ -41,8 +41,6 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
 		//ok_btn.setBounds(520, 20, 140, 70);
 		search_btn.setBounds(540, 60, 140, 70);
 		
-		
-		
 		// 현재 날짜를 얻어옴
         Date currentDate = new Date();
         Calendar calendar = Calendar.getInstance();
