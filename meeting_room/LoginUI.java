@@ -93,35 +93,27 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener{
 		if(obj == signup_btn) {//회원가입 버튼 동작
 			SignUp signup = new SignUp();
 		}else if(obj == login_btn) {
-			if (check_action == 2) {//관리자 로그인 시
-				try {
-					ResultSet rs = stmt.executeQuery("SELECT * FROM member WHERE member_id='" + id_tf.getText() + "' AND member_pw=MD5('" + pw_tf.getText() + "') AND member_level='" + check_action + "'");
-					if (rs.next()) {
-						JOptionPane.showMessageDialog(this, "로그인 성공!");
-						dispose();
-						setLoginID(id_tf.getText());
-						AdminMainPage admin = new AdminMainPage();
-					} else {
-						JOptionPane.showMessageDialog(this, "로그인 실패. 다시 시도하세요.");
-					}
-				} catch (Exception ex) {
-					ex.printStackTrace();
+			Login();
+		}
+	}
+	
+	public void Login() {
+		try {
+			ResultSet rs = stmt.executeQuery("SELECT * FROM member WHERE member_id='" + id_tf.getText() + "' AND member_pw=MD5('" + pw_tf.getText() + "') AND member_level='" + check_action + "'");
+			if (rs.next()) {
+				JOptionPane.showMessageDialog(this, "로그인 성공!");
+				dispose();
+				setLoginID(id_tf.getText());
+				if (check_action == 1) { //일반 사용자
+					MainPageUI mainpage = new MainPageUI();
+				} else if (check_action == 2) {
+					AdminMainPageUI admin_ui = new AdminMainPageUI();
 				}
-			} else if (check_action == 1) {//비관리자 로그인 시
-				try {
-					ResultSet rs = stmt.executeQuery("SELECT * FROM member WHERE member_id='" + id_tf.getText() + "' AND member_pw=MD5('" + pw_tf.getText() + "') AND member_level='"+check_action+"'");
-					if (rs.next()) {
-						JOptionPane.showMessageDialog(this, "로그인 성공!");
-						dispose();
-						setLoginID(id_tf.getText());
-						MainPageUI mainpage = new MainPageUI();
-					} else {
-						JOptionPane.showMessageDialog(this, "로그인 실패. 다시 시도하세요.");
-					}
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
+			} else {
+				JOptionPane.showMessageDialog(this, "로그인 실패. 다시 시도하세요.");
 			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 	}
 	

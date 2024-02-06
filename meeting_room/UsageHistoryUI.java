@@ -27,7 +27,6 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
 	JButton ok_btn = new JButton("확인");
 	JButton search_btn = new JButton("검색");
 	
-
 	UsageHistoryUI(){
 		setTitle("내 정보");
 		setSize(750, 500);

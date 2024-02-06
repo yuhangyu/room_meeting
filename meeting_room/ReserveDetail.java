@@ -48,8 +48,7 @@ public class ReserveDetail implements ActionListener{
 		}
 		
 		else if (clickedButton == rdUI.payment_btn) {
-			// 결제 이벤ㅌ 구현부
-			
+			// 결제 이벤트 구현부
 		}
 	}
 	
