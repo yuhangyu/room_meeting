@@ -104,7 +104,7 @@ public class MyInfoUI extends JFrame implements ActionListener {
 		
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);
-		//프로그램 종료할 때 프로세스까지 함께 종료
+		//프로그램 종료할 때 현재 창만 종료
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 								
 		setVisible(true);
