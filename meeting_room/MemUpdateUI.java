@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class MemUpdateUI extends JFrame implements ActionListener {
@@ -35,7 +36,7 @@ public class MemUpdateUI extends JFrame implements ActionListener {
 		this.id = id;
 
 		setTitle("내 정보");
-		setSize(400, 300);
+		setSize(400, 350);
 
 		//정보 저장 id, pw, name, phone(tel)
 		mgr = new MyInfoMgr();
@@ -94,7 +95,33 @@ public class MemUpdateUI extends JFrame implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		Object obj = e.getSource();
 		
+		if (obj == modify_info_btn) {
+			if (!id_tf.getText().equals(id)) {
+				JOptionPane.showMessageDialog(this, "아이디는 변경할 수 없습니다.");
+			} else if (name_tf.getText().equals(name) && phone_tf.getText().equals(phone)) {
+				JOptionPane.showMessageDialog(this, "변경할 정보가 없습니다.");
+			} else if ("".equals(name_tf.getText()) || "".equals(phone_tf.getText())) {
+				JOptionPane.showMessageDialog(this, "공백으로 정보를 변경할 수 없습니다.");
+			} else {
+				change();
+			}
+		} else if (obj == ok_btn) {
+			dispose();
+		}
+	}
+	
+	public void change() {
+		bean.setName(name_tf.getText());
+		bean.setPhone(phone_tf.getText());
+		if(mgr.update(bean)) {
+			name = bean.getName();
+			phone = bean.getPhone();
+			JOptionPane.showMessageDialog(this, "정보가 변경되었습니다.");
+			dispose();
+			MemberInfoUI.jb.doClick();
+		}
 	}
 	
 	public static void main(String[] args) {
