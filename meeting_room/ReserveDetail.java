@@ -29,6 +29,14 @@ public class ReserveDetail implements ActionListener{
                 updatePrice();
             }
         });
+        
+        // select_add_person 콤보박스에 ActionListener 추가
+        rdUI.select_add_person.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updatePrice();
+            }
+        });
 	}
 
 	@Override
@@ -55,19 +63,34 @@ public class ReserveDetail implements ActionListener{
 	    int personPrice = 0; // 인원 금액 레이블에 표시
 	    int totalPrice = 0 ; // 총 금액 레이블에 표시
 	    
+	    int personInfo_int = 0; // 추가 인원 
+	    
+	    // 추가 인원 int 형 변환 
+	    if(personInfo.equals("없음")) {
+	    	personInfo_int = 0;
+	    }
+	    else if(personInfo.equals("1명")) {
+	    	personInfo_int = 1;
+	    }
+	    else if(personInfo.equals("2명")) {
+	    	personInfo_int = 2;
+	    }
+	    
+	    
+	    
 	    try {
 	    	// 입력값이 숫자이거나 비어있을 때만 처리
 	    	// 숫자와 백스페이스 키만 입력할 수 있도록 함 
 	        if (timeText.matches("\\d*")) {
 	            // 예외 처리를 통해 숫자로 변환
 	            int hours = timeText.isEmpty() ? 0 : Integer.parseInt(timeText);
-	            
+	             	            
 	            timePrice = hours * roomInfo_members * 10000;
-	            personPrice = Integer.parseInt(personInfo) * 10000;
+	            personPrice = personInfo_int * 10000;
 	            totalPrice = timePrice + personPrice;
 	            
 	            // 값 업데이트
-	            rdUI.add_person_lb.setText(personPrice + " 원");
+	            rdUI.person_price_value_lb.setText(personPrice + " 원");
 	            rdUI.time_price_value_lb.setText(timePrice + " 원");
 	            rdUI.total_price_value_lb.setText(totalPrice + " 원");
 	            
