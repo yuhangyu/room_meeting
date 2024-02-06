@@ -29,14 +29,12 @@ public class ReserveUI extends JFrame implements ActionListener{
 	JButton room2_2_btn = new JButton("2ÀÎ 2¹ø ·ë");
 	JButton room2_3_btn = new JButton("2ÀÎ 3¹ø ·ë");
 	JButton room2_4_btn = new JButton("2ÀÎ 4¹ø ·ë");
-	
 	JButton room4_1_btn = new JButton("4ÀÎ 1¹ø ·ë");
 	JButton room4_2_btn = new JButton("4ÀÎ 2¹ø ·ë");
 	JButton room4_3_btn = new JButton("4ÀÎ 3¹ø ·ë");
 	JButton room4_4_btn = new JButton("4ÀÎ 4¹ø ·ë");
 	JButton room4_5_btn = new JButton("4ÀÎ 5¹ø ·ë");
 	JButton room4_6_btn = new JButton("4ÀÎ 6¹ø ·ë");
-	
 	JButton room8_1_btn = new JButton("8ÀÎ 1¹ø ·ë");
 	JButton room8_2_btn = new JButton("8ÀÎ 2¹ø ·ë");
 	

@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -105,6 +106,9 @@ public class MemberInfoUI extends JFrame implements ActionListener {
 		membertable.setFont(font);
 		
 		pane = new JScrollPane(membertable);		
+		
+		// 수평 스크롤바 비활성화
+	      pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		//컬럼 사이즈 지정
 		membertable.getColumnModel().getColumn(0).setPreferredWidth(25);
