@@ -6,6 +6,7 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.JButton;
@@ -53,8 +54,13 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 	
 	JLabel hour_lb = new JLabel("시간");
 	
+	// Calendar 객체 생성 및 현재 시간 설정
+	Calendar cal = Calendar.getInstance();
+	int currentHour = cal.get(Calendar.HOUR_OF_DAY);
+	
 	// SpinnerNumberModel을 사용하여 JSpinner 초기화 (9부터 시작, 24까지) 시를 조정
-    SpinnerNumberModel spinnerNumberModel1 = new SpinnerNumberModel(9, 9, 24, 1);
+	// 현재 시간의 '시' 를 디폴트로 
+    SpinnerNumberModel spinnerNumberModel1 = new SpinnerNumberModel(currentHour, 9, 24, 1);
     JSpinner hourSpinner = new JSpinner(spinnerNumberModel1);
     
     // SpinnerNumberModel을 사용하여 JSpinner 초기화 (0부터 시작, 50까지) 분을 조정
@@ -118,13 +124,13 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
             }
         });
         
-//        // 콤보 박스의 값이 변경될 때 마다 
-//        select_add_person.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                updatePrice(); // 콤보박스 값이 변경될 때마다 updatePrice 메서드 호출
-//            }
-//        });
+        // 콤보 박스의 값이 변경될 때 마다 
+        select_add_person.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updatePrice(); // 콤보박스 값이 변경될 때마다 updatePrice 메서드 호출
+            }
+        });
         
         
 		
@@ -206,7 +212,7 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);
 		//프로그램 종료할 때 프로세스까지 함께 종료
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 						
 		setVisible(true);
 		setResizable(false);

@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,7 +24,9 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
 	JLabel usage_history_lb = new JLabel("이용 내역");
 	JLabel start_date_lb = new JLabel("검색 시작일");
 	JLabel end_date_lb = new JLabel("검색 종료일");
-
+	JButton ok_btn = new JButton("확인");
+	JButton search_btn = new JButton("검색");
+	
 	UsageHistoryUI(){
 		setTitle("내 정보");
 		setSize(750, 500);
@@ -34,9 +37,9 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
 		
 		usage_history_lb.setBounds(20,  10,  200,  40);
 		start_date_lb.setBounds(40, 50, 150, 50);
-		end_date_lb.setBounds(400, 50, 150, 50);
-		
-		
+		end_date_lb.setBounds(320, 50, 150, 50);
+		//ok_btn.setBounds(520, 20, 140, 70);
+		search_btn.setBounds(540, 60, 140, 70);
 		
 		// 현재 날짜를 얻어옴
         Date currentDate = new Date();
@@ -68,11 +71,11 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
         
         
         YearSpinner1.setBounds(40, 100, 50, 30);
-		YearSpinner2.setBounds(400, 100, 50, 30);
+		YearSpinner2.setBounds(320, 100, 50, 30);
 		MonthSpinner1.setBounds(100, 100, 40, 30);
-		MonthSpinner2.setBounds(460, 100, 40, 30);
+		MonthSpinner2.setBounds(380, 100, 40, 30);
 		DaySpinner1.setBounds(150, 100, 40, 30);
-		DaySpinner2.setBounds(510, 100, 40, 30);
+		DaySpinner2.setBounds(430, 100, 40, 30);
 		
 		Font font = new Font("Dialog", Font.BOLD, 27);
 		Font font1 = new Font("Dialog", Font.BOLD, 18);
@@ -91,11 +94,12 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
 		c.add(MonthSpinner2);
 		c.add(DaySpinner1);
 		c.add(DaySpinner2);
+		c.add(ok_btn);
+		c.add(search_btn);
 		
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);
-		//프로그램 종료할 때 프로세스까지 함께 종료
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 										
 		setVisible(true);
 		setResizable(false);
