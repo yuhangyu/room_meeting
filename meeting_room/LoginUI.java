@@ -107,7 +107,7 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener{
 				if (check_action == 1) { //일반 사용자
 					MainPageUI mainpage = new MainPageUI();
 				} else if (check_action == 2) {
-					AdminMainPageUI admin = new AdminMainPageUI();
+					AdminMainPageUI admin_ui = new AdminMainPageUI();
 				}
 			} else {
 				JOptionPane.showMessageDialog(this, "로그인 실패. 다시 시도하세요.");

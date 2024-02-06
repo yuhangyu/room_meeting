@@ -2,12 +2,14 @@ package meeting_room;
 
 import java.awt.Container;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-public class AdminMainPageUI extends JFrame {
+public class AdminMainPageUI extends JFrame implements ActionListener{
 	MyInfoMgr mgr;
 	MyInfoBean bean = new MyInfoBean();
 	
@@ -34,10 +36,16 @@ public class AdminMainPageUI extends JFrame {
 		setSize(1020, 600);
 		setTitle("관리자 페이지");
 		adm_lb.setBounds(200, 50, 300, 200);
-		Sales_status.setBounds(600, 50, 300, 150);
+		Sales_status.setBounds(650, 50, 300, 150);
 		Order_history.setBounds(50, 300, 300, 150);
 		Reserve.setBounds(350, 300, 300, 150);
 		Member_info.setBounds(650, 300, 300, 150);
+		
+		Sales_status.addActionListener(this);
+		Order_history.addActionListener(this);
+		Reserve.addActionListener(this);
+		Member_info.addActionListener(this);
+		
 		
 		c.add(adm_lb);
 		c.add(Sales_status);
@@ -59,9 +67,21 @@ public class AdminMainPageUI extends JFrame {
 		setResizable(false);
 			
 	}
-	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object obj = e.getSource();
+		if(obj == Sales_status) {
+			
+		}else if(obj == Order_history) {
+			
+		}else if(obj == Reserve) {
+			
+		}else if(obj == Member_info) {
+			
+		}
+	}
 	public static void main(String[] args) {
-		AdminMainPageUI admp = new AdminMainPageUI();
+		AdminMainPageUI admin_ui = new AdminMainPageUI();
 	}
 
 	
