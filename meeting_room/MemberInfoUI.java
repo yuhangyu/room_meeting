@@ -84,10 +84,7 @@ public class MemberInfoUI extends JFrame {
 			if(e.getClickCount()==2) {
 				int row = membertable.getSelectedRow();
 				TableModel mmm = membertable.getModel();
-				System.out.println(mmm.getValueAt(row, 1));
-				System.out.println(mmm.getValueAt(row, 2));
-				System.out.println(mmm.getValueAt(row, 3));
-				System.out.println(mmm.getValueAt(row, 4));
+				MemUpdateUI MUUI = new MemUpdateUI(String.valueOf(mmm.getValueAt(row, 1)));
 			}
 		}
 	}
