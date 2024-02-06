@@ -1,9 +1,69 @@
 package meeting_room;
 
-public class AdminMainPageUI {
+import java.awt.Container;
+import java.awt.Font;
 
-	public static void main(String[] args) {
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
+public class AdminMainPageUI extends JFrame {
+	MyInfoMgr mgr;
+	MyInfoBean bean = new MyInfoBean();
+	
+	String id;
+	String name;
+	
+	JLabel adm_lb = new JLabel("관리자 :");
+	
+	JButton Sales_status = new JButton("매출 현황");
+	JButton	Order_history = new JButton("주문 현황");
+	JButton Reserve = new JButton("예약 정보");
+	JButton Member_info = new JButton("회원 정보 관리");
+	
+	public AdminMainPageUI() {
+		id = LoginUI.getLoginID();
+		mgr = new MyInfoMgr();
+		bean = mgr.select(id);
+		name = bean.getName();
+		
+		adm_lb.setText("관리자 : "+name);
+		
+		Container c = getContentPane();
+		c.setLayout(null);
+		setSize(1020, 600);
+		setTitle("관리자 페이지");
+		adm_lb.setBounds(200, 50, 300, 200);
+		Sales_status.setBounds(600, 50, 300, 150);
+		Order_history.setBounds(50, 300, 300, 150);
+		Reserve.setBounds(350, 300, 300, 150);
+		Member_info.setBounds(650, 300, 300, 150);
+		
+		c.add(adm_lb);
+		c.add(Sales_status);
+		c.add(Order_history);
+		c.add(Reserve);
+		c.add(Member_info);
+		
+		Font font = new Font("Dialog", Font.BOLD, 30);
+		
+		adm_lb.setFont(font);
+		Sales_status.setFont(font);
+		Order_history.setFont(font);
+		Reserve.setFont(font);
+		Member_info.setFont(font);
+		
+		setLocationRelativeTo(null);
+		
+		setVisible(true);
+		setResizable(false);
+			
 	}
+	
+	public static void main(String[] args) {
+		AdminMainPageUI admp = new AdminMainPageUI();
+	}
+
+	
 
 }
