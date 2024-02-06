@@ -24,11 +24,9 @@ public class MemUpdateUI extends JFrame implements ActionListener {
 	JLabel id_lb = new JLabel("아이디");
 	JLabel name_lb = new JLabel("이름");
 	JLabel phone_lb = new JLabel("전화번호");
-	
 	JTextField id_tf = new JTextField("DefaultID", 10);
 	JTextField name_tf = new JTextField("UserName", 10);
 	JTextField phone_tf = new JTextField("PhoneNum", 10);
-	
 	JButton modify_info_btn = new JButton("정보 수정");
 	JButton ok_btn = new JButton("확인");
 	
@@ -53,34 +51,33 @@ public class MemUpdateUI extends JFrame implements ActionListener {
 		Container c = getContentPane();
 		c.setLayout(null); //컨텐츠 패널 초기
 		
+		//요소 위치 지정
 		id_lb.setBounds(85,  30,  100,  40);
 		name_lb.setBounds(85,  80,  100,  40);
 		phone_lb.setBounds(85,  130,  100,  40);
-		
 		id_tf.setBounds(180, 30, 100, 40);
 		name_tf.setBounds(180, 80, 100, 40);
 		phone_tf.setBounds(180, 130, 100, 40);
-		
 		modify_info_btn.setBounds(85, 200, 90, 70);
 		ok_btn.setBounds(195, 200, 90, 70);
 		
+		//폰트 설정
 		Font font = new Font("Dialog", Font.BOLD, 18);
-		
 		id_lb.setFont(font);
 		name_lb.setFont(font);
 		phone_lb.setFont(font);
 		
+		//이벤트 추가
 		modify_info_btn.addActionListener(this);
 		ok_btn.addActionListener(this);
 		
+		//요소 추가
 		c.add(id_lb);
 		c.add(name_lb);
 		c.add(phone_lb);
-		
 		c.add(id_tf);
 		c.add(name_tf);
 		c.add(phone_tf);
-		
 		c.add(modify_info_btn);
 		c.add(ok_btn);		
 		

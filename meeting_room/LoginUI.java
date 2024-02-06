@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -18,7 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class LoginUI extends JFrame implements ActionListener, ItemListener{
+public class LoginUI extends JFrame implements ActionListener, ItemListener, KeyListener{
 	
 	public static String ID;
 	
@@ -68,6 +70,8 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener{
 		signup_btn.addActionListener(this);
 		login_btn.addActionListener(this);
 		check_admin.addItemListener(this);
+		id_tf.addKeyListener(this);
+		pw_tf.addKeyListener(this);
 		//요소 추가
 		c.add(id_lb);
 		c.add(pw_lb);
@@ -95,15 +99,34 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener{
 		}
 	}
 	
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object obj = e.getSource();
 		
 		if(obj == signup_btn) {//회원가입 버튼 동작
 			SignUp signup = new SignUp();
-		}else if(obj == login_btn) {
+		}else if(obj == login_btn ) {
 			Login();
 		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		//엔터키로 로그인 실행
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			Login();
+		}
+	}
+	
+	@Override
+	public void keyReleased(KeyEvent e) {
+		
+	}
+	
+	@Override
+	public void keyTyped(KeyEvent e) {
+		
 	}
 	
 	public void Login() {
@@ -148,4 +171,5 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener{
 	public static void main(String[] args) {
 		LoginUI login = new LoginUI();
 	}
+
 }
