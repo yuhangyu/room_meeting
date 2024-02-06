@@ -4,13 +4,12 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 
-public class MainPageUI extends JFrame implements ActionListener{
+public class MainPageUI extends JFrame implements ActionListener {
 	private MainPage mainPage;
 	String id;
 	String name;
@@ -21,9 +20,9 @@ public class MainPageUI extends JFrame implements ActionListener{
 	//요소 생성
 	JLabel memberinfo_lb = new JLabel("회원정보");	
 	JLabel name_lb = new JLabel("이름 : ");
-	JLabel name_value_lb = new JLabel("");
+	static JLabel name_value_lb = new JLabel("");
 	JLabel balance_lb = new JLabel("잔액 : ");
-	JLabel balance_value_lb = new JLabel("0원");
+	static JLabel balance_value_lb = new JLabel("0원");
 	
 	//Swing에서 \n을 통한 줄바꿈을 지원하지 않아서, HTML을 활용하여 버튼 내의 줄바꿈
 	JButton reserve_btn = new JButton("<html><div style='text-align: center;'>미팅룸<br>예약하기</div></html>");
@@ -60,11 +59,11 @@ public class MainPageUI extends JFrame implements ActionListener{
 		
 		//Font 지정
 		Font font = new Font("Dialog", Font.PLAIN, 18); // 폰트의 크기만 변경 
-		memberinfo_lb.setFont(font); // 회원정보 레이블에 적용 
-		name_lb.setFont(font); // 회원정보 레이블에 적용 
+		memberinfo_lb.setFont(font);
+		name_lb.setFont(font);
 		name_value_lb.setFont(font);
-		balance_lb.setFont(font); // 회원정보 레이블에 적용 
-		balance_value_lb.setFont(font); // 회원정보 레이블에 적용 
+		balance_lb.setFont(font);
+		balance_value_lb.setFont(font);
 		reserve_btn.setFont(font);
 		deposit_btn.setFont(font);
 		purchasefood_btn.setFont(font);

@@ -69,6 +69,9 @@ public class Recharge implements ActionListener {
 		bean.setMoney(Integer.parseInt(recharge_value_tf.getText()) + money);
 		if(mgr.charge(bean)) {
 			JOptionPane.showMessageDialog(null, "충전되었습니다.");
+			MyInfoMgr mgr = new MyInfoMgr();
+			mgr.select(bean.getID());
+			MainPageUI.balance_value_lb.setText(String.valueOf(bean.getMoney()));
 			cancelCharge();
 		}
 	}

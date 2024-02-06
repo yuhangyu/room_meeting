@@ -18,6 +18,7 @@ public class MyInfoUI extends JFrame implements ActionListener {
 	
 	Vector<MyInfoBean> vlist;
 	MyInfoMgr mgr;
+	MyInfoBean bean = new MyInfoBean();
 	
 	String id;
 	String pw;
@@ -46,11 +47,10 @@ public class MyInfoUI extends JFrame implements ActionListener {
 		setTitle("내 정보");
 		setSize(400, 500);
 
+		//정보 저장 id, pw, name, phone(tel)
 		id = LoginUI.getLoginID();
 		mgr = new MyInfoMgr();
-		MyInfoBean bean = mgr.select(id);
-		
-		id = bean.getID();
+		bean = mgr.select(id);
 		pw = bean.getPW();
 		name = bean.getName();
 		phone = bean.getPhone();
@@ -131,8 +131,6 @@ public class MyInfoUI extends JFrame implements ActionListener {
 	}
 	
 	public void change() {
-		MyInfoBean bean = new MyInfoBean();
-		bean.setID(id);
 		bean.setPW(md5Hash(pw_tf.getText()));
 		bean.setName(name_tf.getText());
 		bean.setPhone(phone_tf.getText());
@@ -141,6 +139,8 @@ public class MyInfoUI extends JFrame implements ActionListener {
 			name = bean.getName();
 			phone = bean.getPhone();
 			JOptionPane.showMessageDialog(this, "정보가 변경되었습니다.");
+			MainPageUI.name_value_lb.setText(name);
+			dispose();
 		}
 	}
 	
