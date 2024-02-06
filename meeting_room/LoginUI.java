@@ -32,7 +32,6 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 	JButton signup_btn = new JButton("회원가입");
 	JButton login_btn = new JButton("로그인");
 	
-	//JLabel admin_lb = new JLabel("관리자 로그인");
 	JCheckBox check_admin = new JCheckBox("관리자 로그인");
 	
 	int check_action = 1;
