@@ -1,6 +1,7 @@
 package meeting_room;
 
 import java.awt.Color;
+
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -19,10 +20,11 @@ import javax.swing.text.DocumentFilter;
 import javax.swing.text.AbstractDocument;
 
 public class ReserveDetailUI extends JFrame implements ActionListener{
+	private ReserveDetail rsvdetail;
 	
 	JLabel reserve_lb = new JLabel("미팅룸 예약하기 상세정보");
 	JLabel chosen_room_lb = new JLabel("선택된 룸  ");
-	JLabel chosen_room_info_lb = new JLabel("2인 1번룸");
+	JLabel chosen_room_info_lb;
 	JLabel time_lb = new JLabel("사용 시간  ");
 	JLabel add_person_lb = new JLabel("추가 인원 ");
 	JLabel start_time_lb = new JLabel("시작 시간 ");
@@ -62,7 +64,7 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 	
 	
 	
-	public ReserveDetailUI() {
+	public ReserveDetailUI(String selectedRoomInfo) {
 		setTitle("미팅룸 예약하기 상세정보");
 		setSize(400, 600);
 		
@@ -72,6 +74,7 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 		
 		reserve_lb.setBounds(35,  10,  500,  40);
 		chosen_room_lb.setBounds(80,  70,  90,  25);
+		chosen_room_info_lb = new JLabel(selectedRoomInfo);
 		chosen_room_info_lb.setBounds(180, 70, 90, 25);
 		time_lb.setBounds(80, 110, 90, 25);
 		time_tf.setBounds(180, 110, 30, 25);
@@ -84,17 +87,46 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 		start_min_lb.setBounds(315, 190, 50, 25);
 		
 		// DocumentFilter를 사용하여 텍스트 필드의 입력을 제한
-        ((AbstractDocument) time_tf.getDocument()).setDocumentFilter(new DocumentFilter() {
-            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
-                    throws BadLocationException {
-                // 입력값이 숫자이고, 최대 1자리까지만 입력 가능하도록 제한
-                if (text.matches("\\d") && fb.getDocument().getLength() + text.length() <= 1) {
-                    super.replace(fb, offset, length, text, attrs);
-                    // 여기서 금액 계산 등 추가 작업을 할 수 있습니다.
-                    updatePrice(); // 예시로 추가된 메서드 호출
-                }
+		((AbstractDocument) time_tf.getDocument()).setDocumentFilter(new DocumentFilter() {
+		    @Override
+		    public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+		            throws BadLocationException {
+		        // 입력값이 숫자이거나 백스페이스 키일 때만 처리, 최대 입력 자릿수를 1자리로 제한 
+		        if ((text == null || text.matches("\\d")) && fb.getDocument().getLength() + (text == null ? 0 : text.length()) - length <= 1) {
+		            super.replace(fb, offset, length, text, attrs);
+		            // 여기서 금액 계산 등 추가 작업을 할 수 있습니다.
+		            updatePrice(); // 예시로 추가된 메서드 호출
+		        }
+		    }
+		});
+		
+        // 텍스트 필드의 값이 바뀔 때 마다 time_price_value_lb 값 갱신 
+        time_tf.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                updatePrice();
+            }
+
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                updatePrice();
+            }
+
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                updatePrice();
             }
         });
+        
+//        // 콤보 박스의 값이 변경될 때 마다 
+//        select_add_person.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                updatePrice(); // 콤보박스 값이 변경될 때마다 updatePrice 메서드 호출
+//            }
+//        });
+        
+        
 		
         hourSpinner.setBounds(180, 190, 50, 30);
         minSpinner.setBounds(260, 190, 50, 30);
@@ -110,9 +142,10 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 		cancel_btn.setBounds(200, 410, 140, 60);
 		
 		
+		rsvdetail = new ReserveDetail(this);
 		
-		payment_btn.addActionListener(this);
-		cancel_btn.addActionListener(this);
+		payment_btn.addActionListener(rsvdetail);
+		cancel_btn.addActionListener(rsvdetail);
 		
 		
 		//Font 지정
@@ -187,9 +220,8 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 	}
 	
 	public static void main(String[] args) {
-		ReserveDetailUI rsvdetail = new ReserveDetailUI();
+		String selectedRoomInfo = "잘못된 접근";
+		ReserveDetailUI rsvdetail = new ReserveDetailUI(selectedRoomInfo);
 	}
-
-	
 
 }
