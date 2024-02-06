@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,7 +20,7 @@ public class MemberInfoUI extends JFrame implements ActionListener {
 
 	JTable membertable;
 	JScrollPane pane;
-	static JButton jb;
+	static JButton jb = new JButton("a");;
 
 	//컨텐츠 패널의 객체 메소드 호출
 	Container c = getContentPane();
@@ -36,20 +35,18 @@ public class MemberInfoUI extends JFrame implements ActionListener {
 		
 		//요소 위치 지정
 		pane.setBounds(0, 0, 535, 400);
-
-		jb = new JButton("a");
-		jb.addActionListener(this);
-		c.add(jb);
 		
 		//이벤트 추가
 		membertable.addMouseListener(new MouseAction());
+		jb.addActionListener(this);
 		
 		//요소 추가
 		c.add(pane);
+		c.add(jb);
 		
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);
-		//프로그램 종료할 때 프로세스까지 함께 종료
+		//프로그램 종료할 때 현재 창만 종료
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		setVisible(true);
@@ -58,15 +55,18 @@ public class MemberInfoUI extends JFrame implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		//MemUpdateUI를 통해 DB 정보가 수정 되었을 때 이벤트 발생 시키기 위해 생성
+		//새로고침으로는 수정된 내용 불러오기를 못해서 창을 껐다 키게 만들어서 목록 새로고침
 		if (e.getSource() == jb) {
 			dispose();
 			MemberInfoUI MIUI = new MemberInfoUI();
 		}
 	}
 	
-	private class MouseAction extends MouseAdapter{
+	private class MouseAction extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e) {
+			//더블클릭 시 이벤트 발생
 			if(e.getClickCount()==2) {
 				int row = membertable.getSelectedRow();
 				TableModel mmm = membertable.getModel();
@@ -83,8 +83,9 @@ public class MemberInfoUI extends JFrame implements ActionListener {
 		vlist = mgr.selectAll();
 		
 		String header[]= {"번호", "아이디", "이름", "전화번호", "현재잔액"};
-		String[][] conts;
-		conts = new String[vlist.size()][header.length];
+		String[][] conts = new String[vlist.size()][header.length];
+		
+		//순번, 아이디, 이름, 전화번호, 현재잔액 값 conts 배열에 저장
 		for(int i = 0; i < vlist.size(); i++) {
 			MyInfoBean bean = vlist.get(i);
 			conts[i][0] = String.valueOf(i + 1);
@@ -93,18 +94,26 @@ public class MemberInfoUI extends JFrame implements ActionListener {
 			conts[i][3] = bean.getPhone();
 			conts[i][4] = String.valueOf(bean.getMoney());
 		}
+		
+		//테이블 직접 편집 불가능
 		DefaultTableModel model = new DefaultTableModel(conts, header) {
 			public boolean isCellEditable(int i, int c){ return false; }
 		};
+		
+		//테이블 가운데 정렬
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-		
+            
+		//선언
 		membertable = new JTable(model);
+		pane = new JScrollPane(membertable);
 		
-		Font font = new Font("Dialog", Font.BOLD, 17);
+		//폰트 설정
+		Font font = new Font("Dialog", Font.BOLD, 16);
 		membertable.setFont(font);
-		
-		pane = new JScrollPane(membertable);		
+
+		//크기 조절 불가능
+		membertable.getTableHeader().setResizingAllowed(false);
 		
 		//컬럼 사이즈 지정
 		membertable.getColumnModel().getColumn(0).setPreferredWidth(25);
@@ -114,6 +123,7 @@ public class MemberInfoUI extends JFrame implements ActionListener {
 		membertable.getColumnModel().getColumn(4).setPreferredWidth(110);
 		membertable.setRowHeight(30);
 
+		//header 추가, 가운데 정렬
 		for (int i = 0; i < membertable.getColumnCount(); i++) {
 			membertable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
 		}

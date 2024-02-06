@@ -181,7 +181,6 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 		start_hour_lb.setFont(font2);
 		start_min_lb.setFont(font2);
 
-		
 		c.add(reserve_lb);
 		c.add(chosen_room_lb);
 		c.add(chosen_room_info_lb);
@@ -190,21 +189,17 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 		c.add(add_person_lb);
 		c.add(select_add_person);
 		c.add(start_time_lb);
-		
 		c.add(time_price_lb);
 		c.add(time_price_value_lb);
 		c.add(person_price_lb);
 		c.add(person_price_value_lb);
 		c.add(total_price_lb);
 		c.add(total_price_value_lb);
-		
 		c.add(payment_btn);
 		c.add(cancel_btn);
-		
 		c.add(hour_lb);
 		c.add(start_hour_lb);
 		c.add(start_min_lb);
-		
 		c.add(hourSpinner);
 		c.add(minSpinner);
 		
