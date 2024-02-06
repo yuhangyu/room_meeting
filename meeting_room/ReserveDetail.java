@@ -55,7 +55,6 @@ public class ReserveDetail implements ActionListener{
 	    int personPrice = 0; // 인원 금액 레이블에 표시
 	    int totalPrice = 0 ; // 총 금액 레이블에 표시
 	    
-	    
 	    try {
 	    	// 입력값이 숫자이거나 비어있을 때만 처리
 	    	// 숫자와 백스페이스 키만 입력할 수 있도록 함 

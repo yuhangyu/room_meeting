@@ -74,10 +74,8 @@ public class ReserveUI extends JFrame implements ActionListener{
 		room4_4_btn.setBounds(210, 410, 160, 85);
 		room4_5_btn.setBounds(210, 510, 160, 85);
 		room4_6_btn.setBounds(210, 610, 160, 85);
-		
 		room8_1_btn.setBounds(405, 110, 160, 85);
 		room8_2_btn.setBounds(405, 210, 160, 85);
-		
 		reserve_btn.setBounds(605, 150, 160, 85);
 		cancel_btn.setBounds(605, 250, 160, 85);
 		
@@ -87,20 +85,16 @@ public class ReserveUI extends JFrame implements ActionListener{
 		room2_2_btn.addActionListener(reserve);
 		room2_3_btn.addActionListener(reserve);
 		room2_4_btn.addActionListener(reserve);
-		
 		room4_1_btn.addActionListener(reserve);
 		room4_2_btn.addActionListener(reserve);
 		room4_3_btn.addActionListener(reserve);
 		room4_4_btn.addActionListener(reserve);
 		room4_5_btn.addActionListener(reserve);
 		room4_6_btn.addActionListener(reserve);
-		
 		room8_1_btn.addActionListener(reserve);
 		room8_2_btn.addActionListener(reserve);
-		
 		reserve_btn.addActionListener(reserve);
 		cancel_btn.addActionListener(reserve);
-		
 		
 		//Font 지정
 		Font font = new Font("Dialog", Font.BOLD, 30); // 폰트굵게
