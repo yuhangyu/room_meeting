@@ -75,9 +75,9 @@ public class AdminMainPageUI extends JFrame implements ActionListener{
 		}else if(obj == Order_history) {
 			
 		}else if(obj == Reserve) {
-			
+			ReserveInfoUI reserveinfo_ui = new ReserveInfoUI();
 		}else if(obj == Member_info) {
-			
+			MemberInfoUI MIUI = new MemberInfoUI();
 		}
 	}
 	public static void main(String[] args) {
