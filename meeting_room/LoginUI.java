@@ -95,7 +95,7 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener{
 		}else if(obj == login_btn) {
 			if (check_action == 2) {//관리자 로그인 시
 				try {
-					ResultSet rs = stmt.executeQuery("SELECT * FROM member WHERE member_id='" + id_tf.getText() + "' AND member_pw='" + pw_tf.getText() + "' AND member_level='" + check_action + "'");
+					ResultSet rs = stmt.executeQuery("SELECT * FROM member WHERE member_id='" + id_tf.getText() + "' AND member_pw=MD5('" + pw_tf.getText() + "') AND member_level='" + check_action + "'");
 					if (rs.next()) {
 						JOptionPane.showMessageDialog(this, "로그인 성공!");
 						dispose();
@@ -109,7 +109,7 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener{
 				}
 			} else if (check_action == 1) {//비관리자 로그인 시
 				try {
-					ResultSet rs = stmt.executeQuery("SELECT * FROM member WHERE member_id='" + id_tf.getText() + "' AND member_pw='" + pw_tf.getText() + "' AND member_level='"+check_action+"'");
+					ResultSet rs = stmt.executeQuery("SELECT * FROM member WHERE member_id='" + id_tf.getText() + "' AND member_pw=MD5('" + pw_tf.getText() + "') AND member_level='"+check_action+"'");
 					if (rs.next()) {
 						JOptionPane.showMessageDialog(this, "로그인 성공!");
 						dispose();

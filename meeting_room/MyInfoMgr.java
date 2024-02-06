@@ -87,7 +87,7 @@ public class MyInfoMgr {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "update member set member_id=?, member_pw=?, member_name=?, member_tel=? where member_id=?";
+			sql = "update member set member_id=?, member_pw=MD5(?), member_name=?, member_tel=? where member_id=?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1,  bean.getID());
 			pstmt.setString(2,  bean.getPW());
