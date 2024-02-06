@@ -112,7 +112,7 @@ public class Login extends JFrame implements ActionListener, ItemListener{
 					ResultSet rs = stmt.executeQuery("SELECT * FROM member WHERE member_id='" + id_tf.getText() + "' AND member_pw='" + pw_tf.getText() + "'");
 					if (rs.next()) {
 						JOptionPane.showMessageDialog(this, "로그인 성공!");
-						MainPage mainpage = new MainPage();
+						MainPageUI mainpage = new MainPageUI();
 						dispose();
 					} else {
 						JOptionPane.showMessageDialog(this, "로그인 실패. 다시 시도하세요.");
