@@ -1,5 +1,7 @@
 package meeting_room;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -87,13 +89,12 @@ public class MyInfoMgr {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "update member set member_id=?, member_pw=MD5(?), member_name=?, member_tel=? where member_id=?";
+			sql = "update member set member_pw=?, member_name=?, member_tel=? where member_id=?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1,  bean.getID());
-			pstmt.setString(2,  bean.getPW());
-			pstmt.setString(3,  bean.getName());
-			pstmt.setString(4,  bean.getPhone());
-			pstmt.setString(5, bean.getID());
+			pstmt.setString(1,  bean.getPW());
+			pstmt.setString(2,  bean.getName());
+			pstmt.setString(3,  bean.getPhone());
+			pstmt.setString(4, bean.getID());
 			if (pstmt.executeUpdate() == 1) flag = true;
 		} catch (Exception e) {
 			e.printStackTrace();

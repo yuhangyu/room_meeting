@@ -4,6 +4,8 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -130,7 +132,8 @@ public class MyInfoUI extends JFrame implements ActionListener {
 	
 	public void change() {
 		MyInfoBean bean = new MyInfoBean();
-		bean.setPW(pw_tf.getText());
+		bean.setID(id);
+		bean.setPW(md5Hash(pw_tf.getText()));
 		bean.setName(name_tf.getText());
 		bean.setPhone(phone_tf.getText());
 		if(mgr.update(bean)) {
@@ -138,6 +141,24 @@ public class MyInfoUI extends JFrame implements ActionListener {
 			name = bean.getName();
 			phone = bean.getPhone();
 			JOptionPane.showMessageDialog(this, "정보가 변경되었습니다.");
+		}
+	}
+	
+	// MD5 해시 함수
+	private static String md5Hash(String input) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = md.digest(input.getBytes());
+			
+			StringBuilder hexString = new StringBuilder();
+			for (byte b : messageDigest) {
+				hexString.append(String.format("%02x", b));
+			}
+			
+			return hexString.toString();
+		
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
