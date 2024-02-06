@@ -13,8 +13,9 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
-public class MemberInfoUI extends JFrame implements ActionListener {
+public class MemberInfoUI extends JFrame {
 	
 	Vector<MyInfoBean> vlist;
 	MyInfoMgr mgr;
@@ -25,7 +26,7 @@ public class MemberInfoUI extends JFrame implements ActionListener {
 	JScrollPane pane;
 	
 	public MemberInfoUI() {
-		setSize(550, 500);
+		setSize(550, 350);
 		setTitle("회원 정보 관리");
 
 		//컨텐츠 패널의 객체 메소드 호출
@@ -53,18 +54,20 @@ public class MemberInfoUI extends JFrame implements ActionListener {
 		pane = new JScrollPane(membertable);		
 		
 		//컬럼 사이즈 지정
-		membertable.getColumnModel().getColumn(0).setPreferredWidth(30);
+		membertable.getColumnModel().getColumn(0).setPreferredWidth(25);
 		membertable.getColumnModel().getColumn(1).setPreferredWidth(70);
 		membertable.getColumnModel().getColumn(2).setPreferredWidth(70);
 		membertable.getColumnModel().getColumn(3).setPreferredWidth(160);
 		membertable.getColumnModel().getColumn(4).setPreferredWidth(110);
 
 		//요소 위치 지정
-		pane.setBounds(0, 0, 535, 500);
+		pane.setBounds(0, 0, 535, 350);
 		
-		c.add(pane);
-		
+		//이벤트 추가
 		membertable.addMouseListener(new MouseAction());
+
+		//요소 추가
+		c.add(pane);
 		
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);
@@ -80,13 +83,13 @@ public class MemberInfoUI extends JFrame implements ActionListener {
 		public void mouseClicked(MouseEvent e) {
 			if(e.getClickCount()==2) {
 				int row = membertable.getSelectedRow();
+				TableModel mmm = membertable.getModel();
+				System.out.println(mmm.getValueAt(row, 1));
+				System.out.println(mmm.getValueAt(row, 2));
+				System.out.println(mmm.getValueAt(row, 3));
+				System.out.println(mmm.getValueAt(row, 4));
 			}
 		}
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		
 	}
 	
 	public static void main(String[] args) {
