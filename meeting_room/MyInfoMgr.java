@@ -30,7 +30,7 @@ public class MyInfoMgr {
 		try {
 			//Connection 객체를 pool 에서 가져옴
 			con = pool.getConnection();
-			sql = "select * from tblMember";
+			sql = "select * from member where member_level=1";
 			pstmt = con.prepareStatement(sql);
 			//rs: select 실행 결과 객체
 			rs = pstmt.executeQuery(); //실제 SQL문 실행
@@ -40,7 +40,7 @@ public class MyInfoMgr {
 				bean.setID(rs.getString("member_id"));
 				bean.setPW(rs.getString("member_pw"));
 				bean.setName(rs.getString("member_name"));
-				bean.setPhone(rs.getString("member_phone"));
+				bean.setPhone(rs.getString("member_tel"));
 				bean.setMoney(rs.getInt("member_money"));
 				vlist.addElement(bean);
 			}
