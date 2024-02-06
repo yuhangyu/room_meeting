@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class MyInfoUI extends JFrame implements ActionListener {
@@ -31,7 +32,7 @@ public class MyInfoUI extends JFrame implements ActionListener {
 	JLabel phone_lb = new JLabel("전화번호");
 	
 	JTextField id_tf = new JTextField("DefaultID", 10);
-	JTextField pw_tf = new JTextField(10);
+	JTextField pw_tf = new JPasswordField(10);
 	JTextField name_tf = new JTextField("UserName", 10);
 	JTextField phone_tf = new JTextField("PhoneNum", 10);
 	
