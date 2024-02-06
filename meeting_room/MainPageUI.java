@@ -1,25 +1,28 @@
 package meeting_room;
 
 import java.awt.Container;
-
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-public class MainPageUI extends JFrame implements ActionListener{
+
+public class MainPageUI extends JFrame implements ActionListener {
 	private MainPage mainPage;
+	String id;
+	String name;
+	int money;
+	MyInfoMgr mgr;
+	public static int MONEY;
 	
 	//요소 생성
 	JLabel memberinfo_lb = new JLabel("회원정보");	
 	JLabel name_lb = new JLabel("이름 : ");
-	JLabel name_value_lb = new JLabel("집가고싶다");
+	static JLabel name_value_lb = new JLabel("");
 	JLabel balance_lb = new JLabel("잔액 : ");
-	JLabel balance_value_lb = new JLabel("<TEST>원");
-	
+	static JLabel balance_value_lb = new JLabel("0원");
 	
 	//Swing에서 \n을 통한 줄바꿈을 지원하지 않아서, HTML을 활용하여 버튼 내의 줄바꿈
 	JButton reserve_btn = new JButton("<html><div style='text-align: center;'>미팅룸<br>예약하기</div></html>");
@@ -29,7 +32,6 @@ public class MainPageUI extends JFrame implements ActionListener{
 	JButton logout_btn = new JButton("로그아웃");
 	JButton myinfo_btn = new JButton("내 정보");
 
-	
 	public MainPageUI() {
 		setTitle("메인 페이지");
 		setSize(600, 350);
@@ -38,20 +40,30 @@ public class MainPageUI extends JFrame implements ActionListener{
 		Container c = getContentPane();
 		c.setLayout(null); //컨텐츠 패널 초기화
 		
+		id = LoginUI.getLoginID();
+		mgr = new MyInfoMgr();
+		MyInfoBean bean = mgr.select(id);
+		
+		name = bean.getName();
+		money = bean.getMoney();
+		name_value_lb.setText(name);
+		balance_value_lb.setText(money + "원");
+		setIDMoney(money);
+		
 		//요소 위치 지정
 		memberinfo_lb.setBounds(380,  3,  100,  40);
 		name_lb.setBounds(380,  40,  100,  40);	
-		name_value_lb.setBounds(430, 40, 100, 40);
+		name_value_lb.setBounds(430, 40, 150, 40);
 		balance_lb.setBounds(380, 77, 100, 40);
 		balance_value_lb.setBounds(430, 77, 150, 40);
 		
 		//Font 지정
 		Font font = new Font("Dialog", Font.PLAIN, 18); // 폰트의 크기만 변경 
-		memberinfo_lb.setFont(font); // 회원정보 레이블에 적용 
-		name_lb.setFont(font); // 회원정보 레이블에 적용 
+		memberinfo_lb.setFont(font);
+		name_lb.setFont(font);
 		name_value_lb.setFont(font);
-		balance_lb.setFont(font); // 회원정보 레이블에 적용 
-		balance_value_lb.setFont(font); // 회원정보 레이블에 적용 
+		balance_lb.setFont(font);
+		balance_value_lb.setFont(font);
 		reserve_btn.setFont(font);
 		deposit_btn.setFont(font);
 		purchasefood_btn.setFont(font);
@@ -63,13 +75,6 @@ public class MainPageUI extends JFrame implements ActionListener{
 		rentgame_btn.setBounds(180, 120, 150, 100);
 		logout_btn.setBounds(380, 120, 100, 40);
 		myinfo_btn.setBounds(380, 170, 100, 40);
-		
-				
-	
-		purchasefood_btn.addActionListener(this);
-		rentgame_btn.addActionListener(this);
-	
-		
 				
 		//요소 추가
 		c.add(memberinfo_lb);
@@ -91,7 +96,8 @@ public class MainPageUI extends JFrame implements ActionListener{
 		deposit_btn.addActionListener(mainPage);
 		logout_btn.addActionListener(mainPage);
 		myinfo_btn.addActionListener(mainPage);
-		
+		purchasefood_btn.addActionListener(this);
+		rentgame_btn.addActionListener(this);
 		
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);
@@ -100,18 +106,21 @@ public class MainPageUI extends JFrame implements ActionListener{
 				
 		setVisible(true);
 		setResizable(false);
-		
+	}
+	
+	public static void setIDMoney(int money) {
+		MONEY = money;
+	}
+	
+	public static int getIDMoney() {
+		return MONEY;
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 	}
-
+	
 	public static void main(String[] args) {
 		MainPageUI mainpage = new MainPageUI();
-
 	}
-
-	
-
 }
