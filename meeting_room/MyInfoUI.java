@@ -17,7 +17,6 @@ import javax.swing.JTextField;
 
 public class MyInfoUI extends JFrame implements ActionListener {
 	
-	Vector<MyInfoBean> vlist;
 	MyInfoMgr mgr;
 	MyInfoBean bean = new MyInfoBean();
 	
