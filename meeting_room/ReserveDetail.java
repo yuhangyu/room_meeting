@@ -129,14 +129,26 @@ public class ReserveDetail implements ActionListener {
 			dialog.setVisible(true);
 			return;
 		}
-	
+		
+		// 추가 인원 int 형 변환 
+		if(personInfo.equals("없음")) {
+			personInfo_int = 0;
+		} else if(personInfo.equals("1명")) {
+			personInfo_int = 1;
+		} else if(personInfo.equals("2명")) {
+			personInfo_int = 2;
+		}
+		
+		String roomInfo = rdUI.chosen_room_info_lb.getText();
+		RoomBean bean3 = mgr.room(roomInfo);
+		
 		bean.setResvid(bean2.getID());
 		bean.setResvname(bean2.getName());
 		bean.setResvphone(bean2.getPhone());
 		bean.setResvroom(rdUI.chosen_room_info_lb.getText());
 		bean.setResvtime(str);
 		bean.setResvusetime(Integer.parseInt(rdUI.time_tf.getText()));
-		bean.setResvperson(personInfo_int);
+		bean.setResvperson(bean3.getRperson() + personInfo_int);
 		
 		if(mgr.reserve(bean)) {
 			optionPane = new JOptionPane("예약이 완료되었습니다.", JOptionPane.INFORMATION_MESSAGE);
@@ -146,6 +158,7 @@ public class ReserveDetail implements ActionListener {
 			bean2.setMoney(money - totalPrice);
 			if (mgr.charge(bean2)) {
 				rdUI.dispose();
+				ReserveUI.a.doClick();
 			}
 			return;
 		}

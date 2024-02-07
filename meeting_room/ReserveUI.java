@@ -27,6 +27,8 @@ public class ReserveUI extends JFrame implements ActionListener{
 	JLabel balance_lb = new JLabel("잔액 : ");
 	JLabel balance_value_lb = new JLabel("<TEST> 원");
 	
+	static JButton a = new JButton("");
+	
 	JButton reserve_btn = new JButton("예약");
 	JButton cancel_btn = new JButton("취소");
 
@@ -61,6 +63,7 @@ public class ReserveUI extends JFrame implements ActionListener{
 		
 		reserve_btn.addActionListener(reserve);
 		cancel_btn.addActionListener(reserve);
+		a.addActionListener(this);
 		
 		//Font 지정
 		Font font = new Font("Dialog", Font.BOLD, 30); // 폰트굵게
@@ -125,7 +128,7 @@ public class ReserveUI extends JFrame implements ActionListener{
 		
 		c.add(reserve_btn);
 		c.add(cancel_btn);
-		
+		c.add(a);
 		
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);
@@ -137,6 +140,10 @@ public class ReserveUI extends JFrame implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == a) {
+			dispose();
+			ReserveUI rsv = new ReserveUI();
+		}
 	}
 
 	public static void main(String[] args) {
