@@ -196,14 +196,24 @@ public class BoardGameUI extends JFrame {
         
 
         JButton homeButton = new JButton("홈");
+//        homeButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                frame.setVisible(false);
+//                MainPageUI mainPage = new MainPageUI();
+//                mainPage.setVisible(true);
+//            }
+//        });
+        
+        // 홈 버튼을 눌렀을 때 새로운 메인 UI가 열리지 않고 현재 UI를 닫도록 수정
         homeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.setVisible(false);
-                MainPageUI mainPage = new MainPageUI();
-                mainPage.setVisible(true);
-            }
+          @Override
+          public void actionPerformed(ActionEvent e) {
+              frame.dispose();      
+          	}
         });
+        
+        
         northPanel.add(homeButton);
         panel.add(northPanel, BorderLayout.NORTH);
 

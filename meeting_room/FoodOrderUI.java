@@ -170,16 +170,27 @@ public class FoodOrderUI {
 
 
         JButton homeButton = new JButton("홈");
+//        homeButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                // 현재 프레임을 숨김
+//                frame.setVisible(false);
+//                // mainpage.java를 실행
+//                MainPageUI mainPage = new MainPageUI();  // MainPage는 mainpage.java의 클래스 이름이어야 합니다.
+//                mainPage.setVisible(true);  // MainPage 프레임을 보여줌
+//            }
+//        });
+        
+        // 홈 버튼을 눌렀을 때 새로운 메인 UI가 열리지 않고 현재 UI를 닫도록 수정
         homeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // 현재 프레임을 숨김
-                frame.setVisible(false);
-                // mainpage.java를 실행
-                MainPageUI mainPage = new MainPageUI();  // MainPage는 mainpage.java의 클래스 이름이어야 합니다.
-                mainPage.setVisible(true);  // MainPage 프레임을 보여줌
-            }
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        	frame.dispose();
+        	}
         });
+        
+        
+        
         northPanel.add(homeButton);
         panel.add(northPanel, BorderLayout.NORTH);
 

@@ -112,7 +112,7 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 		Object obj = e.getSource();
 		
 		if(obj == signup_btn) {//회원가입 버튼 동작
-			SignUp signup = new SignUp();
+			SignUpUI suu = new SignUpUI();
 		}else if(obj == login_btn ) {
 			Login();
 		}
