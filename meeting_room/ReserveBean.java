@@ -47,11 +47,8 @@ public class ReserveBean {
 	public String getResvtime() {
 		return resvtime;
 	}
-	public void setResvtime(Date resvtime) {
-		Date date = resvtime;
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String dateString = format.format( date );
-		this.resvtime = dateString;
+	public void setResvtime(String resvtime) {
+		this.resvtime = resvtime;
 	}
 	public int getResvusetime() {
 		return resvusetime;

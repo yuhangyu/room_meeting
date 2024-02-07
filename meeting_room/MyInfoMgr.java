@@ -5,6 +5,8 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Vector;
 
 public class MyInfoMgr {
@@ -68,12 +70,14 @@ public class MyInfoMgr {
 			
 			while (rs.next()) {
 				ReserveBean bean = new ReserveBean();
+				Timestamp dtime = rs.getTimestamp("resv_time");
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				bean.setReserve(rs.getInt("resv"));
 				bean.setResvid(rs.getString("resv_id"));
 				bean.setResvname(rs.getString("resv_name"));
 				bean.setResvphone(rs.getString("resv_tel"));
 				bean.setResvroom(rs.getString("resv_room"));
-				bean.setResvtime(rs.getDate("resv_time"));
+				bean.setResvtime(format.format(dtime));
 				bean.setResvusetime(rs.getInt("resv_usetime"));
 				bean.setResvperson(rs.getInt("resv_person"));
 				vlist.addElement(bean);
