@@ -23,6 +23,10 @@ public class UsageHistory implements ActionListener{
 		if(sourceButton.getText().equals("확인")) {
 			ush.dispose();
 		}
+		
+		else if(sourceButton.getText().equals("검색")) {
+			// 이 부분에 검색 버튼 클릭시의 이벤트 구현 
+		}
 	}
 		
 	

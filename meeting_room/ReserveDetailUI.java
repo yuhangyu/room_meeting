@@ -7,16 +7,19 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultFormatter;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.AbstractDocument;
 
@@ -28,6 +31,9 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 	JLabel chosen_room_info_lb;
 	JLabel time_lb = new JLabel("사용 시간  ");
 	JLabel add_person_lb = new JLabel("추가 인원 ");
+	
+		
+	JLabel start_date_lb = new JLabel("예약 날짜 ");
 	JLabel start_time_lb = new JLabel("시작 시간 ");
 	JLabel start_hour_lb = new JLabel("시");
 	JLabel start_min_lb = new JLabel("분");
@@ -54,6 +60,7 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 	
 	JLabel hour_lb = new JLabel("시간");
 	
+	
 	// Calendar 객체 생성 및 현재 시간 설정
 	Calendar cal = Calendar.getInstance();
 	int currentHour = cal.get(Calendar.HOUR_OF_DAY);
@@ -66,8 +73,21 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
     // SpinnerNumberModel을 사용하여 JSpinner 초기화 (0부터 시작, 50까지) 분을 조정
     SpinnerNumberModel spinnerNumberModel2 = new SpinnerNumberModel(0, 0, 50, 10);
     JSpinner minSpinner = new JSpinner(spinnerNumberModel2);
+    
+    
+    // 현재 날짜를 기본값으로 설정
+    int currentYear = cal.get(Calendar.YEAR);
+    int currentMonth = cal.get(Calendar.MONTH) + 1; // Calendar.MONTH는 0부터 시작하므로 1을 더해줌
+    int currentDay = cal.get(Calendar.DAY_OF_MONTH);
+    
+    SpinnerNumberModel spinnerNumberModel3 = new SpinnerNumberModel(currentYear, currentYear, 2030, 1);
+    JSpinner yearSpinner = new JSpinner(spinnerNumberModel3);
 	
-	
+    SpinnerNumberModel spinnerNumberModel4 = new SpinnerNumberModel(currentMonth, 1, 12, 1);
+    JSpinner monthSpinner = new JSpinner(spinnerNumberModel4);
+    
+    SpinnerNumberModel spinnerNumberModel5 = new SpinnerNumberModel(currentDay, 1, 31, 1);
+    JSpinner daySpinner = new JSpinner(spinnerNumberModel5);
 	
 	
 	public ReserveDetailUI(String selectedRoomInfo) {
@@ -87,6 +107,7 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 		add_person_lb.setBounds(80, 150, 90, 25);
 		select_add_person.setBounds(180, 150, 90, 25);
 		start_time_lb.setBounds(80, 190, 90, 25);
+		start_date_lb.setBounds(80, 230, 90, 25);
 		
 		hour_lb.setBounds(220, 110, 50, 25);
 		start_hour_lb.setBounds(235, 190, 50, 25);
@@ -136,16 +157,20 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 		
         hourSpinner.setBounds(180, 190, 50, 30);
         minSpinner.setBounds(260, 190, 50, 30);
+        
+        yearSpinner.setBounds(180, 230, 50, 30);
+        monthSpinner.setBounds(240, 230, 50, 30);
+        daySpinner.setBounds(300, 230, 50, 30);
 		
-		time_price_lb.setBounds(80, 270, 90, 25);
-		time_price_value_lb.setBounds(180, 270, 90, 25);
-		person_price_lb.setBounds(80, 310, 90, 25);
-		person_price_value_lb.setBounds(180, 310, 90, 25);
-		total_price_lb.setBounds(80, 350, 90, 25);
-		total_price_value_lb.setBounds(180, 350, 90, 25);
+		time_price_lb.setBounds(80, 320, 90, 25);
+		time_price_value_lb.setBounds(180, 320, 90, 25);
+		person_price_lb.setBounds(80, 360, 90, 25);
+		person_price_value_lb.setBounds(180, 360, 90, 25);
+		total_price_lb.setBounds(80, 400, 90, 25);
+		total_price_value_lb.setBounds(180, 400, 90, 25);
 		
-		payment_btn.setBounds(40, 410, 140, 60);
-		cancel_btn.setBounds(200, 410, 140, 60);
+		payment_btn.setBounds(40, 460, 140, 60);
+		cancel_btn.setBounds(200, 460, 140, 60);
 		
 		
 		rsvdetail = new ReserveDetail(this);
@@ -166,6 +191,7 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 		add_person_lb.setFont(font2);
 		select_add_person.setFont(font2);
 		start_time_lb.setFont(font2);
+		start_date_lb.setFont(font2);
 		
 		time_price_lb.setFont(font2);
 		time_price_value_lb.setFont(font2);
@@ -189,6 +215,8 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 		c.add(add_person_lb);
 		c.add(select_add_person);
 		c.add(start_time_lb);
+		c.add(start_date_lb);
+		
 		c.add(time_price_lb);
 		c.add(time_price_value_lb);
 		c.add(person_price_lb);
@@ -202,6 +230,9 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 		c.add(start_min_lb);
 		c.add(hourSpinner);
 		c.add(minSpinner);
+		c.add(yearSpinner);
+		c.add(monthSpinner);
+		c.add(daySpinner);
 		
 		
 		//화면 중앙에 오게 설정
@@ -211,6 +242,18 @@ public class ReserveDetailUI extends JFrame implements ActionListener{
 						
 		setVisible(true);
 		setResizable(false);
+		
+		// JSpinner에 사용되는 DefaultFormatter 가져오기
+        JFormattedTextField.AbstractFormatter formatter = ((JSpinner.DefaultEditor) yearSpinner.getEditor()).getTextField().getFormatter();
+
+        // AllowsInvalid를 false로 설정하여 유효하지 않은 값을 허용하지 않도록 함
+        if (formatter instanceof DefaultFormatter) {
+            ((DefaultFormatter) formatter).setAllowsInvalid(false);
+        }
+        
+        // JSpinner의 에디터를 변경하여 쉼표가 없는 형식으로 표시되도록 함
+        JSpinner.NumberEditor editor = new JSpinner.NumberEditor(yearSpinner, "####");
+        yearSpinner.setEditor(editor);
 		
 	}
 	
