@@ -206,6 +206,33 @@ public class MyInfoMgr {
 		return bean;
 	}
 	
+	//방 select
+	public RoomBean room(String rid) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		RoomBean bean = new RoomBean();
+		try {
+			con = pool.getConnection();
+			sql = "select * from room where room = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, rid); //첫번째 ?에 매개변수 id 값 세팅
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				bean.setRoom(rs.getString(1));
+				bean.setRperson(rs.getInt(2));
+				bean.setRprice(rs.getInt(3));
+				bean.setRadd(rs.getInt(4));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return bean;
+	}
+	
 	//정보 수정
 	public boolean update(MyInfoBean bean) {
 		Connection con = null;
