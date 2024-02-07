@@ -53,7 +53,7 @@ public class MyInfoMgr {
 		return vlist;
 	}
 	
-	//방 리스트
+	//예약 리스트
 	public Vector<ReserveBean> reserveAll() {
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -73,9 +73,9 @@ public class MyInfoMgr {
 				bean.setResvname(rs.getString("resv_name"));
 				bean.setResvphone(rs.getString("resv_tel"));
 				bean.setResvroom(rs.getString("resv_room"));
-				bean.setResvtime(rs.getDate("room_time"));
-				bean.setResvusetime(rs.getInt("room_usetime"));
-				bean.setResvperson(rs.getInt("room_person"));
+				bean.setResvtime(rs.getDate("resv_time"));
+				bean.setResvusetime(rs.getInt("resv_usetime"));
+				bean.setResvperson(rs.getInt("resv_person"));
 				vlist.addElement(bean);
 			}
 		} catch (Exception e) {
@@ -193,6 +193,33 @@ public class MyInfoMgr {
 				bean.setName(rs.getString(3));
 				bean.setPhone(rs.getString(4));
 				bean.setMoney(rs.getInt(5));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return bean;
+	}
+	
+	//방 select
+	public RoomBean room(String rid) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		RoomBean bean = new RoomBean();
+		try {
+			con = pool.getConnection();
+			sql = "select * from room where room = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, rid); //첫번째 ?에 매개변수 id 값 세팅
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				bean.setRoom(rs.getString(1));
+				bean.setRperson(rs.getInt(2));
+				bean.setRprice(rs.getInt(3));
+				bean.setRadd(rs.getInt(4));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

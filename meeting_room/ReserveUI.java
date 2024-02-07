@@ -44,7 +44,7 @@ public class ReserveUI extends JFrame implements ActionListener{
 	JButton cancel_btn = new JButton("취소");
 
 	Container c = getContentPane();
-   
+ 
 	public ReserveUI() {
 		setTitle("미팅룸 예약하기");
 		setSize(800, 750);
@@ -56,47 +56,22 @@ public class ReserveUI extends JFrame implements ActionListener{
 		name_value_lb.setText(MainPageUI.name_value_lb.getText());
 		balance_value_lb.setText(MainPageUI.balance_value_lb.getText());
 		
-		reserve_lb.setBounds(5,  2,  500,  40);
+		reserve_lb.setBounds(5,2,500,40);
 		room2_lb.setBounds(65, 75, 100, 20);
 		room4_lb.setBounds(265, 75, 100, 20);
 		room8_lb.setBounds(465, 75, 100, 20);
 		
-		memberinfo_lb.setBounds(590,  13,  100,  40);
-		name_lb.setBounds(590,  50,  100,  40);	
+		memberinfo_lb.setBounds(590,13,100,40);
+		name_lb.setBounds(590,50,100,40);	
 		name_value_lb.setBounds(640, 50, 100, 40);
 		balance_lb.setBounds(590, 87, 100, 40);
 		balance_value_lb.setBounds(640, 87, 150, 40);
 		
-		room2_1_btn.setBounds(5, 110, 160, 85);
-		room2_2_btn.setBounds(5, 210, 160, 85);
-		room2_3_btn.setBounds(5, 310, 160, 85);
-		room2_4_btn.setBounds(5, 410, 160, 85);
-		
-		room4_1_btn.setBounds(210, 110, 160, 85);
-		room4_2_btn.setBounds(210, 210, 160, 85);
-		room4_3_btn.setBounds(210, 310, 160, 85);
-		room4_4_btn.setBounds(210, 410, 160, 85);
-		room4_5_btn.setBounds(210, 510, 160, 85);
-		room4_6_btn.setBounds(210, 610, 160, 85);
-		room8_1_btn.setBounds(405, 110, 160, 85);
-		room8_2_btn.setBounds(405, 210, 160, 85);
 		reserve_btn.setBounds(605, 150, 160, 85);
 		cancel_btn.setBounds(605, 250, 160, 85);
 		
 		reserve = new Reserve(this);
 		
-        room2_1_btn.addActionListener(reserve);
-		room2_2_btn.addActionListener(reserve);
-		room2_3_btn.addActionListener(reserve);
-		room2_4_btn.addActionListener(reserve);
-		room4_1_btn.addActionListener(reserve);
-		room4_2_btn.addActionListener(reserve);
-		room4_3_btn.addActionListener(reserve);
-		room4_4_btn.addActionListener(reserve);
-		room4_5_btn.addActionListener(reserve);
-		room4_6_btn.addActionListener(reserve);
-		room8_1_btn.addActionListener(reserve);
-		room8_2_btn.addActionListener(reserve);
 		reserve_btn.addActionListener(reserve);
 		cancel_btn.addActionListener(reserve);
 		
@@ -115,27 +90,42 @@ public class ReserveUI extends JFrame implements ActionListener{
 		balance_lb.setFont(font3);
 		balance_value_lb.setFont(font3);
 		
-		room2_1_btn.setFont(font2);
-		room2_2_btn.setFont(font2);
-		room2_3_btn.setFont(font2);
-		room2_4_btn.setFont(font2);
-		
-		room4_1_btn.setFont(font2);
-		room4_2_btn.setFont(font2);
-		room4_3_btn.setFont(font2);
-		room4_4_btn.setFont(font2);
-		room4_5_btn.setFont(font2);
-		room4_6_btn.setFont(font2);
-		
-		room8_1_btn.setFont(font2);
-		room8_2_btn.setFont(font2);
-		
 		reserve_btn.setFont(font2);
 		reserve_btn.setEnabled(false); // 예약 버튼은 미팅룸을 선택햐야 활성화 되도록 설정
 
 		cancel_btn.setFont(font2);
 		
-		RoomCheck();
+		
+		Vector<RoomBean> vlist;
+		MyInfoMgr mgr = new MyInfoMgr();
+		vlist = mgr.roomAll();
+
+		int buttonWidth = 160;
+		int buttonHeight = 85;
+		int verticalGap = 15;
+		int startY = 110;
+
+		for(int i = 0; i < vlist.size(); i++) {
+			RoomBean bean = vlist.get(i);
+			JButton button = new JButton(bean.getRoom());
+			button.addActionListener(reserve);
+			
+			if (i < 4) {
+				button.setBounds(5, startY, 160, 85);
+				startY += 100;
+			} else if (4<= i && i < 10) {
+				if (i == 4) startY -= 400;
+				button.setBounds(210, startY, 160, 85);
+				startY += 100;
+			} else {
+				if (i == 10) startY -= 600;
+				button.setBounds(405, startY, 160, 85);
+				startY += 100;
+			}
+			
+			button.setFont(font2);
+			c.add(button);
+		}
 		
 		//요소 추가
 		c.add(reserve_lb);
@@ -149,21 +139,6 @@ public class ReserveUI extends JFrame implements ActionListener{
 		c.add(balance_lb);
 		c.add(balance_value_lb);
 		
-		c.add(room2_1_btn);
-		c.add(room2_2_btn);
-		c.add(room2_3_btn);
-		c.add(room2_4_btn);
-		
-		c.add(room4_1_btn);
-		c.add(room4_2_btn);
-		c.add(room4_3_btn);
-		c.add(room4_4_btn);
-		c.add(room4_5_btn);
-		c.add(room4_6_btn);
-		
-		c.add(room8_1_btn);
-		c.add(room8_2_btn);
-		
 		c.add(reserve_btn);
 		c.add(cancel_btn);
 		
@@ -174,19 +149,6 @@ public class ReserveUI extends JFrame implements ActionListener{
 				
 		setVisible(true);
 		setResizable(false);
-	}
-	
-	public void RoomCheck() {
-		//room4_2_btn.setEnabled(false); // 사용중인 룸 예시로 디폴트 설정 
-		//room4_2_btn.setBackground(new Color(255, 180, 180)); // 사용중인 방 색 변경
-		Vector<RoomBean> vlist;
-		MyInfoMgr mgr = new MyInfoMgr();
-		vlist = mgr.roomAll();
-		
-		for(int i = 0; i < vlist.size(); i++) {
-			RoomBean bean = vlist.get(i);
-			
-		}
 	}
 	
 	@Override
