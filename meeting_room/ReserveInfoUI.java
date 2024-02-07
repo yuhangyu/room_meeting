@@ -36,7 +36,7 @@ public class ReserveInfoUI extends JFrame implements ActionListener{
 		
 		prviewlist();
 		
-		pane.setBounds(0,0,1000,440);	
+		pane.setBounds(0,0,986,440);	
 		
 		reservetable.addMouseListener(new MouseActionn());
 		jb.addActionListener(this);

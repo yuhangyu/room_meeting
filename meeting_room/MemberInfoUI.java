@@ -34,7 +34,7 @@ public class MemberInfoUI extends JFrame implements ActionListener {
 		viewlist();
 		
 		//요소 위치 지정
-		pane.setBounds(0, 0, 535, 400);
+		pane.setBounds(0, 0, 536, 400);
 		
 		//이벤트 추가
 		membertable.addMouseListener(new MouseAction());
