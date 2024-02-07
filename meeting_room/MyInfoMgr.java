@@ -20,7 +20,7 @@ public class MyInfoMgr {
 		}
 	}
 	
-	//모든 리스트: select
+	//관리자 제외 모든 사용자
 	public Vector<MyInfoBean> selectAll() {
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -48,6 +48,127 @@ public class MyInfoMgr {
 			e.printStackTrace();
 		} finally {
 			//con 반납, pstmt, rs 는 close
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return vlist;
+	}
+	
+	//방 리스트
+	public Vector<ReserveBean> reserveAll() {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ReserveBean> vlist = new Vector<ReserveBean>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from reserve";
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				ReserveBean bean = new ReserveBean();
+				bean.setReserve(rs.getInt("resv"));
+				bean.setResvid(rs.getString("resv_id"));
+				bean.setResvname(rs.getString("resv_name"));
+				bean.setResvphone(rs.getString("resv_tel"));
+				bean.setResvroom(rs.getString("resv_room"));
+				bean.setResvtime(rs.getDate("room_time"));
+				bean.setResvusetime(rs.getInt("room_usetime"));
+				bean.setResvperson(rs.getInt("room_person"));
+				vlist.addElement(bean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return vlist;
+	}
+	
+	//음식 리스트
+	public Vector<FoodBean> foodAll() {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<FoodBean> vlist = new Vector<FoodBean>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from food";
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				FoodBean bean = new FoodBean();
+				bean.setFood(rs.getString("food"));
+				bean.setFname(rs.getString("food_name"));
+				bean.setFprice(rs.getInt("food_price"));
+				bean.setFtype(rs.getString("food_type"));
+				vlist.addElement(bean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return vlist;
+	}
+	
+	//보드게임 리스트
+	public Vector<GameBean> gameAll() {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<GameBean> vlist = new Vector<GameBean>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from game";
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				GameBean bean = new GameBean();
+				bean.setGame(rs.getString("game"));
+				bean.setGname(rs.getString("game_name"));
+				bean.setGprice(rs.getInt("game_price"));
+				bean.setGstate(rs.getBoolean("game_state"));
+				vlist.addElement(bean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return vlist;
+	}
+	
+	//방 리스트
+	public Vector<RoomBean> roomAll() {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<RoomBean> vlist = new Vector<RoomBean>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from room";
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				RoomBean bean = new RoomBean();
+				bean.setRoom(rs.getString("room"));
+				bean.setRperson(rs.getInt("room_person"));
+				bean.setRprice(rs.getInt("room_price"));
+				bean.setRadd(rs.getInt("room_add"));
+				bean.setRstate(rs.getBoolean("room_state"));
+				vlist.addElement(bean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
 			pool.freeConnection(con, pstmt, rs);
 		}
 		return vlist;
