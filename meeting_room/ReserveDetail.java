@@ -120,6 +120,15 @@ public class ReserveDetail implements ActionListener {
 		MyInfoBean bean2 = mgr.select(id);
 		String personInfo = (String) rdUI.select_add_person.getSelectedItem();
 		int personInfo_int = 0; // 추가 인원 
+
+		// 추가 인원 int 형 변환 
+		if(personInfo.equals("없음")) {
+			personInfo_int = 0;
+		} else if(personInfo.equals("1명")) {
+			personInfo_int = 1;
+		} else if(personInfo.equals("2명")) {
+			personInfo_int = 2;
+		}
 		
 		int money = bean2.getMoney();
 		if (money < totalPrice) {
@@ -130,37 +139,28 @@ public class ReserveDetail implements ActionListener {
 			return;
 		}
 		
-		// 추가 인원 int 형 변환 
-		if(personInfo.equals("없음")) {
-			personInfo_int = 0;
-		} else if(personInfo.equals("1명")) {
-			personInfo_int = 1;
-		} else if(personInfo.equals("2명")) {
-			personInfo_int = 2;
-		}
-		
 		String roomInfo = rdUI.chosen_room_info_lb.getText();
 		RoomBean bean3 = mgr.room(roomInfo);
 		
 		bean.setResvid(bean2.getID());
 		bean.setResvname(bean2.getName());
 		bean.setResvphone(bean2.getPhone());
-		bean.setResvroom(rdUI.chosen_room_info_lb.getText());
+		bean.setResvroom(roomInfo);
 		bean.setResvtime(str);
 		bean.setResvusetime(Integer.parseInt(rdUI.time_tf.getText()));
 		bean.setResvperson(bean3.getRperson() + personInfo_int);
 		
 		if(mgr.reserve(bean)) {
-			optionPane = new JOptionPane("예약이 완료되었습니다.", JOptionPane.INFORMATION_MESSAGE);
-			dialog = optionPane.createDialog(rdUI, "예약 안내");
-			dialog.setLocationRelativeTo(rdUI);
-			dialog.setVisible(true);
 			bean2.setMoney(money - totalPrice);
 			if (mgr.charge(bean2)) {
+				optionPane = new JOptionPane("예약이 완료되었습니다.", JOptionPane.INFORMATION_MESSAGE);
+				dialog = optionPane.createDialog(rdUI, "예약 안내");
+				dialog.setLocationRelativeTo(rdUI);
+				dialog.setVisible(true);
 				rdUI.dispose();
 				ReserveUI.a.doClick();
+				return;
 			}
-			return;
 		}
 	}
 	

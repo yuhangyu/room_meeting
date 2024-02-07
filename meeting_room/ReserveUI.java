@@ -142,7 +142,7 @@ public class ReserveUI extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == a) {
 			dispose();
-			ReserveUI rsv = new ReserveUI();
+			MainPageUI.a.doClick();
 		}
 	}
 
