@@ -142,7 +142,7 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 			if (rs.next()) {
 				JOptionPane.showMessageDialog(this, "로그인 성공!");
 				dispose();
-				setLoginID(id_tf.getText());
+				ID = id_tf.getText();
 				if (check_action == 1) { //일반 사용자
 					MainPageUI mainpage = new MainPageUI();
 				} else if (check_action == 2) {
@@ -154,14 +154,6 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-	}
-	
-	public static void setLoginID(String id) {
-		ID = id;
-	}
-	
-	public static String getLoginID() {
-		return ID;
 	}
 	
 	@Override

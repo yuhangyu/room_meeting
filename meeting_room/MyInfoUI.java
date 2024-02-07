@@ -48,7 +48,7 @@ public class MyInfoUI extends JFrame implements ActionListener {
 		setSize(400, 500);
 
 		//정보 저장 id, pw, name, phone(tel)
-		id = LoginUI.getLoginID();
+		id = LoginUI.ID;
 		mgr = new MyInfoMgr();
 		bean = mgr.select(id);
 		pw = bean.getPW();

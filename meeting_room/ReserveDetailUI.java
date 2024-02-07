@@ -107,6 +107,7 @@ public class ReserveDetailUI extends JFrame implements ActionListener {
 		start_min_lb.setBounds(315, 190, 50, 25);
 		
 		if ((int)minSpinner.getValue() == 60) {
+			hourSpinner.setValue((int)hourSpinner.getValue() + 1);
 			minSpinner.setValue(0);
 		}
 		
