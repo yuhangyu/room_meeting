@@ -6,6 +6,7 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,6 +14,7 @@ import javax.swing.JLabel;
 
 public class ReserveUI extends JFrame implements ActionListener{
 	private Reserve reserve;
+	String id;
 	
 	JLabel reserve_lb = new JLabel("미팅룸 예약하기");
 	JLabel room2_lb = new JLabel("2인");
@@ -41,14 +43,18 @@ public class ReserveUI extends JFrame implements ActionListener{
 	JButton reserve_btn = new JButton("예약");
 	JButton cancel_btn = new JButton("취소");
 
+	Container c = getContentPane();
    
 	public ReserveUI() {
 		setTitle("미팅룸 예약하기");
 		setSize(800, 750);
 		
-		//컨텐츠 패널의 객체 메소드 호출
-		Container c = getContentPane();
-		c.setLayout(null); //컨텐츠 패널 초기
+		c.setLayout(null);
+		
+		id = LoginUI.getLoginID();
+		
+		name_value_lb.setText(MainPageUI.name_value_lb.getText());
+		balance_value_lb.setText(MainPageUI.balance_value_lb.getText());
 		
 		reserve_lb.setBounds(5,  2,  500,  40);
 		room2_lb.setBounds(65, 75, 100, 20);
@@ -126,14 +132,12 @@ public class ReserveUI extends JFrame implements ActionListener{
 		
 		reserve_btn.setFont(font2);
 		reserve_btn.setEnabled(false); // 예약 버튼은 미팅룸을 선택햐야 활성화 되도록 설정
-									   // 디폴트 = false
-		
-		//room4_2_btn.setEnabled(false); // 사용중인 룸 예시로 디폴트 설정 
-		//room4_2_btn.setBackground(new Color(255, 180, 180)); // 사용중인 방 색 변경 
-		
-		
+
 		cancel_btn.setFont(font2);
 		
+		RoomCheck();
+		
+		//요소 추가
 		c.add(reserve_lb);
 		c.add(room2_lb);
 		c.add(room4_lb);
@@ -170,6 +174,19 @@ public class ReserveUI extends JFrame implements ActionListener{
 				
 		setVisible(true);
 		setResizable(false);
+	}
+	
+	public void RoomCheck() {
+		//room4_2_btn.setEnabled(false); // 사용중인 룸 예시로 디폴트 설정 
+		//room4_2_btn.setBackground(new Color(255, 180, 180)); // 사용중인 방 색 변경
+		Vector<RoomBean> vlist;
+		MyInfoMgr mgr = new MyInfoMgr();
+		vlist = mgr.roomAll();
+		
+		for(int i = 0; i < vlist.size(); i++) {
+			RoomBean bean = vlist.get(i);
+			
+		}
 	}
 	
 	@Override
