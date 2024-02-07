@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class SignUpUI extends JFrame implements ActionListener{
+	private SignUp su;
 	
 	//요소 생성
 	JLabel id_lb = new JLabel("아이디");
@@ -54,10 +55,6 @@ public class SignUpUI extends JFrame implements ActionListener{
 		signup_btn.setBounds(40, 290, 100, 40);
 		cancel_btn.setBounds(168, 290, 100, 40);
 				
-		//버튼 이벤트 추가
-		id_check_btn.addActionListener(this);
-		signup_btn.addActionListener(this);
-		cancel_btn.addActionListener(this);
 				
 		//요소 추가
 		c.add(id_lb);
@@ -76,6 +73,14 @@ public class SignUpUI extends JFrame implements ActionListener{
 		c.add(signup_btn);
 		c.add(cancel_btn);
 				
+		su = new SignUp(this);
+		
+		//버튼 이벤트 추가
+		id_check_btn.addActionListener(su);
+		signup_btn.addActionListener(su);
+		cancel_btn.addActionListener(su);
+		
+		
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);
 		//프로그램 종료할 때 프로세스까지 함께 종료
