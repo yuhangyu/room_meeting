@@ -26,7 +26,7 @@ class Game {
     int getPrice() { return price; }
 }
 
-public class BoardGameUI {
+public class BoardGameUI extends JFrame {
     public static void main(String[] args) {
         JFrame frame = new JFrame("게임 메뉴");
   	  frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

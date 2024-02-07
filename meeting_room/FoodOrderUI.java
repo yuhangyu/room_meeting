@@ -85,18 +85,20 @@ public class FoodOrderUI {
                             SpinnerNumberModel model = new SpinnerNumberModel(1, 1, 10, 1);  // 초기 값 1, 최소 값 1, 최대 값 10, 단계 1
                             JSpinner quantitySpinner = new JSpinner(model);
                             JLabel quantityLabel = new JLabel("수량: ");
+                            quantitySpinner.setPreferredSize(new Dimension(140, 25));
+                            
+                            JPanel quantityPanel = new JPanel();
+                            quantityPanel.add(quantityLabel);
+                            quantityPanel.add(quantitySpinner);
                             quantityLabel.setLabelFor(quantitySpinner);
-
                             detailPanel.add(nameLabel);
                             detailPanel.add(detailLabel);
                             detailPanel.add(priceLabel);
-                            detailPanel.add(quantityLabel);
-                            detailPanel.add(quantitySpinner);
-
+                            detailPanel.add(quantityPanel);
                             detailDialog.add(detailPanel);
 
 
-                         // '담기' 버튼 추가
+                             // '담기' 버튼 추가
                             JButton addButton = new JButton("담기");
 
                             addButton.addActionListener(new ActionListener() {

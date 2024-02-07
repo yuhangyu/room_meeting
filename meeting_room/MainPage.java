@@ -31,12 +31,12 @@ public class MainPage implements ActionListener{
 			
 			case "음식 주문하기":
 				// 음식 주문 UI 띄우기
-				FoodOrderUI fui = new FoodOrderUI();
+				FoodOrderUI.main(null);
 				break;
 			
 			case "보드게임 대여":
 				// 보드게임 대여 UI 띄우기
-				BoardGameUI gui = new BoardGameUI();
+				BoardGameUI.main(null);
 				break;
 				
 			case "내 정보":
