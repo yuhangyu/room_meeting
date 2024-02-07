@@ -87,7 +87,7 @@ public class ReserveInfoUI extends JFrame implements ActionListener{
 			conts[i][2] = bean.getResvname();
 			conts[i][3] = bean.getResvphone();
 			conts[i][4] = bean.getResvroom();
-			conts[i][5] = String.valueOf(bean.getResvtime());
+			conts[i][5] = bean.getResvtime();
 			conts[i][6] = String.valueOf(bean.getResvusetime());
 			conts[i][7] = String.valueOf(bean.getResvperson());
 		}
