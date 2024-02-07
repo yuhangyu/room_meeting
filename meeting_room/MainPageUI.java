@@ -84,9 +84,9 @@ public class MainPageUI extends JFrame implements ActionListener {
 		deposit_btn.setBounds(230, 330, 150, 100);
 		purchasefood_btn.setBounds(55, 440, 150, 100);
 		rentgame_btn.setBounds(230, 440, 150, 100);
-		logout_btn.setBounds(430, 460, 150, 100);
-		myinfo_btn.setBounds(590, 460, 150, 100);
-				
+		myinfo_btn.setBounds(430, 440, 150, 100);
+		logout_btn.setBounds(590, 440, 150, 100);
+		
 		//요소 추가
 		c.add(memberinfo_lb);
 		c.add(name_lb);
@@ -107,8 +107,8 @@ public class MainPageUI extends JFrame implements ActionListener {
 		deposit_btn.addActionListener(mainPage);
 		logout_btn.addActionListener(mainPage);
 		myinfo_btn.addActionListener(mainPage);
-		purchasefood_btn.addActionListener(this);
-		rentgame_btn.addActionListener(this);
+		purchasefood_btn.addActionListener(mainPage);
+		rentgame_btn.addActionListener(mainPage);
 		
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);

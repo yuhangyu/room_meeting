@@ -44,7 +44,7 @@ public class FoodOrderUI {
         JList<String> cart = new JList<>(cartList);
         JScrollPane cartScrollPane = new JScrollPane(cart); 
 
-     // 음식 데이터 생성
+        // 음식 데이터 생성
         List<Food> foods = new ArrayList<>();
         foods.add(new Food("카페", "아이스티", "아이스티의 상세 정보", "http://example.com/iced_tea_image.jpg", 2000));
         foods.add(new Food("카페", "망고스무디", "망고스무디의 상세 정보", "http://example.com/mango_smoothie_image.jpg", 4500));

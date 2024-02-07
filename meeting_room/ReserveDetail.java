@@ -2,12 +2,8 @@ package meeting_room;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.util.Calendar;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class ReserveDetail implements ActionListener {
@@ -50,13 +46,12 @@ public class ReserveDetail implements ActionListener {
 			rdUI.dispose();
 		} else if (clickedButton == rdUI.payment_btn) {
 			// 결제 이벤트 구현부
-			// Calendar 객체 생성 및 현재 시간 설정
-			Calendar cal = Calendar.getInstance();
-			int currentYear = cal.get(Calendar.YEAR);
-			int currentMonth = cal.get(Calendar.MONTH) + 1; // Calendar.MONTH는 0부터 시작하므로 1을 더해줌
-			int currentDay = cal.get(Calendar.DAY_OF_MONTH);
-			int currentHour = cal.get(Calendar.HOUR_OF_DAY);
-			int currentMin = cal.get(Calendar.MINUTE);
+			
+			int currentYear = rdUI.currentYear;
+			int currentMonth = rdUI.currentMonth; // Calendar.MONTH는 0부터 시작하므로 1을 더해줌
+			int currentDay = rdUI.currentDay;
+			int currentHour = rdUI.currentHour;
+			int currentMin = rdUI.currentMinute;
 			
 			Object selectYear = rdUI.yearSpinner.getValue();
 			Object selectMonth = rdUI.monthSpinner.getValue();
