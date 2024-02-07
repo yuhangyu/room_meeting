@@ -276,4 +276,30 @@ public class MyInfoMgr {
 		}
 		return flag;
 	}
+	
+	//예약하기
+	public boolean reserve(ReserveBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "insert into reserve values (NULL, ?, ?, ?, ?, ?, ?, ?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1,  bean.getResvid());
+			pstmt.setString(1,  bean.getResvname());
+			pstmt.setString(1,  bean.getResvphone());
+			pstmt.setString(1,  bean.getResvroom());
+			pstmt.setString(1,  bean.getResvtime());
+			pstmt.setInt(1,  bean.getResvusetime());
+			pstmt.setInt(1,  bean.getResvperson());
+			if (pstmt.executeUpdate() == 1) flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
 }
