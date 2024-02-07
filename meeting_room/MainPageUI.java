@@ -52,6 +52,7 @@ public class MainPageUI extends JFrame implements ActionListener {
 		balance_value_lb.setText(money + "원");
 		setIDMoney(money);
 		
+		
 		// 로고 추가
         ImageIcon logoIcon = new ImageIcon("meeting_room/logo.jpg");
         JLabel logoLabel = new JLabel(logoIcon);
