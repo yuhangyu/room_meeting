@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -45,6 +46,13 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 		//컨텐츠 패널의 객체 메소드 호출
 		Container c = getContentPane();
 		c.setLayout(null);  //컨텐츠 패널 초기화
+		
+		// 로고 추가
+        ImageIcon logoIcon = new ImageIcon("meeting_room/logo.jpg");
+        JLabel logoLabel = new JLabel(logoIcon);
+        logoLabel.setBounds(45, 20, 700, 270);
+        c.add(logoLabel);
+		
 		
 		//요소 위치 지정
 		id_lb.setBounds(255,  322,  100,  25);

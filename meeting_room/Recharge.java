@@ -12,6 +12,7 @@ public class Recharge implements ActionListener {
 	private JTextField recharge_value_tf;
 	MyInfoMgr mgr;
 	int money;
+	String id;
 
 	public Recharge(JTextField recharge_value_tf) {
 		this.recharge_value_tf = recharge_value_tf;
@@ -62,16 +63,16 @@ public class Recharge implements ActionListener {
 	}
 	
 	private void goCharge() {
+		id = LoginUI.getLoginID();
 		mgr = new MyInfoMgr();
-		MyInfoBean bean = new MyInfoBean();
-		money = MainPageUI.getIDMoney();
-		bean.setID(LoginUI.getLoginID());
+		MyInfoBean bean = mgr.select(id);
+		money = bean.getMoney();
+		bean.setID(id);
 		bean.setMoney(Integer.parseInt(recharge_value_tf.getText()) + money);
 		if(mgr.charge(bean)) {
 			JOptionPane.showMessageDialog(null, "충전되었습니다.");
-			MyInfoMgr mgr = new MyInfoMgr();
 			mgr.select(bean.getID());
-			MainPageUI.balance_value_lb.setText(String.valueOf(bean.getMoney()));
+			MainPageUI.balance_value_lb.setText(String.valueOf(bean.getMoney()) + "원");
 			cancelCharge();
 		}
 	}
