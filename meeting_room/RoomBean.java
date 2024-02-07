@@ -6,6 +6,7 @@ public class RoomBean {
 	private int rperson;
 	private int rprice;
 	private int radd;
+	private boolean rstate;
 	
 	public String getRoom() {
 		return room;
@@ -13,23 +14,29 @@ public class RoomBean {
 	public void setRoom(String room) {
 		this.room = room;
 	}
-	public int getPerson() {
+	public int getRperson() {
 		return rperson;
 	}
-	public void setPerson(int person) {
+	public void setRperson(int person) {
 		this.rperson = person;
 	}
-	public int getPrice() {
+	public int getRprice() {
 		return rprice;
 	}
-	public void setPrice(int price) {
+	public void setRprice(int price) {
 		this.rprice = price;
 	}
-	public int getAdd() {
+	public int getRadd() {
 		return radd;
 	}
-	public void setAdd(int add) {
+	public void setRadd(int add) {
 		this.radd = add;
+	}
+	public boolean getRstate() {
+		return rstate;
+	}
+	public void setRstate(boolean state) {
+		this.rstate = state;
 	}
 	
 }
