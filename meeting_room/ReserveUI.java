@@ -27,19 +27,6 @@ public class ReserveUI extends JFrame implements ActionListener{
 	JLabel balance_lb = new JLabel("ÀÜ¾× : ");
 	JLabel balance_value_lb = new JLabel("<TEST> ¿ø");
 	
-	JButton room2_1_btn = new JButton("2ÀÎ 1¹ø ·ë");
-	JButton room2_2_btn = new JButton("2ÀÎ 2¹ø ·ë");
-	JButton room2_3_btn = new JButton("2ÀÎ 3¹ø ·ë");
-	JButton room2_4_btn = new JButton("2ÀÎ 4¹ø ·ë");
-	JButton room4_1_btn = new JButton("4ÀÎ 1¹ø ·ë");
-	JButton room4_2_btn = new JButton("4ÀÎ 2¹ø ·ë");
-	JButton room4_3_btn = new JButton("4ÀÎ 3¹ø ·ë");
-	JButton room4_4_btn = new JButton("4ÀÎ 4¹ø ·ë");
-	JButton room4_5_btn = new JButton("4ÀÎ 5¹ø ·ë");
-	JButton room4_6_btn = new JButton("4ÀÎ 6¹ø ·ë");
-	JButton room8_1_btn = new JButton("8ÀÎ 1¹ø ·ë");
-	JButton room8_2_btn = new JButton("8ÀÎ 2¹ø ·ë");
-	
 	JButton reserve_btn = new JButton("¿¹¾à");
 	JButton cancel_btn = new JButton("Ãë¼Ò");
 
@@ -89,12 +76,9 @@ public class ReserveUI extends JFrame implements ActionListener{
 		name_value_lb.setFont(font3);;
 		balance_lb.setFont(font3);
 		balance_value_lb.setFont(font3);
-		
 		reserve_btn.setFont(font2);
 		reserve_btn.setEnabled(false); // ¿¹¾à ¹öÆ°Àº ¹ÌÆÃ·ëÀ» ¼±ÅÃÇá¾ß È°¼ºÈ­ µÇµµ·Ï ¼³Á¤
-
 		cancel_btn.setFont(font2);
-		
 		
 		Vector<RoomBean> vlist;
 		MyInfoMgr mgr = new MyInfoMgr();
@@ -157,7 +141,5 @@ public class ReserveUI extends JFrame implements ActionListener{
 
 	public static void main(String[] args) {
 		ReserveUI rsv = new ReserveUI();
-
 	}
-
 }
