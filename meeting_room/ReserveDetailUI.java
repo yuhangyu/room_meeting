@@ -106,6 +106,10 @@ public class ReserveDetailUI extends JFrame implements ActionListener {
 		start_hour_lb.setBounds(235, 190, 50, 25);
 		start_min_lb.setBounds(315, 190, 50, 25);
 		
+		if ((int)minSpinner.getValue() == 60) {
+			minSpinner.setValue(0);
+		}
+		
 		// DocumentFilter를 사용하여 텍스트 필드의 입력을 제한
 		((AbstractDocument) time_tf.getDocument()).setDocumentFilter(new DocumentFilter() {
 			@Override
@@ -295,6 +299,6 @@ public class ReserveDetailUI extends JFrame implements ActionListener {
 	}
 	
 	public static void main(String[] args) {
-		ReserveUI RUI = new ReserveUI();
+		
 	}
 }
