@@ -62,6 +62,7 @@ public class AdminMainPageUI extends JFrame implements ActionListener{
 		Member_info.setFont(font);
 		
 		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		setResizable(false);
 	}
