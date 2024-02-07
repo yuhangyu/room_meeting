@@ -3,8 +3,11 @@ package meeting_room;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.Calendar;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class ReserveDetail implements ActionListener {
@@ -47,7 +50,63 @@ public class ReserveDetail implements ActionListener {
 			rdUI.dispose();
 		} else if (clickedButton == rdUI.payment_btn) {
 			// 결제 이벤트 구현부
+			// Calendar 객체 생성 및 현재 시간 설정
+			Calendar cal = Calendar.getInstance();
+			int currentYear = cal.get(Calendar.YEAR);
+			int currentMonth = cal.get(Calendar.MONTH) + 1; // Calendar.MONTH는 0부터 시작하므로 1을 더해줌
+			int currentDay = cal.get(Calendar.DAY_OF_MONTH);
+			int currentHour = cal.get(Calendar.HOUR_OF_DAY);
+			int currentMin = cal.get(Calendar.MINUTE);
+			
+			Object selectYear = rdUI.yearSpinner.getValue();
+			Object selectMonth = rdUI.monthSpinner.getValue();
+			Object selectDay = rdUI.daySpinner.getValue();
+			Object selectHour = rdUI.hourSpinner.getValue();
+			Object selectMin = rdUI.minSpinner.getValue();
+			
+			JOptionPane optionPane;
+			JDialog dialog;
+			
+			if (currentYear == ((Integer)selectYear).intValue()) {
+				if (currentMonth == ((Integer)selectMonth).intValue()) {
+					if (currentDay > ((Integer)selectDay).intValue()) {
+						errorMsg();
+						return;
+					} else if (currentDay == ((Integer)selectDay).intValue()) {
+						if (currentHour == ((Integer)selectHour).intValue()) {
+							if (currentMin > ((Integer)selectMin).intValue() || currentMin == ((Integer)selectMin).intValue()) {
+								errorMsg();
+								return;
+							}
+						} else if (currentHour > ((Integer)selectHour).intValue()) {
+							errorMsg();
+							return;
+						}
+					}
+				} else if (currentMonth > ((Integer)selectMonth).intValue()) {
+					errorMsg();
+					return;
+				}
+			}
+			
+			if ("".equals(rdUI.time_tf.getText())) {
+				optionPane = new JOptionPane("이용할 시간을 입력해주세요.", JOptionPane.ERROR_MESSAGE);
+				dialog = optionPane.createDialog(rdUI, "예약 안내");
+				dialog.setLocationRelativeTo(rdUI);
+				dialog.setVisible(true);
+				return;
+			}
 		}
+	}
+	
+	public void errorMsg() {
+		JOptionPane optionPane;
+		JDialog dialog;
+		
+		optionPane = new JOptionPane("예약 시간 선택 오류입니다.", JOptionPane.ERROR_MESSAGE);
+		dialog = optionPane.createDialog(rdUI, "예약 안내");
+		dialog.setLocationRelativeTo(rdUI);
+		dialog.setVisible(true);
 	}
 	
 	private void updatePrice() {   
@@ -58,11 +117,9 @@ public class ReserveDetail implements ActionListener {
 		MyInfoMgr mgr = new MyInfoMgr();
 		RoomBean bean = mgr.room(roomInfo);
 		
-		int roomInfo_members = roomInfo.charAt(0) - '0'; // 방 정보의 첫번째 글자를 INT형으로 변환 
 		int timePrice = 0; // 시간 금액 레이블에 표시
 		int personPrice = 0; // 인원 금액 레이블에 표시
 		int totalPrice = 0 ; // 총 금액 레이블에 표시
-		
 		int personInfo_int = 0; // 추가 인원 
 		
 		// 추가 인원 int 형 변환 
