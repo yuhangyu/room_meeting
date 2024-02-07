@@ -4,6 +4,8 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -34,7 +36,7 @@ public class MainPageUI extends JFrame implements ActionListener {
 
 	public MainPageUI() {
 		setTitle("메인 페이지");
-		setSize(600, 350);
+		setSize(800, 650);
 		
 		//컨텐츠 패널의 객체 메소드 호출
 		Container c = getContentPane();
@@ -50,12 +52,18 @@ public class MainPageUI extends JFrame implements ActionListener {
 		balance_value_lb.setText(money + "원");
 		setIDMoney(money);
 		
+		// 로고 추가
+        ImageIcon logoIcon = new ImageIcon("meeting_room/logo.jpg");
+        JLabel logoLabel = new JLabel(logoIcon);
+        logoLabel.setBounds(45, 20, 700, 270);
+        c.add(logoLabel);
+		
 		//요소 위치 지정
-		memberinfo_lb.setBounds(380,  3,  100,  40);
-		name_lb.setBounds(380,  40,  100,  40);	
-		name_value_lb.setBounds(430, 40, 150, 40);
-		balance_lb.setBounds(380, 77, 100, 40);
-		balance_value_lb.setBounds(430, 77, 150, 40);
+		memberinfo_lb.setBounds(480,  323,  100,  40);
+		name_lb.setBounds(480,  360,  100,  40);	
+		name_value_lb.setBounds(530, 360, 150, 40);
+		balance_lb.setBounds(480, 397, 100, 40);
+		balance_value_lb.setBounds(530, 397, 150, 40);
 		
 		//Font 지정
 		Font font = new Font("Dialog", Font.PLAIN, 18); // 폰트의 크기만 변경 
@@ -68,13 +76,15 @@ public class MainPageUI extends JFrame implements ActionListener {
 		deposit_btn.setFont(font);
 		purchasefood_btn.setFont(font);
 		rentgame_btn.setFont(font);
+		logout_btn.setFont(font);
+		myinfo_btn.setFont(font);
 		
-		reserve_btn.setBounds(10, 10, 150, 100);
-		deposit_btn.setBounds(180, 10, 150, 100);
-		purchasefood_btn.setBounds(10, 120, 150, 100);
-		rentgame_btn.setBounds(180, 120, 150, 100);
-		logout_btn.setBounds(380, 120, 100, 40);
-		myinfo_btn.setBounds(380, 170, 100, 40);
+		reserve_btn.setBounds(55, 330, 150, 100);
+		deposit_btn.setBounds(230, 330, 150, 100);
+		purchasefood_btn.setBounds(55, 440, 150, 100);
+		rentgame_btn.setBounds(230, 440, 150, 100);
+		logout_btn.setBounds(430, 460, 150, 100);
+		myinfo_btn.setBounds(590, 460, 150, 100);
 				
 		//요소 추가
 		c.add(memberinfo_lb);
