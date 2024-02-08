@@ -23,6 +23,8 @@ public class AdminMainPageUI extends JFrame implements ActionListener{
 	JButton Reserve = new JButton("예약 정보");
 	JButton Member_info = new JButton("회원 정보 관리");
 	
+	JButton Log_out = new JButton("로그 아웃");
+	
 	public AdminMainPageUI() {
 		id = LoginUI.ID;
 		mgr = new MyInfoMgr();
@@ -40,11 +42,13 @@ public class AdminMainPageUI extends JFrame implements ActionListener{
 		Order_history.setBounds(50, 300, 300, 150);
 		Reserve.setBounds(350, 300, 300, 150);
 		Member_info.setBounds(650, 300, 300, 150);
+		Log_out.setBounds(50, 200, 150, 100);
 		
 		Sales_state.addActionListener(this);
 		Order_history.addActionListener(this);
 		Reserve.addActionListener(this);
 		Member_info.addActionListener(this);
+		Log_out.addActionListener(this);
 		
 		
 		c.add(adm_lb);
@@ -52,6 +56,7 @@ public class AdminMainPageUI extends JFrame implements ActionListener{
 		c.add(Order_history);
 		c.add(Reserve);
 		c.add(Member_info);
+		c.add(Log_out);
 		
 		Font font = new Font("Dialog", Font.BOLD, 30);
 		
@@ -78,6 +83,10 @@ public class AdminMainPageUI extends JFrame implements ActionListener{
 			ReserveInfoUI reserveinfo_ui = new ReserveInfoUI();
 		}else if(obj == Member_info) {
 			MemberInfoUI MIUI = new MemberInfoUI();
+		}
+		else if(obj == Log_out) {
+			this.dispose();
+			LoginUI li = new LoginUI();
 		}
 	}
 	public static void main(String[] args) {
