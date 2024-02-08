@@ -172,6 +172,8 @@ public class ReserveUI extends JFrame implements ActionListener{
 		model.setRowCount(0); // 기존 테이블 내용 지우기
 		reservePane.setBounds(440, 450, 280, 250);
 		
+		
+		
 		//요소 추가
 		c.add(reserve_lb);
 		c.add(room2_lb);
