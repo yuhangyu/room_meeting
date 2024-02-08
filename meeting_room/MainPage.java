@@ -36,7 +36,7 @@ public class MainPage implements ActionListener{
 			
 			case "보드게임 대여":
 				// 보드게임 대여 UI 띄우기
-				BoardGameUI.main(null);
+				GameOrderUI GUI = new GameOrderUI();
 				break;
 				
 			case "내 정보":

@@ -76,7 +76,39 @@ public class MyInfoMgr {
 				bean.setResvname(rs.getString("resv_name"));
 				bean.setResvphone(rs.getString("resv_tel"));
 				bean.setResvroom(rs.getString("resv_room"));
-				bean.setResvtime(format.format(dtime));
+				bean.setResvtime(rs.getString("resv_time"));
+				bean.setResvusetime(rs.getInt("resv_usetime"));
+				bean.setResvperson(rs.getInt("resv_person"));
+				vlist.addElement(bean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return vlist;
+	}
+	
+	//사용자 예약 리스트
+	public Vector<ReserveBean> reserveUser(String id) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<ReserveBean> vlist = new Vector<ReserveBean>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from reserve where resv_id=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id); //첫번째 ?에 매개변수 id 값 세팅
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				ReserveBean bean = new ReserveBean();
+				bean.setResvid(rs.getString("resv_id"));
+				bean.setResvname(rs.getString("resv_name"));
+				bean.setResvphone(rs.getString("resv_tel"));
+				bean.setResvroom(rs.getString("resv_room"));
+				bean.setResvtime(rs.getString("resv_time"));
 				bean.setResvusetime(rs.getInt("resv_usetime"));
 				bean.setResvperson(rs.getInt("resv_person"));
 				vlist.addElement(bean);
@@ -137,6 +169,7 @@ public class MyInfoMgr {
 				bean.setGname(rs.getString("game_name"));
 				bean.setGprice(rs.getInt("game_price"));
 				bean.setGstate(rs.getBoolean("game_state"));
+				bean.setGtype(rs.getString("game_type"));
 				vlist.addElement(bean);
 			}
 		} catch (Exception e) {

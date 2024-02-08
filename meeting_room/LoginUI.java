@@ -94,14 +94,6 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 		
 		setVisible(true);
 		setResizable(false);
-		
-		try {
-			pool = DBConnection.getInstance();
-			Connection con = pool.getConnection();
-			stmt = con.createStatement();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 	
@@ -135,6 +127,13 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 	}
 	
 	public void Login() {
+		try {
+			pool = DBConnection.getInstance();
+			Connection con = pool.getConnection();
+			stmt = con.createStatement();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		try {
 			ResultSet rs = stmt.executeQuery("SELECT * FROM member WHERE member_id='" + id_tf.getText() + "' AND member_pw=MD5('" + pw_tf.getText() + "') AND member_level='" + check_action + "'");
 			if (rs.next()) {

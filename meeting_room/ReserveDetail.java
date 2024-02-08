@@ -149,15 +149,11 @@ public class ReserveDetail implements ActionListener {
 		bean.setResvtime(str);
 		bean.setResvusetime(Integer.parseInt(rdUI.time_tf.getText()));
 		bean.setResvperson(bean3.getRperson() + personInfo_int);
+		bean.setResvtotal(totalPrice);
 		
 		if(mgr.reserve(bean)) {
 			bean2.setMoney(money - totalPrice);
-			if (mgr.charge(bean2)) {
-				bean.reserveRoom();
-				if (bean.isReserved()) {
-		            ReserveUI.buttonStateChange.setEnabled(false);
-		        }
-				
+			if (mgr.charge(bean2)) {				
 				optionPane = new JOptionPane("예약이 완료되었습니다.", JOptionPane.INFORMATION_MESSAGE);
 				dialog = optionPane.createDialog(rdUI, "예약 안내");
 				dialog.setLocationRelativeTo(rdUI);
