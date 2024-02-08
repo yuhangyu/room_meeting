@@ -38,7 +38,7 @@ public class ReserveInfoUI extends JFrame implements ActionListener{
 		
 		pane.setBounds(0,0,986,440);	
 		
-		reservetable.addMouseListener(new MouseActionn());
+		reservetable.addMouseListener(new MouseAction());
 		jb.addActionListener(this);
 			
 		c.add(pane);
@@ -59,7 +59,7 @@ public class ReserveInfoUI extends JFrame implements ActionListener{
 	}
 	
 	
-	private class MouseActionn extends MouseAdapter{
+	private class MouseAction extends MouseAdapter{
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if(e.getClickCount() == 2 ) {
@@ -82,13 +82,15 @@ public class ReserveInfoUI extends JFrame implements ActionListener{
 		
 		for (int i = 0; i < vlist.size(); i++) {
 			ReserveBean bean = vlist.get(i);
-			conts[i][0] = bean.getResvid();
-			conts[i][1] = bean.getResvname();
-			conts[i][2] = bean.getResvphone();
-			conts[i][3] = bean.getResvroom();
-			conts[i][4] = bean.getResvtime();
-			conts[i][5] = String.valueOf(bean.getResvusetime());
-			conts[i][6] = String.valueOf(bean.getResvperson());
+			
+			conts[i][0] = String.valueOf(i+1);
+			conts[i][1] = bean.getResvid();
+			conts[i][2] = bean.getResvname();
+			conts[i][3] = bean.getResvphone();
+			conts[i][4] = bean.getResvroom();
+			conts[i][5] = bean.getResvtime();
+			conts[i][6] = String.valueOf(bean.getResvusetime());
+			conts[i][7] = String.valueOf(bean.getResvperson());
 		}
 		DefaultTableModel model = new DefaultTableModel(conts, header) {
 			public boolean isCellEditable(int i, int c) {return false;}

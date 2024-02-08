@@ -5,6 +5,8 @@ import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -14,6 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 public class OrderInfo extends JFrame implements ActionListener{
 	JTable orderTable;
@@ -30,8 +33,15 @@ public class OrderInfo extends JFrame implements ActionListener{
 		
 		orderview();
 		
-		pane.setBounds(0, 0 , 900,440);
+		pane.setBounds(0, 0 , 986,440);
+		
+		orderTable.addMouseListener(new MouseAction());
+		jb.addActionListener(this);
+		
+		
 		c.add(pane);
+		c.add(jb);
+		
 		
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -39,8 +49,22 @@ public class OrderInfo extends JFrame implements ActionListener{
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
+		if(e.getSource() == jb) {
+			dispose();
+			OrderInfo orderinfo = new OrderInfo();
+		}
 	
+	}
+	private	class MouseAction extends MouseAdapter {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			if(e.getClickCount() == 2) {
+				int row = orderTable.getSelectedRow();
+				TableModel tm = orderTable.getModel();
+			}
+			super.mouseClicked(e);
+		}
+		
 	}
 		
 	
