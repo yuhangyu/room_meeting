@@ -43,7 +43,7 @@ public class MainPageUI extends JFrame implements ActionListener {
 		Container c = getContentPane();
 		c.setLayout(null); //컨텐츠 패널 초기화
 		
-		id = LoginUI.getLoginID();
+		id = LoginUI.ID;
 		mgr = new MyInfoMgr();
 		MyInfoBean bean = mgr.select(id);
 		
@@ -116,7 +116,7 @@ public class MainPageUI extends JFrame implements ActionListener {
 		setLocationRelativeTo(null);
 		//프로그램 종료할 때 프로세스까지 함께 종료
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				
+		
 		setVisible(true);
 		setResizable(false);
 	}

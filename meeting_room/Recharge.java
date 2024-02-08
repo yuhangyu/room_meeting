@@ -63,7 +63,7 @@ public class Recharge implements ActionListener {
 	}
 	
 	private void goCharge() {
-		id = LoginUI.getLoginID();
+		id = LoginUI.ID;
 		mgr = new MyInfoMgr();
 		MyInfoBean bean = mgr.select(id);
 		money = bean.getMoney();

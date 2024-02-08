@@ -43,7 +43,7 @@ public class ReserveUI extends JFrame implements ActionListener{
 		
 		c.setLayout(null);
 		
-		id = LoginUI.getLoginID();
+		id = LoginUI.ID;
 		
 		name_value_lb.setText(MainPageUI.name_value_lb.getText());
 		balance_value_lb.setText(MainPageUI.balance_value_lb.getText());

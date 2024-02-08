@@ -24,7 +24,7 @@ public class AdminMainPageUI extends JFrame implements ActionListener{
 	JButton Member_info = new JButton("회원 정보 관리");
 	
 	public AdminMainPageUI() {
-		id = LoginUI.getLoginID();
+		id = LoginUI.ID;
 		mgr = new MyInfoMgr();
 		bean = mgr.select(id);
 		name = bean.getName();
@@ -66,6 +66,7 @@ public class AdminMainPageUI extends JFrame implements ActionListener{
 		setVisible(true);
 		setResizable(false);
 	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object obj = e.getSource();
@@ -82,7 +83,4 @@ public class AdminMainPageUI extends JFrame implements ActionListener{
 	public static void main(String[] args) {
 		AdminMainPageUI admin_ui = new AdminMainPageUI();
 	}
-
-	
-
 }
