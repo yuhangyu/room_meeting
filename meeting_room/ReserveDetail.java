@@ -114,7 +114,7 @@ public class ReserveDetail implements ActionListener {
 		ReserveBean bean = new ReserveBean();
 		MyInfoMgr mgr = new MyInfoMgr();
 		
-		String id = LoginUI.getLoginID();
+		String id = LoginUI.ID;
 		String str = selectYear.toString() + "-" + selectMonth.toString() + "-" + selectDay.toString() + " " + selectHour.toString() + ":" + selectMin.toString();
 		
 		MyInfoBean bean2 = mgr.select(id);

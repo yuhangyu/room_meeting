@@ -97,10 +97,8 @@ public class FoodOrderUI {
                             detailPanel.add(quantityPanel);
                             detailDialog.add(detailPanel);
 
-
                              // '담기' 버튼 추가
                             JButton addButton = new JButton("담기");
-
                             addButton.addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
@@ -135,9 +133,9 @@ public class FoodOrderUI {
                                     detailDialog.dispose();
                                 }
                             });
+                            
                             detailPanel.add(addButton);
-
-                            detailDialog.add(detailPanel);
+                            detailDialog.add(detailPanel, BorderLayout.NORTH);
                             detailDialog.setVisible(true);
                         }
                     });
