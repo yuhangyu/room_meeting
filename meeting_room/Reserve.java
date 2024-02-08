@@ -4,8 +4,11 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Vector;
 
@@ -44,6 +47,25 @@ public class Reserve implements ActionListener {
 				// 테이블 업데이트
 				DefaultTableModel model = (DefaultTableModel) reserveUI.reserveTable.getModel();
 	            model.setRowCount(0); // 기존 테이블 내용 지우기
+	            
+	            // reservelist를 날짜에 따라 정렬
+	            Collections.sort(reservelist, new Comparator<ReserveBean>() {
+	                @Override
+	                public int compare(ReserveBean bean1, ReserveBean bean2) {
+	                    Date date1 = null;
+	                    Date date2 = null;
+
+	                    try {
+	                        date1 = originalFormat.parse(bean1.getResvtime());
+	                        date2 = originalFormat.parse(bean2.getResvtime());
+	                    } catch (ParseException e) {
+	                        e.printStackTrace();
+	                    }
+
+	                    return date1.compareTo(date2);
+	                }
+	            });
+	            
 				
 				for(int i = 0; i < reservelist.size(); i++ ) {
 					ReserveBean bean = reservelist.get(i);
@@ -53,22 +75,25 @@ public class Reserve implements ActionListener {
 						
 						try {
 							Date date = originalFormat.parse(OriginalResvtime);
-							System.out.println(OriginalResvtime + "\t" + bean.getResvusetime()
-							 +"\t" + bean.getResvperson());
-//							// getResvusetime()을 시간으로 변환하고 더하기
-//				            Calendar calendar = Calendar.getInstance();
-//				            calendar.setTime(date); // 캘린더의 데이트를 받아온 시간으로 변경
-//				            calendar.add(Calendar.HOUR_OF_DAY, resvtime); // 캘린더에 사용시간 더하기
+							
+							// 콘솔 출력 테스트
+//							System.out.println(OriginalResvtime + "\t" + bean.getResvusetime()
+//							 +"\t" + bean.getResvperson());
+							
+							// getResvusetime()을 시간으로 변환하고 더하기
+				            Calendar calendar = Calendar.getInstance();
+				            calendar.setTime(date); // 캘린더의 데이트를 받아온 시간으로 변경
+				            calendar.add(Calendar.HOUR_OF_DAY, resvtime); // 캘린더에 사용시간 더하기
 							
 							
 							String formattedDate = newFormat.format(date); // 포멧 변경 YY-MM-DD
 							String formattedDate2 = newFormat2.format(date); // 포멧 변경 HH:MM:SS
-//							String EndformattedDate2 = newFormat2.format(calendar.getTime()); // 캘린더에 사용시간을 더하고 포맷 변경하여 출력
+							String EndformattedDate2 = newFormat2.format(calendar.getTime()); // 캘린더에 사용시간을 더하고 포맷 변경하여 출력
 							
 							String[] rowData = { // 추가할 행의 데이터 
 									formattedDate,
 									formattedDate2,
-									formattedDate2
+									EndformattedDate2
 		                    };
 		                    model.addRow(rowData);
 						} catch (Exception e2) {
