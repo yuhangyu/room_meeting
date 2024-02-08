@@ -137,6 +137,7 @@ public class GameOrderUI extends JFrame {
 				}
 			}
 		});
+		
 		buttonPanel.add(cancelButton);
 		
 		JPanel totalPanel = new JPanel(new BorderLayout());
