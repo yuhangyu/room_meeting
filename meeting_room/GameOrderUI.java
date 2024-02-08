@@ -137,6 +137,7 @@ public class GameOrderUI extends JFrame {
 				}
 			}
 		});
+		
 		buttonPanel.add(cancelButton);
 		
 		JPanel totalPanel = new JPanel(new BorderLayout());
@@ -175,12 +176,16 @@ public class GameOrderUI extends JFrame {
 	}
 	
 	public void showGame() {
-		for (String gameType : gameTypes) {
-			JPanel gamePanel = new JPanel(new GridLayout(0, 4));// 세로 크기는 0으로 설정하여 자동으로 조절되도록 함
-			for (Game game : games) {
-				if (game.getType().equals(gameType)) {
-					JButton gameButton = new JButton("<html><center><img src='" + game.getImageUrl() + "' width='100' height='100'/><br/>" + game.getName() + "<br/>" + game.getPrice() + "</center></html>");
-					gameButton.addActionListener(new ActionListener() {
+	    for (String gameType : gameTypes) {
+	        JPanel gamePanel = new JPanel(new GridLayout(0, 5)); // 세로 크기는 무한대로, 가로 크기는 5로 설정하여 고정 크기의 그리드를 생성합니다.
+	        int count = 0; // 게임 버튼을 추가한 수를 저장합니다.
+
+	        for (Game game : games) {
+	            if (game.getType().equals(gameType)) {
+	                JButton gameButton = new JButton("<html><center><img src='" + game.getImageUrl() + "' width='100' height='100'/><br/>" + game.getName() + "<br/>" + game.getPrice() + "</center></html>");
+	                gameButton.setPreferredSize(new Dimension(100, 100)); // 버튼의 크기를 고정합니다.
+	                // 버튼 클릭 시 처리하는 ActionListener 코드는 그대로 유지합니다.
+	                gameButton.addActionListener(new ActionListener() {
 						
 						@Override
 						public void actionPerformed(ActionEvent e) {
@@ -229,14 +234,21 @@ public class GameOrderUI extends JFrame {
 							gameDetail.add(addButton, BorderLayout.SOUTH);
 							gameDetail.setVisible(true);
 						}
-					});
-					gamePanel.add(gameButton);
-				}
-			}
-			JScrollPane scrollPane = new JScrollPane(gamePanel); //gamePanel을 JScrollPane에 추가
-			scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);// 항상 세로 스크롤바 표시
-			centerPanel.add(scrollPane, gameType); //JScrollPane을 centerPanel에 추가
-		}
+	                });
+	                gamePanel.add(gameButton);
+	                count++; // 게임 버튼을 추가했으므로 count를 1 증가시킵니다.
+	            }
+	        }
+
+	        for (int i = count; i < 20; i++) { // 4x5 그리드이므로 총 20개의 칸이 있습니다. 그 중에서 게임 버튼으로 채우지 못한 나머지 칸을 빈 패널로 채웁니다.
+	            JPanel emptyPanel = new JPanel();
+	            gamePanel.add(emptyPanel);
+	        }
+
+	        JScrollPane scrollPane = new JScrollPane(gamePanel); //gamePanel을 JScrollPane에 추가
+	        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);// 항상 세로 스크롤바 표시
+	        centerPanel.add(scrollPane, gameType); //JScrollPane을 centerPanel에 추가
+	    }
 	}
 	
 	public static void main(String[] args) {
