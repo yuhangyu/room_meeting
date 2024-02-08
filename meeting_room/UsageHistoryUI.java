@@ -4,6 +4,7 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Timestamp;
 
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
@@ -22,6 +23,7 @@ import javax.swing.text.DefaultFormatter;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Vector;
 
 
 public class UsageHistoryUI extends JFrame implements ActionListener{
@@ -32,12 +34,9 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
 	JLabel end_date_lb = new JLabel("검색 종료일");
 	JButton ok_btn = new JButton("확인");
 	JButton search_btn = new JButton("검색");
-	
-    
-    JTable historyTable;
-    JScrollPane historyPane;
-    
-        
+	JTable historyTable;
+	JScrollPane historyPane;
+
 	UsageHistoryUI(){
 		uh = new UsageHistory(this);
 		
@@ -46,54 +45,50 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
 		search_btn.addActionListener(uh);
 		
 		setTitle("내 정보");
-		setSize(850, 500);
+		setSize(1000, 500);
 		
 		//컨텐츠 패널의 객체 메소드 호출
 		Container c = getContentPane();
 		c.setLayout(null); //컨텐츠 패널 초기
 		
-		usage_history_lb.setBounds(20,  10,  200,  40);
+		usage_history_lb.setBounds(20,10,200,40);
 		start_date_lb.setBounds(40, 50, 150, 50);
 		end_date_lb.setBounds(420, 50, 150, 50);
-		ok_btn.setBounds(640, 320, 140, 70);
+		ok_btn.setBounds(800, 60, 140, 70);
 		search_btn.setBounds(640, 60, 140, 70);
 		
 		viewhistoryPane(); // 테이블 활성화 메서드 
-		historyPane.setBounds(40, 150, 550, 270); 
-        
-      
-		
-		
+		historyPane.setBounds(40, 150, 905, 270); 
+
 		// 현재 날짜를 얻어옴
-        Date currentDate = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentDate);
-        
-        // 현재 날짜를 기본값으로 설정
-        int currentYear = calendar.get(Calendar.YEAR);
-        int currentMonth = calendar.get(Calendar.MONTH) + 1; // Calendar.MONTH는 0부터 시작하므로 1을 더해줌
-        int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
-        
-        SpinnerNumberModel spinnerNumberModel1 = new SpinnerNumberModel(currentYear, currentYear, 2030, 1);
-        JSpinner YearSpinner1 = new JSpinner(spinnerNumberModel1);
-        
-        SpinnerNumberModel spinnerNumberModel2 = new SpinnerNumberModel(currentYear, currentYear, 2030, 1);
-        JSpinner YearSpinner2 = new JSpinner(spinnerNumberModel2);
-        
-        SpinnerNumberModel spinnerNumberModel3 = new SpinnerNumberModel(currentMonth, 1, 12, 1);
-        JSpinner MonthSpinner1 = new JSpinner(spinnerNumberModel3);
-        
-        SpinnerNumberModel spinnerNumberModel4 = new SpinnerNumberModel(currentMonth, 1, 12, 1);
-        JSpinner MonthSpinner2 = new JSpinner(spinnerNumberModel4);
-        
-        SpinnerNumberModel spinnerNumberModel5 = new SpinnerNumberModel(currentDay, 1, 31, 1);
-        JSpinner DaySpinner1 = new JSpinner(spinnerNumberModel5);
-        
-        SpinnerNumberModel spinnerNumberModel6 = new SpinnerNumberModel(currentDay, 1, 31, 1);
-        JSpinner DaySpinner2 = new JSpinner(spinnerNumberModel6);
-        
-        
-        YearSpinner1.setBounds(40, 100, 50, 30);
+		Date currentDate = new Date();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(currentDate);
+		
+		// 현재 날짜를 기본값으로 설정
+		int currentYear = calendar.get(Calendar.YEAR);
+		int currentMonth = calendar.get(Calendar.MONTH) + 1; // Calendar.MONTH는 0부터 시작하므로 1을 더해줌
+		int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+		
+		SpinnerNumberModel spinnerNumberModel1 = new SpinnerNumberModel(currentYear, currentYear, 2030, 1);
+		JSpinner YearSpinner1 = new JSpinner(spinnerNumberModel1);
+		
+		SpinnerNumberModel spinnerNumberModel2 = new SpinnerNumberModel(currentYear, currentYear, 2030, 1);
+		JSpinner YearSpinner2 = new JSpinner(spinnerNumberModel2);
+		
+		SpinnerNumberModel spinnerNumberModel3 = new SpinnerNumberModel(currentMonth, 1, 12, 1);
+		JSpinner MonthSpinner1 = new JSpinner(spinnerNumberModel3);
+		
+		SpinnerNumberModel spinnerNumberModel4 = new SpinnerNumberModel(currentMonth, 1, 12, 1);
+		JSpinner MonthSpinner2 = new JSpinner(spinnerNumberModel4);
+		
+		SpinnerNumberModel spinnerNumberModel5 = new SpinnerNumberModel(currentDay, 1, 31, 1);
+		JSpinner DaySpinner1 = new JSpinner(spinnerNumberModel5);
+		
+		SpinnerNumberModel spinnerNumberModel6 = new SpinnerNumberModel(currentDay, 1, 31, 1);
+		JSpinner DaySpinner2 = new JSpinner(spinnerNumberModel6);
+
+		YearSpinner1.setBounds(40, 100, 50, 30);
 		YearSpinner2.setBounds(420, 100, 50, 30);
 		MonthSpinner1.setBounds(100, 100, 40, 30);
 		MonthSpinner2.setBounds(480, 100, 40, 30);
@@ -110,7 +105,6 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
 		c.add(usage_history_lb);
 		c.add(start_date_lb);
 		c.add(end_date_lb);
-		
 		c.add(YearSpinner1);
 		c.add(YearSpinner2);
 		c.add(MonthSpinner1);
@@ -120,7 +114,6 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
 		c.add(ok_btn);
 		c.add(search_btn);
 		c.add(historyPane);
-		
 			
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);
@@ -130,55 +123,79 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
 		setResizable(false);
 		
 		// JSpinner에 사용되는 DefaultFormatter 가져오기
-        JFormattedTextField.AbstractFormatter formatter = ((JSpinner.DefaultEditor) YearSpinner1.getEditor()).getTextField().getFormatter();
+		JFormattedTextField.AbstractFormatter formatter = ((JSpinner.DefaultEditor) YearSpinner1.getEditor()).getTextField().getFormatter();
+		
+		// AllowsInvalid를 false로 설정하여 유효하지 않은 값을 허용하지 않도록 함
+		if (formatter instanceof DefaultFormatter) {
+			((DefaultFormatter) formatter).setAllowsInvalid(false);
+		}
 
-        // AllowsInvalid를 false로 설정하여 유효하지 않은 값을 허용하지 않도록 함
-        if (formatter instanceof DefaultFormatter) {
-            ((DefaultFormatter) formatter).setAllowsInvalid(false);
-        }
-        
-        // JSpinner의 에디터를 변경하여 쉼표가 없는 형식으로 표시되도록 함
-        JSpinner.NumberEditor editor = new JSpinner.NumberEditor(YearSpinner1, "####");
-        YearSpinner1.setEditor(editor);
-        
-        JSpinner.NumberEditor editor2 = new JSpinner.NumberEditor(YearSpinner2, "####");
-        YearSpinner2.setEditor(editor2);
+		// JSpinner의 에디터를 변경하여 쉼표가 없는 형식으로 표시되도록 함
+		JSpinner.NumberEditor editor = new JSpinner.NumberEditor(YearSpinner1, "####");
+		YearSpinner1.setEditor(editor);
+		
+		JSpinner.NumberEditor editor2 = new JSpinner.NumberEditor(YearSpinner2, "####");
+		YearSpinner2.setEditor(editor2);
 	}
 	
 	public void viewhistoryPane() {
+		Vector<ReserveBean> vlist;
+		MyInfoMgr mgr;
+		
+		mgr = new MyInfoMgr();
+		vlist = mgr.reserveUser(LoginUI.ID);
+		
 		// 데이터 및 컬럼명 배열 정의
-	    String[] columnNames = {"예약 번호", "ID", "이름", "전화번호", "이용 룸", "예약 날짜", "이용 시간", "이용 인원"};
-	    String[][] data = {{"TEST_01", "admin", "셰계최강귀요미", "010-0000-0000", "2인 1번", "2024-02-06", "2시간", "3명"}};
+		String[] columnNames = {"순번", "ID", "이름", "전화번호", "이용 룸", "예약 날짜", "이용 시간", "이용 인원"};
+		String[][] data = new String[vlist.size()][columnNames.length];
+		
+		//순번, 아이디, 이름, 전화번호, 현재잔액 값 conts 배열에 저장
+		for(int i = 0; i < vlist.size(); i++) {
+			ReserveBean bean = vlist.get(i);
+			data[i][0] = String.valueOf(i + 1);
+			data[i][1] = bean.getResvid();
+			data[i][2] = bean.getResvname();
+			data[i][3] = bean.getResvphone();
+			data[i][4] = bean.getResvroom();
+			data[i][5] = bean.getResvtime();
+			data[i][6] = String.valueOf(bean.getResvusetime());
+			data[i][7] = String.valueOf(bean.getResvperson());
+		}
+		
+		// DefaultTableModel을 사용하여 JTable에 데이터 설정
+		//테이블 직접 편집 불가능
+		DefaultTableModel model = new DefaultTableModel(data, columnNames) {
+			public boolean isCellEditable(int i, int c){ return false; }
+		};
+		historyTable = new JTable(model);
+		historyPane = new JScrollPane(historyTable);
+
+		
+		// 수평 스크롤바 비활성화
+		historyPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 	
-	    // DefaultTableModel을 사용하여 JTable에 데이터 설정
-	    DefaultTableModel model = new DefaultTableModel(data, columnNames);
-	    historyTable = new JTable(model);
-	    historyPane = new JScrollPane(historyTable);
-
-	    
-	    
-	    
-	    // 수평 스크롤바 비활성화
-	    historyPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
-	    // 컬럼 너비 조절
-	    historyTable.getColumnModel().getColumn(0).setPreferredWidth(80);
-	    historyTable.getColumnModel().getColumn(1).setPreferredWidth(80);
-	    historyTable.getColumnModel().getColumn(2).setPreferredWidth(80);
-	    historyTable.getColumnModel().getColumn(3).setPreferredWidth(140);
-	    historyTable.getColumnModel().getColumn(4).setPreferredWidth(80);
-	    historyTable.getColumnModel().getColumn(5).setPreferredWidth(120);
-	    historyTable.getColumnModel().getColumn(6).setPreferredWidth(80);
-	    historyTable.getColumnModel().getColumn(7).setPreferredWidth(80);
-
-	    // 행 높이 조절
-	    historyTable.setRowHeight(20);
-	    
-	    DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < historyTable.getColumnCount(); i++) {
-            historyTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
+		//컬럼 사이즈 지정
+		historyTable.getColumnModel().getColumn(0).setPreferredWidth(30);
+		historyTable.getColumnModel().getColumn(1).setPreferredWidth(50);
+		historyTable.getColumnModel().getColumn(2).setPreferredWidth(50);
+		historyTable.getColumnModel().getColumn(3).setPreferredWidth(140);
+		historyTable.getColumnModel().getColumn(4).setPreferredWidth(50);
+		historyTable.getColumnModel().getColumn(5).setPreferredWidth(210);
+		historyTable.getColumnModel().getColumn(6).setPreferredWidth(50);
+		historyTable.getColumnModel().getColumn(7).setPreferredWidth(50);
+		historyTable.setRowHeight(20);
+		
+		//크기 조절 불가능
+		historyTable.getTableHeader().setResizingAllowed(false);
+		//위치 조정 불가능
+		historyTable.getTableHeader().setReorderingAllowed(false);
+	
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+		
+		for (int i = 0; i < historyTable.getColumnCount(); i++) {
+			historyTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+		}
 	}
 	
 	@Override
@@ -186,11 +203,6 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
 	}
 
 	public static void main(String[] args) {
-		UsageHistoryUI uh = new UsageHistoryUI();
-		
-
+		new UsageHistoryUI();
 	}
-
-	
-
 }
