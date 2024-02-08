@@ -52,6 +52,7 @@ public class OrderInfoMgr {
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				OrderInfoBean bean = new OrderInfoBean();
+				
 				bean.setGametype(rs.getString("games"));
 				bean.setGameprice(rs.getInt("sales_amount"));
 				bean.setOrdertime(rs.getString("sales_day"));
@@ -64,29 +65,7 @@ public class OrderInfoMgr {
 		}finally {
 			pool.freeConnection(con, pstmt, rs);
 		}
-//		try {
-//			con = pool.getConnection();
-//			sql = "select * from food";
-//			pstmt = con.prepareStatement(sql);
-//			rs = pstmt.executeQuery();
-//			while (rs.next()) {
-//				OrderInfoBean bean = new OrderInfoBean();
-//				
-//				bean.setFoodtype(rs.getString("foods"));
-//				bean.setFoodcount(rs.getInt("food_count	"));
-//				bean.setFoodrequest(rs.getString("food_request"));
-//				bean.setFoodprice(rs.getInt("food_price"));
-//				bean.setRoom_no(rs.getInt("food_room"));
-//				bean.setFoodstate(rs.getBoolean("food_state"));
-//				
-//				vlist.addElement(bean);
-//			}
-//		}catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		finally {
-//			pool.freeConnection(con, pstmt, rs);
-//		}
+
 		
 		return vlist;
 	}
