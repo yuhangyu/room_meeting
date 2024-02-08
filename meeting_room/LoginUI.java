@@ -32,7 +32,6 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 	JTextField pw_tf = new JPasswordField(20);
 	JButton signup_btn = new JButton("회원가입");
 	JButton login_btn = new JButton("로그인");
-	
 	JCheckBox check_admin = new JCheckBox("관리자 로그인");
 	
 	int check_action = 1;
@@ -48,11 +47,10 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 		c.setLayout(null);  //컨텐츠 패널 초기화
 		
 		// 로고 추가
-        ImageIcon logoIcon = new ImageIcon("meeting_room/logo.jpg");
-        JLabel logoLabel = new JLabel(logoIcon);
-        logoLabel.setBounds(45, 20, 700, 270);
-        c.add(logoLabel);
-		
+		ImageIcon logoIcon = new ImageIcon("meeting_room/logo.jpg");
+		JLabel logoLabel = new JLabel(logoIcon);
+		logoLabel.setBounds(45, 20, 700, 270);
+		c.add(logoLabel);
 		
 		//요소 위치 지정
 		id_lb.setBounds(255,  322,  100,  25);
@@ -79,6 +77,7 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 		check_admin.addItemListener(this);
 		id_tf.addKeyListener(this);
 		pw_tf.addKeyListener(this);
+		
 		//요소 추가
 		c.add(id_lb);
 		c.add(pw_lb);
@@ -86,7 +85,6 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 		c.add(pw_tf);
 		c.add(signup_btn);
 		c.add(login_btn);
-		//c.add(admin_lb);
 		c.add(check_admin);
 		
 		//화면 중앙에 오게 설정
@@ -170,5 +168,4 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 	public static void main(String[] args) {
 		LoginUI login = new LoginUI();
 	}
-
 }
