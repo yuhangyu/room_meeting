@@ -34,7 +34,7 @@ public class FoodOrderUI {
     public static void main(String[] args) {
         JFrame frame = new JFrame("음식 메뉴");
   	  	frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(1000, 600);
+        frame.setSize(1000, 800);
   	  	frame.setLocationRelativeTo(null);
 
         JPanel panel = new JPanel(new BorderLayout());
@@ -61,11 +61,14 @@ public class FoodOrderUI {
 
         // 음식 유형별로 JPanel 생성
         for (String foodType : foodTypes) {
-            JPanel foodPanel = new JPanel(new GridLayout(0, 5)); // 세로 크기는 동적으로 조정
-            JScrollPane scrollPane = new JScrollPane(foodPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);  // 세로 스크롤만 활성화
+            JPanel foodPanel = new JPanel(new GridLayout(0, 5)); // 세로 크기는 무한대로, 가로 크기는 5로 설정하여 고정 크기의 그리드를 생성합니다.
+            int count = 0; // 음식 버튼을 추가한 수를 저장합니다.
+            
             for (final Food food : foods) {
                 if (food.getType().equals(foodType)) {
                     JButton foodButton = new JButton("<html><center><img src='" + food.getImageUrl() + "' width='100' height='100'/><br/>" + food.getName() + "<br/>" + food.getPrice() + "</center></html>");
+                    foodButton.setPreferredSize(new Dimension(100, 100));
+
                     foodButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -140,9 +143,20 @@ public class FoodOrderUI {
                         }
                     });
                     foodPanel.add(foodButton);
+                    count++; // 음식 버튼을 추가했으므로 count를 1 증가시킵니다.
                 }
+                
+                
+                
             }
-            centerPanel.add(scrollPane, foodType);  // 각 패널을 foodType 이름으로 추가
+        for (int i = count; i < 20; i++) { // 4x5 그리드이므로 총 20개의 칸이 있습니다. 그 중에서 음식 버튼으로 채우지 못한 나머지 칸을 빈 패널로 채웁니다.
+            JPanel emptyPanel = new JPanel();
+            foodPanel.add(emptyPanel);
+        }
+            JScrollPane scrollPane = new JScrollPane(foodPanel); //foodPanel을 JScrollPane에 추가
+            scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);// 항상 세로 스크롤바 표시
+            centerPanel.add(scrollPane, foodType); //JScrollPane을 centerPanel에 추가
+        
         }
 
      // 음식 유형별 버튼에 ActionListener 추가
