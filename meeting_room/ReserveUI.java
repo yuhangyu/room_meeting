@@ -144,7 +144,7 @@ public class ReserveUI extends JFrame implements ActionListener{
 		// 선택된 방에 대한 테이블 출력 
 		// 데이터 및 컬럼명 배열 정의
 		String[] columnNames = {"예약 날짜", "시작 시간", "종료 시간"};
-		String[][] data = {{"2024-02-08", "11:10:00", "15:10:00"}};
+		String[][] data = {{"", "", ""}};
 			
 		// DefaultTableModel을 사용하여 JTable에 데이터 설정
 		DefaultTableModel model = new DefaultTableModel(data, columnNames);
@@ -169,8 +169,8 @@ public class ReserveUI extends JFrame implements ActionListener{
 			reserveTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
 		}
 		
+		model.setRowCount(0); // 기존 테이블 내용 지우기
 		reservePane.setBounds(440, 450, 280, 250);
-		
 		
 		//요소 추가
 		c.add(reserve_lb);

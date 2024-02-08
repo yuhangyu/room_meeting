@@ -349,7 +349,7 @@ public class MyInfoMgr {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "insert into reserve values (NULL, ?, ?, ?, ?, ?, ?, ?)";
+			sql = "insert into reserve values (NULL, ?, ?, ?, ?, ?, ?, ?, ?, FALSE)";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1,  bean.getResvid());
 			pstmt.setString(2,  bean.getResvname());
@@ -358,6 +358,8 @@ public class MyInfoMgr {
 			pstmt.setString(5,  bean.getResvtime());
 			pstmt.setInt(6,  bean.getResvusetime());
 			pstmt.setInt(7,  bean.getResvperson());
+			pstmt.setInt(8,  bean.getResvtotal());
+			
 			if (pstmt.executeUpdate() == 1) flag = true;
 		} catch (Exception e) {
 			e.printStackTrace();

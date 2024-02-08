@@ -15,7 +15,6 @@ public class ReserveBean {
 	int resvperson;
 	int resvtotal;
 	
-	
 	public String getResvid() {
 		return resvid;
 	}
