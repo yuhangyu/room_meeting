@@ -54,8 +54,9 @@ public class OrderInfoMgr {
 				OrderInfoBean bean = new OrderInfoBean();
 				
 				bean.setGametype(rs.getString("games"));
-				bean.setGameprice(rs.getInt("salse_amount"));
-				
+				bean.setGameprice(rs.getInt("sales_amount"));
+				bean.setOrdertime(rs.getString("sales_day"));
+				bean.setRoom_no(rs.getInt("game_room"));
 				vlist.addElement(bean);
 			}
 			
