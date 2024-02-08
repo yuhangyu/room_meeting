@@ -52,7 +52,6 @@ public class OrderInfoMgr {
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				OrderInfoBean bean = new OrderInfoBean();
-				
 				bean.setGametype(rs.getString("games"));
 				bean.setGameprice(rs.getInt("sales_amount"));
 				bean.setOrdertime(rs.getString("sales_day"));
