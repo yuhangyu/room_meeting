@@ -137,6 +137,7 @@ public class MyInfoMgr {
 				bean.setGname(rs.getString("game_name"));
 				bean.setGprice(rs.getInt("game_price"));
 				bean.setGstate(rs.getBoolean("game_state"));
+				bean.setGtype(rs.getString("game_type"));
 				vlist.addElement(bean);
 			}
 		} catch (Exception e) {

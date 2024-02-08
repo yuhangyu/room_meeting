@@ -7,26 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-class Game {
-    String type;
-    String name;
-    String imageUrl;
-    int price;
-
-    Game(String type, String name, String imageUrl, int price) {
-        this.type = type;
-        this.name = name;
-        this.imageUrl = imageUrl;
-        this.price = price;
-    }
-
-    String getType() { return type; }
-    String getName() { return name; }
-    String getImageUrl() { return imageUrl; }
-    int getPrice() { return price; }
-}
-
-public class BoardGameUI extends JFrame {
+public class BoardGame extends JFrame {
     public static void main(String[] args) {
         JFrame frame = new JFrame("게임 메뉴");
   	  frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
