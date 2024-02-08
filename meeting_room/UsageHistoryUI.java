@@ -37,6 +37,33 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
 	JTable historyTable;
 	JScrollPane historyPane;
 
+	// 현재 날짜를 얻어옴
+	Date currentDate = new Date();
+	Calendar calendar = Calendar.getInstance();
+	
+	// 현재 날짜를 기본값으로 설정
+	int currentYear = calendar.get(Calendar.YEAR);
+	int currentMonth = calendar.get(Calendar.MONTH) + 1; // Calendar.MONTH는 0부터 시작하므로 1을 더해줌
+	int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+	
+	SpinnerNumberModel spinnerNumberModel1 = new SpinnerNumberModel(currentYear, currentYear, 2030, 1);
+	JSpinner YearSpinner1 = new JSpinner(spinnerNumberModel1);
+	
+	SpinnerNumberModel spinnerNumberModel2 = new SpinnerNumberModel(currentYear, currentYear, 2030, 1);
+	JSpinner YearSpinner2 = new JSpinner(spinnerNumberModel2);
+	
+	SpinnerNumberModel spinnerNumberModel3 = new SpinnerNumberModel(currentMonth, 1, 12, 1);
+	JSpinner MonthSpinner1 = new JSpinner(spinnerNumberModel3);
+	
+	SpinnerNumberModel spinnerNumberModel4 = new SpinnerNumberModel(currentMonth, 1, 12, 1);
+	JSpinner MonthSpinner2 = new JSpinner(spinnerNumberModel4);
+	
+	SpinnerNumberModel spinnerNumberModel5 = new SpinnerNumberModel(currentDay, 1, 31, 1);
+	JSpinner DaySpinner1 = new JSpinner(spinnerNumberModel5);
+	
+	SpinnerNumberModel spinnerNumberModel6 = new SpinnerNumberModel(currentDay, 1, 31, 1);
+	JSpinner DaySpinner2 = new JSpinner(spinnerNumberModel6);
+
 	UsageHistoryUI(){
 		uh = new UsageHistory(this);
 		
@@ -50,6 +77,8 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
 		//컨텐츠 패널의 객체 메소드 호출
 		Container c = getContentPane();
 		c.setLayout(null); //컨텐츠 패널 초기
+
+		calendar.setTime(currentDate);
 		
 		usage_history_lb.setBounds(20,10,200,40);
 		start_date_lb.setBounds(40, 50, 150, 50);
@@ -59,34 +88,6 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
 		
 		viewhistoryPane(); // 테이블 활성화 메서드 
 		historyPane.setBounds(40, 150, 905, 270); 
-
-		// 현재 날짜를 얻어옴
-		Date currentDate = new Date();
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(currentDate);
-		
-		// 현재 날짜를 기본값으로 설정
-		int currentYear = calendar.get(Calendar.YEAR);
-		int currentMonth = calendar.get(Calendar.MONTH) + 1; // Calendar.MONTH는 0부터 시작하므로 1을 더해줌
-		int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
-		
-		SpinnerNumberModel spinnerNumberModel1 = new SpinnerNumberModel(currentYear, currentYear, 2030, 1);
-		JSpinner YearSpinner1 = new JSpinner(spinnerNumberModel1);
-		
-		SpinnerNumberModel spinnerNumberModel2 = new SpinnerNumberModel(currentYear, currentYear, 2030, 1);
-		JSpinner YearSpinner2 = new JSpinner(spinnerNumberModel2);
-		
-		SpinnerNumberModel spinnerNumberModel3 = new SpinnerNumberModel(currentMonth, 1, 12, 1);
-		JSpinner MonthSpinner1 = new JSpinner(spinnerNumberModel3);
-		
-		SpinnerNumberModel spinnerNumberModel4 = new SpinnerNumberModel(currentMonth, 1, 12, 1);
-		JSpinner MonthSpinner2 = new JSpinner(spinnerNumberModel4);
-		
-		SpinnerNumberModel spinnerNumberModel5 = new SpinnerNumberModel(currentDay, 1, 31, 1);
-		JSpinner DaySpinner1 = new JSpinner(spinnerNumberModel5);
-		
-		SpinnerNumberModel spinnerNumberModel6 = new SpinnerNumberModel(currentDay, 1, 31, 1);
-		JSpinner DaySpinner2 = new JSpinner(spinnerNumberModel6);
 
 		YearSpinner1.setBounds(40, 100, 50, 30);
 		YearSpinner2.setBounds(420, 100, 50, 30);
@@ -161,7 +162,7 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
 			data[i][6] = String.valueOf(bean.getResvusetime());
 			data[i][7] = String.valueOf(bean.getResvperson());
 		}
-		
+
 		// DefaultTableModel을 사용하여 JTable에 데이터 설정
 		//테이블 직접 편집 불가능
 		DefaultTableModel model = new DefaultTableModel(data, columnNames) {
@@ -169,8 +170,12 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
 		};
 		historyTable = new JTable(model);
 		historyPane = new JScrollPane(historyTable);
-
 		
+		history();
+	}
+	
+	public void history() {
+
 		// 수평 스크롤바 비활성화
 		historyPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 	
