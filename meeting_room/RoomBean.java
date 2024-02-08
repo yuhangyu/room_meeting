@@ -6,7 +6,7 @@ public class RoomBean {
 	private int rperson;
 	private int rprice;
 	private int radd;
-	private boolean rstate;
+	private boolean rstate = false;
 	
 	public String getRoom() {
 		return room;
@@ -38,5 +38,8 @@ public class RoomBean {
 	public void setRstate(boolean state) {
 		this.rstate = state;
 	}
+	public void reserveRoom() {
+        this.rstate = true;
+    }
 	
 }

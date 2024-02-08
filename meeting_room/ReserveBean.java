@@ -14,12 +14,8 @@ public class ReserveBean {
 	int resvusetime;
 	int resvperson;
 	
-	public int getReserve() {
-		return reserve;
-	}
-	public void setReserve(int reserve) {
-		this.reserve = reserve;
-	}
+	boolean reserved = false; // 방의 예약 여부
+	
 	public String getResvid() {
 		return resvid;
 	}
@@ -62,4 +58,11 @@ public class ReserveBean {
 	public void setResvperson(int resvperson) {
 		this.resvperson = resvperson;
 	}
+	public boolean isReserved(){ // 예약 여부 반환 메서드
+		return reserved;
+	}
+	public void reserveRoom() {
+        this.reserved = true;
+    }
+	
 }

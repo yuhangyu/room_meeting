@@ -31,6 +31,9 @@ public class ReserveUI extends JFrame implements ActionListener{
 	
 	JButton reserve_btn = new JButton("예약");
 	JButton cancel_btn = new JButton("취소");
+	
+	// 예약한 방의 상태를 변경하기 위한 새로운 버튼 객체 생성 
+	static JButton buttonStateChange = new JButton(""); 
 
 	Container c = getContentPane();
  
@@ -97,6 +100,11 @@ public class ReserveUI extends JFrame implements ActionListener{
 			JButton button = new JButton(bean.getRoom());
 			button.addActionListener(reserve);
 			
+			// 방이 예약되었다면 버튼을 비활성화
+		    if (bean.getRstate()) {
+		        button.setEnabled(false);
+		    }
+			
 			if (i < 4) {
 				button.setBounds(5, startY, 160, 85);
 				startY += 100;
@@ -112,6 +120,8 @@ public class ReserveUI extends JFrame implements ActionListener{
 			
 			button.setFont(font2);
 			c.add(button);
+			
+			
 		}
 		
 		//요소 추가

@@ -72,7 +72,6 @@ public class MyInfoMgr {
 				ReserveBean bean = new ReserveBean();
 				Timestamp dtime = rs.getTimestamp("resv_time");
 				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				bean.setReserve(rs.getInt("resv"));
 				bean.setResvid(rs.getString("resv_id"));
 				bean.setResvname(rs.getString("resv_name"));
 				bean.setResvphone(rs.getString("resv_tel"));

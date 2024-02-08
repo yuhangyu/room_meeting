@@ -33,9 +33,9 @@ class Food {
 public class FoodOrderUI {
     public static void main(String[] args) {
         JFrame frame = new JFrame("음식 메뉴");
-  	  frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+  	  	frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(1000, 600);
-  	  frame.setLocationRelativeTo(null);
+  	  	frame.setLocationRelativeTo(null);
 
         JPanel panel = new JPanel(new BorderLayout());
 

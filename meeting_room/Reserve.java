@@ -33,6 +33,9 @@ public class Reserve implements ActionListener {
 		
 		// 예약하기 버튼 클릭시
 		else if (clickedButton == reserveUI.reserve_btn) {
+			JButton buttonStateChanger = previousSelectedButton;
+			// 예약된 방의 상태를 변경하기 위한 새로운 버튼 객체 생성 
+			
 			String selectedRoomInfo = previousSelectedButton.getText();
 			// 이전에 클릭한 방 버튼의 텍스트
 			
