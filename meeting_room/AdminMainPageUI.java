@@ -18,7 +18,7 @@ public class AdminMainPageUI extends JFrame implements ActionListener{
 	
 	JLabel adm_lb = new JLabel("관리자 :");
 	
-	JButton Sales_status = new JButton("매출 현황");
+	JButton Sales_state = new JButton("매출 현황");
 	JButton	Order_history = new JButton("주문 현황");
 	JButton Reserve = new JButton("예약 정보");
 	JButton Member_info = new JButton("회원 정보 관리");
@@ -36,19 +36,19 @@ public class AdminMainPageUI extends JFrame implements ActionListener{
 		setSize(1020, 600);
 		setTitle("관리자 페이지");
 		adm_lb.setBounds(200, 50, 300, 200);
-		Sales_status.setBounds(650, 50, 300, 150);
+		Sales_state.setBounds(650, 50, 300, 150);
 		Order_history.setBounds(50, 300, 300, 150);
 		Reserve.setBounds(350, 300, 300, 150);
 		Member_info.setBounds(650, 300, 300, 150);
 		
-		Sales_status.addActionListener(this);
+		Sales_state.addActionListener(this);
 		Order_history.addActionListener(this);
 		Reserve.addActionListener(this);
 		Member_info.addActionListener(this);
 		
 		
 		c.add(adm_lb);
-		c.add(Sales_status);
+		c.add(Sales_state);
 		c.add(Order_history);
 		c.add(Reserve);
 		c.add(Member_info);
@@ -56,7 +56,7 @@ public class AdminMainPageUI extends JFrame implements ActionListener{
 		Font font = new Font("Dialog", Font.BOLD, 30);
 		
 		adm_lb.setFont(font);
-		Sales_status.setFont(font);
+		Sales_state.setFont(font);
 		Order_history.setFont(font);
 		Reserve.setFont(font);
 		Member_info.setFont(font);
@@ -70,10 +70,10 @@ public class AdminMainPageUI extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object obj = e.getSource();
-		if(obj == Sales_status) {
+		if(obj == Sales_state) {
 			
 		}else if(obj == Order_history) {
-			
+			OrderInfo orderinfo = new OrderInfo();
 		}else if(obj == Reserve) {
 			ReserveInfoUI reserveinfo_ui = new ReserveInfoUI();
 		}else if(obj == Member_info) {
