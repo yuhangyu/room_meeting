@@ -11,6 +11,11 @@ import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 public class ReserveUI extends JFrame implements ActionListener{
 	private Reserve reserve;
@@ -32,14 +37,19 @@ public class ReserveUI extends JFrame implements ActionListener{
 	JButton reserve_btn = new JButton("예약");
 	JButton cancel_btn = new JButton("취소");
 	
-	// 예약한 방의 상태를 변경하기 위한 새로운 버튼 객체 생성 
-	static JButton buttonStateChange = new JButton(""); 
-
+	JLabel chosen_room_lb = new JLabel("선택된 룸 ");
+	JLabel chosen_room_value_lb = new JLabel("   ");
+	JLabel chosen_room_lb2 = new JLabel("의 예약 정보");
+	
 	Container c = getContentPane();
+	
+	
+	JTable reserveTable;
+    JScrollPane reservePane;
  
 	public ReserveUI() {
 		setTitle("미팅룸 예약하기");
-		setSize(800, 750);
+		setSize(900, 800);
 		
 		c.setLayout(null);
 		
@@ -53,14 +63,21 @@ public class ReserveUI extends JFrame implements ActionListener{
 		room4_lb.setBounds(265, 75, 100, 20);
 		room8_lb.setBounds(465, 75, 100, 20);
 		
-		memberinfo_lb.setBounds(590,13,100,40);
-		name_lb.setBounds(590,50,100,40);	
-		name_value_lb.setBounds(640, 50, 100, 40);
-		balance_lb.setBounds(590, 87, 100, 40);
-		balance_value_lb.setBounds(640, 87, 150, 40);
+		memberinfo_lb.setBounds(640,13,100,40);
+		name_lb.setBounds(640,50,100,40);	
+		name_value_lb.setBounds(690, 50, 100, 40);
+		balance_lb.setBounds(640, 87, 100, 40);
+		balance_value_lb.setBounds(690, 87, 150, 40);
 		
-		reserve_btn.setBounds(605, 150, 160, 85);
-		cancel_btn.setBounds(605, 250, 160, 85);
+		reserve_btn.setBounds(655, 150, 160, 85);
+		cancel_btn.setBounds(655, 250, 160, 85);
+		
+		chosen_room_lb.setBounds(450, 400, 100, 40);
+		chosen_room_value_lb.setBounds(550, 400, 100, 40);
+		chosen_room_value_lb.setForeground(Color.RED);
+		chosen_room_lb2.setBounds(600, 400, 100, 40);
+		
+	
 		
 		reserve = new Reserve(this);
 		
@@ -85,11 +102,15 @@ public class ReserveUI extends JFrame implements ActionListener{
 		reserve_btn.setFont(font2);
 		reserve_btn.setEnabled(false); // 예약 버튼은 미팅룸을 선택햐야 활성화 되도록 설정
 		cancel_btn.setFont(font2);
+		chosen_room_lb.setFont(font3);
+		chosen_room_value_lb.setFont(font3);
+		chosen_room_lb2.setFont(font3);
+		
 		
 		Vector<RoomBean> vlist;
 		MyInfoMgr mgr = new MyInfoMgr();
 		vlist = mgr.roomAll();
-
+		
 		int buttonWidth = 160;
 		int buttonHeight = 85;
 		int verticalGap = 15;
@@ -100,10 +121,6 @@ public class ReserveUI extends JFrame implements ActionListener{
 			JButton button = new JButton(bean.getRoom());
 			button.addActionListener(reserve);
 			
-			// 방이 예약되었다면 버튼을 비활성화
-		    if (bean.getRstate()) {
-		        button.setEnabled(false);
-		    }
 			
 			if (i < 4) {
 				button.setBounds(5, startY, 160, 85);
@@ -124,6 +141,37 @@ public class ReserveUI extends JFrame implements ActionListener{
 			
 		}
 		
+		// 선택된 방에 대한 테이블 출력 
+		// 데이터 및 컬럼명 배열 정의
+		String[] columnNames = {"예약 날짜", "시작 시간", "종료 시간"};
+		String[][] data = {{"2024-02-08", "11:10:00", "15:10:00"}};
+			
+		// DefaultTableModel을 사용하여 JTable에 데이터 설정
+		DefaultTableModel model = new DefaultTableModel(data, columnNames);
+		reserveTable = new JTable(model);
+		reservePane = new JScrollPane(reserveTable);
+
+			    
+		// 수평 스크롤바 비활성화
+		reservePane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+		// 컬럼 너비 조절
+		reserveTable.getColumnModel().getColumn(0).setPreferredWidth(120);
+		reserveTable.getColumnModel().getColumn(1).setPreferredWidth(80);
+		reserveTable.getColumnModel().getColumn(2).setPreferredWidth(80);
+
+		// 행 높이 조절
+		reserveTable.setRowHeight(20);
+			    
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+		for (int i = 0; i < reserveTable.getColumnCount(); i++) {
+			reserveTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+		}
+		
+		reservePane.setBounds(440, 450, 280, 250);
+		
+		
 		//요소 추가
 		c.add(reserve_lb);
 		c.add(room2_lb);
@@ -140,6 +188,12 @@ public class ReserveUI extends JFrame implements ActionListener{
 		c.add(cancel_btn);
 		c.add(a);
 		
+		c.add(chosen_room_lb);
+		c.add(chosen_room_value_lb);
+		c.add(chosen_room_lb2);
+		
+		c.add(reservePane);
+		
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -148,11 +202,16 @@ public class ReserveUI extends JFrame implements ActionListener{
 		setResizable(false);
 	}
 	
+
+	
+	
+	
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == a) {
 			dispose();
-			MainPageUI.a.doClick();
+			MainPageUI.as.doClick();
 		}
 	}
 

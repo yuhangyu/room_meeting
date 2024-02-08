@@ -127,6 +127,8 @@ public class MyInfoUI extends JFrame implements ActionListener {
 			}
 		} else if (obj == ok_btn) {
 			dispose();
+		} else if (obj == my_usage_btn) {
+			UsageHistoryUI UHUI = new UsageHistoryUI();
 		}
 	}
 	

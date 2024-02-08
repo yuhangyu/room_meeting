@@ -33,7 +33,7 @@ public class MainPageUI extends JFrame implements ActionListener {
 	JButton rentgame_btn = new JButton("보드게임 대여");
 	JButton logout_btn = new JButton("로그아웃");
 	JButton myinfo_btn = new JButton("내 정보");
-	static JButton a = new JButton("");
+	static JButton as = new JButton("");
 
 	public MainPageUI() {
 		setTitle("메인 페이지");
@@ -110,7 +110,7 @@ public class MainPageUI extends JFrame implements ActionListener {
 		myinfo_btn.addActionListener(mainPage);
 		purchasefood_btn.addActionListener(mainPage);
 		rentgame_btn.addActionListener(mainPage);
-		a.addActionListener(this);
+		as.addActionListener(this);
 		
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);
@@ -131,9 +131,14 @@ public class MainPageUI extends JFrame implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == a) {
-			dispose();
-			MainPageUI mainpage = new MainPageUI();
+		if (e.getSource() == as) {
+			id = LoginUI.ID;
+			mgr = new MyInfoMgr();
+			MyInfoBean bean = mgr.select(id);
+			
+			money = bean.getMoney();
+			balance_value_lb.setText(money + "원");
+			setIDMoney(money);
 		}
 	}
 	
