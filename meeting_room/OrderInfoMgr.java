@@ -16,6 +16,7 @@ public class OrderInfoMgr {
 			e.printStackTrace();
 		}
 	}
+	
 	public Vector<OrderInfoBean> orderfood() {
 		Connection con = null;
 		PreparedStatement pstmt =  null;
@@ -29,7 +30,6 @@ public class OrderInfoMgr {
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				OrderInfoBean bean = new OrderInfoBean();
-				
 				bean.setFoodtype(rs.getString("foods"));
 				bean.setFoodcount(rs.getInt("food_count"));
 				bean.setFoodrequest(rs.getString("food_request"));
@@ -37,39 +37,30 @@ public class OrderInfoMgr {
 				bean.setRoom_no(rs.getInt("food_room"));
 				bean.setFoodstate(rs.getBoolean("food_state"));
 				bean.setOrdertime(rs.getString("sales_day"));
-				
 				vlist.addElement(bean);
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			pool.freeConnection(con, pstmt, rs);
-		}try {
+		} try {
 			con = pool.getConnection();
 			sql = "select * from game_sales";
 			pstmt = con.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				OrderInfoBean bean = new OrderInfoBean();
-				
 				bean.setGametype(rs.getString("games"));
 				bean.setGameprice(rs.getInt("sales_amount"));
 				bean.setOrdertime(rs.getString("sales_day"));
 				bean.setRoom_no(rs.getInt("game_room"));
 				vlist.addElement(bean);
 			}
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
 			pool.freeConnection(con, pstmt, rs);
 		}
-
-		
 		return vlist;
 	}
-
-	}
-
-	
+}

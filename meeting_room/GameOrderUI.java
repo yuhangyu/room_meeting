@@ -9,10 +9,13 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import javax.net.ssl.SSLContext;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -61,11 +64,22 @@ public class GameOrderUI extends JFrame {
 	//게임 리스트 생성
 	List<Game> games = new ArrayList<>();
 	
+	JFrame gameDetail;
+	
 	public GameOrderUI() {
 		setTitle("게임 메뉴");
 		setSize(1000, 800);
 		setLocationRelativeTo(this);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+		//창을 X 를 눌러서 닫을 때
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				//상세정보(담기) 프레임이 열려있을 때 함께 닫기
+				if (gameDetail != null && gameDetail.isVisible() == true) gameDetail.dispose();
+			}
+		});
 		
 		//게임 데이터 생성
 		Vector<GameBean> vlist;
@@ -105,6 +119,7 @@ public class GameOrderUI extends JFrame {
 		homeButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (gameDetail != null && gameDetail.isVisible() == true) gameDetail.dispose();
 				dispose();
 			}
 		});
@@ -150,7 +165,7 @@ public class GameOrderUI extends JFrame {
 		
 		//총 주문 금액 표시
 		JPanel totalPanel = new JPanel(new BorderLayout());
-		totalPanel.add(totalLabel, BorderLayout.NORTH);
+		totalPanel.add(totalLabel, BorderLayout.CENTER);
 		
 		//주문 요청사항 입력 패널
 		JPanel requestPanel = new JPanel();
@@ -159,11 +174,10 @@ public class GameOrderUI extends JFrame {
 		requestField.setPreferredSize(new Dimension(200, 40));
 		requestPanel.add(requestLabel);
 		requestPanel.add(requestField);
-		totalPanel.add(requestPanel, BorderLayout.CENTER);
+		totalPanel.add(requestPanel, BorderLayout.SOUTH);
 		
 		rightPanel.add(totalPanel, BorderLayout.NORTH);
 		rightPanel.add(buttonPanel, BorderLayout.SOUTH);
-		
 		panel.add(rightPanel, BorderLayout.EAST);
 		
 		JButton purchaseButton = new JButton("주문하기");
@@ -183,7 +197,7 @@ public class GameOrderUI extends JFrame {
 		add(panel);
 		setVisible(true);
 	}
-	
+
 	public void showGame() {
 		//게임 카테고리별로 JPanel 생성
 	    for (String gameType : gameTypes) {
@@ -198,7 +212,7 @@ public class GameOrderUI extends JFrame {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							//팝업 창을 생성하고 보여줌
-							JFrame gameDetail = new JFrame("게임 상세 정보");
+							gameDetail = new JFrame("게임 상세 정보");
 							gameDetail.setSize(250, 120);
 							gameDetail.setLocationRelativeTo(null);
 							

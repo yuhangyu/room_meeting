@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -44,12 +46,23 @@ public class FoodOrderUI extends JFrame {
 	JScrollPane cartScrollPane = new JScrollPane(cart);
 	//음식 리스트 생성
 	List<Food> foods = new ArrayList<>();
+	
+	JFrame detailDialog;
 
 	public FoodOrderUI() {
 		setTitle("음식 메뉴");
 		setSize(1000, 800);
 		setLocationRelativeTo(this);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+		//창을 X 를 눌러서 닫을 때
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				//상세정보(담기) 프레임이 열려있을 때 함께 닫기
+				if (detailDialog != null && detailDialog.isVisible() == true) detailDialog.dispose();
+			}
+		});
 		
 		//음식 데이터 생성
 		Vector<FoodBean> vlist;
@@ -90,6 +103,7 @@ public class FoodOrderUI extends JFrame {
 		homeButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (detailDialog != null && detailDialog.isVisible() == true) detailDialog.dispose();
 				dispose();
 			}
 		});
@@ -187,7 +201,7 @@ public class FoodOrderUI extends JFrame {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							//팝업 창을 생성하고 보여줌
-							JFrame detailDialog = new JFrame("음식 상세 정보");
+							detailDialog = new JFrame("음식 상세 정보");
 							detailDialog.setSize(250, 150);
 							detailDialog.setLocationRelativeTo(null);
 							
