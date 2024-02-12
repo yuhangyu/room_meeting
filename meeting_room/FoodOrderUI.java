@@ -16,17 +16,15 @@ class Food {
 	String imageUrl;
 	int price;
 	
-	Food(String type, String name, String detail, String imageUrl, int price) {  // 상세 정보를 받는 생성자 추가
+	Food(String type, String name, String imageUrl, int price) {  // 상세 정보를 받는 생성자 추가
 		this.type = type;
 		this.name = name;
-		this.detail = detail;
 		this.imageUrl = imageUrl;
 		this.price = price;
 	}
 	
 	String getType() { return type; }
 	String getName() { return name; }
-	String getDetail() { return detail; }
 	String getImageUrl() { return imageUrl; }
 	int getPrice() { return price; }
 }
@@ -60,7 +58,7 @@ public class FoodOrderUI extends JFrame {
 		
 		for (int i = 0; i < vlist.size(); i++) {
 			FoodBean bean = vlist.get(i);
-			foods.add(new Food(bean.getFtype(), bean.getFname(), "상세정보", "이미지", bean.getFprice()));
+			foods.add(new Food(bean.getFtype(), bean.getFname(), "이미지", bean.getFprice()));
 		}
 		showFood();
 		
@@ -190,7 +188,7 @@ public class FoodOrderUI extends JFrame {
 						public void actionPerformed(ActionEvent e) {
 							//팝업 창을 생성하고 보여줌
 							JFrame detailDialog = new JFrame("음식 상세 정보");
-							detailDialog.setSize(300, 200);
+							detailDialog.setSize(250, 150);
 							detailDialog.setLocationRelativeTo(null);
 							
 							//팝업 창에 음식 정보를 표시
@@ -198,13 +196,12 @@ public class FoodOrderUI extends JFrame {
 							detailPanel.setLayout(new BoxLayout(detailPanel, BoxLayout.Y_AXIS));
 							
 							JLabel nameLabel = new JLabel("이름: " + food.getName());
-							JLabel detailLabel = new JLabel("상세 정보: " + food.getDetail());
 							JLabel priceLabel = new JLabel("가격: " + food.getPrice());
 							
 							SpinnerNumberModel model = new SpinnerNumberModel(1, 1, 10, 1);  // 초기 값 1, 최소 값 1, 최대 값 10, 단계 1
 							JSpinner quantitySpinner = new JSpinner(model);
 							JLabel quantityLabel = new JLabel("수량: ");
-							quantitySpinner.setPreferredSize(new Dimension(140, 25));
+							quantitySpinner.setPreferredSize(new Dimension(50, 25));
 		
 							JPanel quantityPanel = new JPanel();
 							quantityPanel.add(quantityLabel);
@@ -212,10 +209,8 @@ public class FoodOrderUI extends JFrame {
 							quantityLabel.setLabelFor(quantitySpinner);
 							
 							detailPanel.add(nameLabel);
-							detailPanel.add(detailLabel);
 							detailPanel.add(priceLabel);
 							detailPanel.add(quantityPanel);
-							detailDialog.add(detailPanel);
 							
 							//담기 버튼 추가
 							JButton addButton = new JButton("담기");
@@ -250,7 +245,7 @@ public class FoodOrderUI extends JFrame {
 									
 									detailDialog.dispose();
 								}
-							});		
+							});
 							detailPanel.add(addButton);
 							detailDialog.add(detailPanel, BorderLayout.NORTH);
 							detailDialog.setVisible(true);

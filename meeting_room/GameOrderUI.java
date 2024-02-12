@@ -140,7 +140,7 @@ public class GameOrderUI extends JFrame {
 					int quantity = split[split.length - 1].startsWith("x") ? Integer.parseInt(split[split.length - 1].substring(1)) : 1;
 
 					cartList.remove(cart.getSelectedIndex());
-
+					
 					int total = Integer.parseInt(totalLabel.getText().split(": ")[1]);
 					totalLabel.setText("총 주문 금액: " + (total - price * quantity));
 				}
@@ -153,13 +153,13 @@ public class GameOrderUI extends JFrame {
 		totalPanel.add(totalLabel, BorderLayout.NORTH);
 		
 		//주문 요청사항 입력 패널
-		JPanel requestPanel = new JPanel();
-		JLabel requestLabel = new JLabel("주문 요청사항: ");
-		JTextField requestField = new JTextField(20);
-		requestField.setPreferredSize(new Dimension(200, 40));
-		requestPanel.add(requestLabel);
-		requestPanel.add(requestField);
-		totalPanel.add(requestPanel, BorderLayout.CENTER);
+//		JPanel requestPanel = new JPanel();
+//		JLabel requestLabel = new JLabel("주문 요청사항: ");
+//		JTextField requestField = new JTextField(20);
+//		requestField.setPreferredSize(new Dimension(200, 40));
+//		requestPanel.add(requestLabel);
+//		requestPanel.add(requestField);
+//		totalPanel.add(requestPanel, BorderLayout.CENTER);
 		
 		rightPanel.add(totalPanel, BorderLayout.NORTH);
 		rightPanel.add(buttonPanel, BorderLayout.SOUTH);
@@ -193,29 +193,25 @@ public class GameOrderUI extends JFrame {
 	        for (Game game : games) {
 	            if (game.getType().equals(gameType)) {
 	                JButton gameButton = new JButton("<html><center><img src='" + game.getImageUrl() + "' width='100' height='100'/><br/>" + game.getName() + "<br/>" + game.getPrice() + "</center></html>");
-	                gameButton.setPreferredSize(new Dimension(100, 100)); //생성된 버튼의 크기 고정
+
 	                gameButton.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							//팝업 창을 생성하고 보여줌
 							JFrame gameDetail = new JFrame("게임 상세 정보");
-							gameDetail.setSize(300, 250);
+							gameDetail.setSize(250, 120);
 							gameDetail.setLocationRelativeTo(null);
 							
 							//팝업 창에 음식 정보를 표시
 							JPanel detailPanel = new JPanel();
-							detailPanel.setLayout(new BoxLayout(detailPanel, BoxLayout.Y_AXIS));
 							
 							JLabel nameLabel = new JLabel("게임 이름: " + game.getName());	
 							JLabel priceLabel = new JLabel("가격: " + game.getPrice());
-
-							Font font = new Font("Dialog", Font.BOLD, 20); // 폰트굵게
-							nameLabel.setFont(font);
-							priceLabel.setFont(font);
 							
-							detailPanel.add(nameLabel);
-							detailPanel.add(priceLabel);
-							gameDetail.add(detailPanel);
+							JPanel gamePanel = new JPanel();
+							gamePanel.setLayout(new BoxLayout(gamePanel, BoxLayout.Y_AXIS));
+							gamePanel.add(nameLabel);
+							gamePanel.add(priceLabel);
 							
 							//담기 버튼 추가
 							JButton addButton = new JButton("담기");
@@ -244,8 +240,9 @@ public class GameOrderUI extends JFrame {
 									gameDetail.dispose();
 								}
 							});
-							gameDetail.add(addButton, BorderLayout.SOUTH);
-							gameDetail.add(detailPanel, BorderLayout.NORTH);
+							gamePanel.add(addButton);
+							gamePanel.add(detailPanel);
+							gameDetail.add(gamePanel, BorderLayout.NORTH);
 							gameDetail.setVisible(true);
 						}
 	                });
@@ -260,7 +257,7 @@ public class GameOrderUI extends JFrame {
 	        }
 
 	        JScrollPane scrollPane = new JScrollPane(gamePanel);
-	        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);// 항상 세로 스크롤바 표시
+	        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS); //항상 세로 스크롤바 표시
 	        centerPanel.add(scrollPane, gameType);
 	    }
 	}
