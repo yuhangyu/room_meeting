@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -26,7 +27,7 @@ public class MemberInfoUI extends JFrame implements ActionListener {
 	Container c = getContentPane();
 	
 	public MemberInfoUI() {
-		setSize(550, 400);
+		setSize(549, 436);
 		setTitle("회원 정보 관리");
 
 		c.setLayout(null); //컨텐츠 패널 초기
@@ -107,6 +108,7 @@ public class MemberInfoUI extends JFrame implements ActionListener {
 		//선언
 		membertable = new JTable(model);
 		pane = new JScrollPane(membertable);
+		pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);// 항상 세로 스크롤바 표시
 		
 		//폰트 설정
 		Font font = new Font("Dialog", Font.BOLD, 16);
