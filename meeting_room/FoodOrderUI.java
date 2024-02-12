@@ -152,8 +152,6 @@ public class FoodOrderUI extends JFrame {
 		totalPanel.add(requestPanel, BorderLayout.CENTER);
 		
 		rightPanel.add(totalPanel, BorderLayout.NORTH);
-		
-		//버튼 패널을 rightPanel의 SOUTH에 추가
 		rightPanel.add(buttonPanel, BorderLayout.SOUTH);
 		
 		panel.add(rightPanel, BorderLayout.EAST);

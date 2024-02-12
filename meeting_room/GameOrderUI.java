@@ -152,6 +152,15 @@ public class GameOrderUI extends JFrame {
 		JPanel totalPanel = new JPanel(new BorderLayout());
 		totalPanel.add(totalLabel, BorderLayout.NORTH);
 		
+		//주문 요청사항 입력 패널
+		JPanel requestPanel = new JPanel();
+		JLabel requestLabel = new JLabel("주문 요청사항: ");
+		JTextField requestField = new JTextField(20);
+		requestField.setPreferredSize(new Dimension(200, 40));
+		requestPanel.add(requestLabel);
+		requestPanel.add(requestField);
+		totalPanel.add(requestPanel, BorderLayout.CENTER);
+		
 		rightPanel.add(totalPanel, BorderLayout.NORTH);
 		rightPanel.add(buttonPanel, BorderLayout.SOUTH);
 		
@@ -236,6 +245,7 @@ public class GameOrderUI extends JFrame {
 								}
 							});
 							gameDetail.add(addButton, BorderLayout.SOUTH);
+							gameDetail.add(detailPanel, BorderLayout.NORTH);
 							gameDetail.setVisible(true);
 						}
 	                });
