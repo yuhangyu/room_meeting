@@ -21,7 +21,7 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
 	
 	public OrderInfoDetail(String no) {
 		setSize(800,400);
-		setTitle("No."+ no);
+		setTitle(no);
 		
 		
 		c.setLayout(null);
@@ -57,15 +57,21 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
 			conts[i][3] = String.valueOf(bean.getFoodprice());
 			conts[i][4] = String.valueOf(bean.getFoodprice()*bean.getFoodcount());
 			conts[i][5] = String.valueOf(bean.isFoodstate());
+		
+		DefaultTableModel model = new DefaultTableModel(conts, header) {
+			public boolean isCellEditable(int i, int c) {
+			return false;
+			}
+		};
+		ODT = new JTable(model);
+		
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		
+		for (int j = 0; j < ODT.getColumnCount(); j++) {
+		    ODT.getColumnModel().getColumn(j).setCellRenderer(centerRenderer);
 		}
-//		DefaultTableModel model = new DefaultTableModel(conts, header);{
-//			public boolean isCellEditable(int i, int c) {return false;}
-//		};
-//		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-//		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-//		for
-	
-	
+		pane = new JScrollPane(ODT);
 
-}
+		}
+	}
 }
