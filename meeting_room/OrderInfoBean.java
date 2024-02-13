@@ -2,7 +2,7 @@ package meeting_room;
 
 public class OrderInfoBean {
 	//주문 현황
-	int room_no;
+	String room_no;
 	String ordertime;
 	int totalprice;
 	//주문 현황 디테일
@@ -26,10 +26,10 @@ public class OrderInfoBean {
 	public void setFoodrequest(String foodrequest) {
 		this.foodrequest = foodrequest;
 	}
-	public int getRoom_no() {
+	public String getRoom_no() {
 		return room_no;
 	}
-	public void setRoom_no(int room_no) {
+	public void setRoom_no(String room_no) {
 		this.room_no = room_no;
 	}
 	public String getOrdertime() {
