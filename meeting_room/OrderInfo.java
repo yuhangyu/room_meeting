@@ -77,8 +77,7 @@ public class OrderInfo extends JFrame implements ActionListener{
 		vlist = mgr.orderfood();
 		String header[] = {"순서", "주문한 방", "주문 시간","총 금액", "주문 상태"};
 		String [][] conts = new String [vlist.size()][header.length];	
-//		int j = 0;
-//		if(conts[j][header.length] != conts[j+1][header.length]) {
+
 			for (int i = 0; i < vlist.size(); i++) {
 				OrderInfoBean  bean = vlist.get(i);
 				conts[i][0] = String.valueOf(i+1);
@@ -86,7 +85,7 @@ public class OrderInfo extends JFrame implements ActionListener{
 				conts[i][2] = bean.getOrdertime();
 				conts[i][3] = String.valueOf(bean.getFoodprice()+bean.getGameprice());
 				conts[i][4] = String.valueOf(bean.isFoodstate());
-//			}
+
 			}
 		DefaultTableModel model = new DefaultTableModel(conts, header) {
 			public boolean isCellEditable(int i, int c) {return false;}
