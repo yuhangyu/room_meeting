@@ -426,12 +426,13 @@ public class MyInfoMgr {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "insert into game_sales values (NULL, ?, ?, now(), ?, ?, FALSE)";
+			sql = "insert into game_sales values (NULL, ?, ?, now(), ?, ?, ?, FALSE)";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1,  bean.getRoom_no());
 			pstmt.setString(2,  bean.getGameid());
 			pstmt.setString(3, bean.getGamename());
-			pstmt.setInt(4, bean.getGameprice());
+			pstmt.setInt(4,  bean.getGamecount());
+			pstmt.setInt(5, bean.getGameprice());
 			
 			if (pstmt.executeUpdate() == 1) flag = true;
 		} catch (Exception e) {
@@ -458,7 +459,7 @@ public class MyInfoMgr {
 			if (rs.next()) {
 				bean.setGame(rs.getString(1));
 				bean.setGname(rs.getString(2));
-				bean.setGprice(rs.getInt(3));
+				bean.setGprice(rs.getInt(4));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
