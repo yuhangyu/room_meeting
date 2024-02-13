@@ -426,7 +426,7 @@ public class MyInfoMgr {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "insert into game_sales values (NULL, ?, ?, now(), ?, 1, ?, FALSE)";
+			sql = "insert into game_sales values (NULL, ?, ?, now(), ?, ?, ?, FALSE)";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1,  bean.getRoom_no());
 			pstmt.setString(2,  bean.getGameid());

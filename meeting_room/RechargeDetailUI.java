@@ -9,27 +9,31 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-public class RechargeDetailUI extends JFrame {
+public class RechargeDetailUI extends JFrame implements ActionListener {
 	
 	JLabel recharge_check = new JLabel("충전 확인");
 	JLabel amount = new JLabel("충전 금액 : ");
-	static JLabel amount_value = new JLabel("value");
+	JLabel amount_value = new JLabel("value");
 	JLabel pw_check = new JLabel("비밀번호 확인 ");
 	JTextField pw_check_tf = new JPasswordField(20);
 	JLabel recharge_check_1 = new JLabel("정말 충전하시겠습니까?");
 	JLabel won_lb = new JLabel("원");
 	
-	static JButton recharge = new JButton("충전");
-	static JButton cancel = new JButton("취소");
+	JButton recharge = new JButton("충전");
+	JButton cancel = new JButton("취소");
+	
+	MyInfoMgr mgr;
+	int money;
+	String id;
 	
 	public RechargeDetailUI() {
-		
 		setTitle("충전 상세");
 		setSize(400, 500);
 		amount_value.setText(RechargeUI.recharge_value_tf.getText());
@@ -63,7 +67,6 @@ public class RechargeDetailUI extends JFrame {
 		recharge.setBounds(50, 300, 130, 100);
 		cancel.setBounds(210, 300, 130, 100);
 
-		
 		c.add(recharge_check);
 		c.add(amount);
 		c.add(amount_value);
@@ -74,10 +77,8 @@ public class RechargeDetailUI extends JFrame {
 		c.add(cancel);
 		c.add(won_lb);
 		
-		RechargeDetail rcd = new RechargeDetail(this);
-		recharge.addActionListener(rcd);
-		cancel.addActionListener(rcd);
-		
+		recharge.addActionListener(this);
+		cancel.addActionListener(this);
 		
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);
@@ -88,9 +89,37 @@ public class RechargeDetailUI extends JFrame {
 		setResizable(false);
 	}
 
-	public static void main(String[] args) {
-		RechargeDetailUI rcdu = new RechargeDetailUI();
-
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == recharge) {
+			id = LoginUI.ID;
+			mgr = new MyInfoMgr();
+			MyInfoBean bean = mgr.select(id);
+			money = bean.getMoney();
+			
+			byte[] password = SeedEncoding.encrypt(pw_check_tf.getText().trim());
+			String pw = new String(password);
+			if (!pw.equals(bean.getPW())) {
+				JOptionPane.showMessageDialog(null, "비밀번호가 틀렸습니다. 다시 한 번 확인해주세요.");
+				return;
+			}
+		
+			bean.setID(id);
+			bean.setMoney(Integer.parseInt(amount_value.getText()) + money);
+			if(mgr.charge(bean)) {
+				JOptionPane.showMessageDialog(null, "충전되었습니다.");
+				mgr.select(bean.getID());
+				MainPageUI.balance_value_lb.setText(String.valueOf(bean.getMoney()));
+				RechargeUI.recharge_value_tf.setText("0");
+				RechargeUI.cancel_btn.doClick();
+				dispose();
+			}
+		} else if (e.getSource() == cancel) {
+			dispose();
+		}
 	}
-
+	
+	public static void main(String[] args) {
+		
+	}
 }

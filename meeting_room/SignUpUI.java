@@ -6,14 +6,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
-
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Vector;
 
 public class SignUpUI extends JFrame implements ActionListener {
 	
@@ -34,9 +29,6 @@ public class SignUpUI extends JFrame implements ActionListener {
 	JButton signup_btn = new JButton("회원가입");
 	JButton cancel_btn = new JButton("취소");
 
-	private static byte pbUserKey[] = "0123456789abcdef".getBytes(); // 16
-	private static byte pbCipher[] = new byte[50];
-	
 	public SignUpUI() {
 		setTitle("회원가입");
 		setSize(320, 400);
@@ -94,62 +86,18 @@ public class SignUpUI extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object obj = e.getSource();
-		MyInfoMgr mgr;
-		String id = id_tf.getText();
-		String pw = pw_tf.getText();
-		String pw2 = pwcheck_tf.getText();
-		String name = name_tf.getText();
-		String phone = phone_tf.getText();
+		String id = id_tf.getText().trim();
 		
 		if (obj == id_check_btn) {
 			idcheck(id);
 		} else if (obj == signup_btn) {
-			mgr = new MyInfoMgr();
-			MyInfoBean bean = mgr.select(id);
-			if ("".equals(id)) {
-				JOptionPane.showMessageDialog(this, "아이디를 입력해주세요.");
-				return;
-			} else if (id.equals(bean.getID())) {
-				JOptionPane.showMessageDialog(this, "이미 등록된 아이디입니다.");
-				return;
-			}
-			
-			if ("".equals(pw) || "".equals(pw2)) {
-				JOptionPane.showMessageDialog(this, "비밀번호를 입력해주세요.");
-				return;
-			} else if (!pw.equals(pw2)) {
-				JOptionPane.showMessageDialog(this, "입력한 비밀번호가 서로 다릅니다.");
-				return;
-			} else if (pw.length() < 4 || pw2.length() < 4) {
-				JOptionPane.showMessageDialog(this, "비밀번호는 4자리 이상 입력해주세요.");
-				return;
-			}
-			phone = phone_format(phone);
-			if ("".equals(name) || "".equals(phone)) {
-				JOptionPane.showMessageDialog(this, "공백인 칸을 입력해주세요.");
-				return;
-			} else if (phone.length() != 13) {
-				JOptionPane.showMessageDialog(this, "11자리 휴대전화 번호를 제대로 입력해주세요.");
-				return;
-			}
-			
-			byte[] password = encrypt(pw_tf.getText());
-			pw = new String(password);
-			bean = new MyInfoBean();
-			bean.setID(id);
-			bean.setPW(pw);
-			bean.setName(name);
-			bean.setPhone(phone_format(phone));
-			if (mgr.signup(bean)) {
-				JOptionPane.showMessageDialog(this, "회원가입이 완료되었습니다.");
-				dispose();
-				return;
-			}
+			signup(id);
 		} else if (obj == cancel_btn) {
 			dispose();
 		}
 	}
 	
+	//사용 가능한 아이디인지 중복 체크
 	public void idcheck(String id) {
 		MyInfoMgr mgr = new MyInfoMgr();
 		MyInfoBean bean = mgr.select(id);
@@ -165,33 +113,68 @@ public class SignUpUI extends JFrame implements ActionListener {
 		}
 	}
 	
-	public static byte[] encrypt(String str){
-		byte[] userBytes = str.getBytes();
-		byte pbData[] = new byte[16];
-			
-		for(int i=0; i<userBytes.length; i++) {
-			if (i < userBytes.length) 
-				pbData[i] = userBytes[i];
-			else
-				pbData[i] = 0x00;
+	//회원가입 시 확인
+	public void signup(String id) {
+		String pw = pw_tf.getText().trim();
+		String pw2 = pwcheck_tf.getText().trim();
+		String name = name_tf.getText().trim();
+		String phone = phone_tf.getText().trim();
+		
+		MyInfoMgr mgr = new MyInfoMgr();
+		MyInfoBean bean = mgr.select(id);
+		
+		if ("".equals(id)) {
+			JOptionPane.showMessageDialog(this, "아이디를 입력해주세요.");
+			return;
+		} else if (id.equals(bean.getID())) {
+			JOptionPane.showMessageDialog(this, "이미 등록된 아이디입니다.");
+			return;
 		}
 		
-		//암호화 함수 호출
-		pbCipher = KISA_SEED_ECB.SEED_ECB_Encrypt(pbUserKey, pbData,  0, pbData.length);
+		if ("".equals(pw) || "".equals(pw2)) {
+			JOptionPane.showMessageDialog(this, "비밀번호를 입력해주세요.");
+			return;
+		} else if (!pw.equals(pw2)) {
+			JOptionPane.showMessageDialog(this, "입력한 비밀번호가 서로 다릅니다.");
+			return;
+		} else if (pw.length() < 4 || pw2.length() < 4) {
+			JOptionPane.showMessageDialog(this, "비밀번호는 4자리 이상 입력해주세요.");
+			return;
+		}
 		
-		/**JDK1.8 일 때 사용  */
-		java.util.Base64.Encoder encoder = Base64.getEncoder(); 
-		byte[] encArray = encoder.encode(Arrays.copyOf(pbCipher, 16)); // 인코딩할 바이트 배열의 길이를 16으로 수정
-		 
-		return encArray;
+		phone = phone_format(phone);
+		if ("".equals(name) || "".equals(phone)) {
+			JOptionPane.showMessageDialog(this, "공백인 칸을 입력해주세요.");
+			return;
+		} else if (phone.length() != 13) {
+			JOptionPane.showMessageDialog(this, "11자리 휴대전화 번호를 제대로 입력해주세요.");
+			return;
+		}
+		
+		//암호화
+		byte[] password = SeedEncoding.encrypt(pw);
+		pw = new String(password);
+		
+		bean = new MyInfoBean();
+		bean.setID(id);
+		bean.setPW(pw);
+		bean.setName(name);
+		bean.setPhone(phone_format(phone));
+		
+		if (mgr.signup(bean)) {
+			JOptionPane.showMessageDialog(this, "회원가입이 완료되었습니다.");
+			dispose();
+			return;
+		}
 	}
 	
+	//전화번호 입력 값을 000-0000-0000 형식으로 변경
 	public String phone_format(String number) {
 	      String regEx = "(\\d{3})(\\d{3,4})(\\d{4})";
 	      return number.replaceAll(regEx, "$1-$2-$3");
 	}
 	
 	public static void main(String[] args) {
-		SignUpUI signup = new SignUpUI();
+		
 	}
 }

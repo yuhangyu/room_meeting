@@ -75,9 +75,7 @@ public class ReserveUI extends JFrame implements ActionListener{
 		chosen_room_lb.setBounds(450, 400, 100, 40);
 		chosen_room_value_lb.setBounds(550, 400, 100, 40);
 		chosen_room_value_lb.setForeground(Color.RED);
-		chosen_room_lb2.setBounds(600, 400, 100, 40);
-		
-	
+		chosen_room_lb2.setBounds(600, 400, 110, 40);
 		
 		reserve = new Reserve(this);
 		
@@ -111,16 +109,12 @@ public class ReserveUI extends JFrame implements ActionListener{
 		MyInfoMgr mgr = new MyInfoMgr();
 		vlist = mgr.roomAll();
 		
-		int buttonWidth = 160;
-		int buttonHeight = 85;
-		int verticalGap = 15;
 		int startY = 110;
 
 		for(int i = 0; i < vlist.size(); i++) {
 			RoomBean bean = vlist.get(i);
 			JButton button = new JButton(bean.getRoom());
 			button.addActionListener(reserve);
-			
 			
 			if (i < 4) {
 				button.setBounds(5, startY, 160, 85);
@@ -137,8 +131,6 @@ public class ReserveUI extends JFrame implements ActionListener{
 			
 			button.setFont(font2);
 			c.add(button);
-			
-			
 		}
 		
 		// 선택된 방에 대한 테이블 출력 
@@ -173,7 +165,6 @@ public class ReserveUI extends JFrame implements ActionListener{
 		reservePane.setBounds(440, 450, 280, 250);
 		
 		
-		
 		//요소 추가
 		c.add(reserve_lb);
 		c.add(room2_lb);
@@ -204,16 +195,11 @@ public class ReserveUI extends JFrame implements ActionListener{
 		setResizable(false);
 	}
 	
-
-	
-	
-	
-	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == a) {
-			dispose();
 			MainPageUI.as.doClick();
+			dispose();
 		}
 	}
 
