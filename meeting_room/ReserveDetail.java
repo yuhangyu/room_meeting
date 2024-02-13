@@ -2,9 +2,12 @@ package meeting_room;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -186,6 +189,7 @@ public class ReserveDetail implements ActionListener {
 		mgr = new MyInfoMgr();
 		
 		String id = LoginUI.ID;
+		String day = selectYear.toString() + "-" + selectMonth.toString() + "-" + selectDay.toString();
 		String str = selectYear.toString() + "-" + selectMonth.toString() + "-" + selectDay.toString() + " " + selectHour.toString() + ":" + selectMin.toString();
 		
 		MyInfoBean bean2 = mgr.select(id);
@@ -221,18 +225,50 @@ public class ReserveDetail implements ActionListener {
 		bean.setResvperson(bean3.getRperson() + personInfo_int);
 		bean.setResvtotal(totalPrice);
 		
+		// DB에서 받아온 DATE타입을 테이블에 업데이트 하기 위해 포맷을 변경하기 위한 선언
+		SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+		SimpleDateFormat newFormat2 = new SimpleDateFormat("HH:mm:ss");
+		String OriginalResvtime = str;
+		String timeText = rdUI.time_tf.getText();
+		int resvtime = Integer.parseInt(timeText); // 사용 시간을 받아옴
+		TotalBean bean4 = new TotalBean();
+		try {
+			Date date = originalFormat.parse(str + ":00");
+			System.out.println(date);
+			// getResvusetime()을 시간으로 변환하고 더하기
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date); // 캘린더의 데이트를 받아온 시간으로 변경
+            calendar.add(Calendar.HOUR_OF_DAY, resvtime); // 캘린더에 사용시간 더하기
+			
+			String formattedDate = newFormat.format(date); // 포멧 변경 YY-MM-DD
+			String formattedDate2 = newFormat2.format(date); // 포멧 변경 HH:MM:SS
+			String EndformattedDate2 = newFormat2.format(calendar.getTime()); // 캘린더에 사용시간을 더하고 포맷 변경하여 출력
+			
+			bean4.setRoom(roomInfo);
+			bean4.setID(id);
+			bean4.setDay(day);
+			bean4.setIntime(formattedDate + " " + formattedDate2);
+			bean4.setOuttime(formattedDate + " " + EndformattedDate2);
+			bean4.setTotal(totalPrice);
+		} catch (Exception e) {
+			return;
+		}
+		
 		if(mgr.reserve(bean)) {
-			bean2.setMoney(money - totalPrice);
-			if (mgr.charge(bean2)) {				
-				MainPageUI.purchasefood_btn.setEnabled(true);
-				MainPageUI.rentgame_btn.setEnabled(true);
-				optionPane = new JOptionPane("예약이 완료되었습니다.", JOptionPane.INFORMATION_MESSAGE);
-				dialog = optionPane.createDialog(rdUI, "예약 안내");
-				dialog.setLocationRelativeTo(rdUI);
-				dialog.setVisible(true);
-				rdUI.dispose();
-				ReserveUI.a.doClick();
-				return;
+			if (mgr.total(bean4)) {
+				bean2.setMoney(money - totalPrice);
+				if (mgr.charge(bean2)) {
+					MainPageUI.purchasefood_btn.setEnabled(true);
+					MainPageUI.rentgame_btn.setEnabled(true);
+					optionPane = new JOptionPane("예약이 완료되었습니다.", JOptionPane.INFORMATION_MESSAGE);
+					dialog = optionPane.createDialog(rdUI, "예약 안내");
+					dialog.setLocationRelativeTo(rdUI);
+					dialog.setVisible(true);
+					rdUI.dispose();
+					ReserveUI.a.doClick();
+					return;
+				}
 			}
 		}
 	}

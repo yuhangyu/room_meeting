@@ -185,6 +185,7 @@ public class GameOrderUI extends JFrame {
 				} else {
 					MyInfoMgr mgr = new MyInfoMgr();
 					MyInfoBean bean = mgr.select(LoginUI.ID);
+					TotalBean bean4 = mgr.selecttotal(LoginUI.ID);
 					int money = bean.getMoney();
 					int total = Integer.parseInt(totalLabel.getText().split(": ")[1]);
 					if (money < total) {
@@ -203,8 +204,10 @@ public class GameOrderUI extends JFrame {
 						beans.setGameprice(bean2.getGprice() * Integer.parseInt(cartList.getElementAt(i).split("x")[1]));
 						mgr.gamesales(beans);
 					}
+					int totalmoney = bean4.getTotal();
+					bean4.setTotal(totalmoney + total);
 					bean.setMoney(money - total);
-					if (mgr.charge(bean)) {
+					if (mgr.charge(bean) && mgr.totalprice(bean4)) {
 						JOptionPane.showMessageDialog(null, "구매가 완료되었습니다.");
 						cartList.clear(); // 장바구니 비우기
 						ReserveUI.a.doClick();
