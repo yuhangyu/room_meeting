@@ -169,13 +169,9 @@ public class GameOrderUI extends JFrame {
 		
 		//주문 요청사항 입력 패널
 		JPanel requestPanel = new JPanel();
-		JLabel requestLabel = new JLabel("주문 요청사항: ");
-		JTextField requestField = new JTextField(20);
-		requestField.setPreferredSize(new Dimension(200, 40));
-		requestPanel.add(requestLabel);
-		requestPanel.add(requestField);
+		rightPanel.setPreferredSize(new Dimension(225, 800)); // 원하는 크기로 설정
+
 		totalPanel.add(requestPanel, BorderLayout.SOUTH);
-		
 		rightPanel.add(totalPanel, BorderLayout.NORTH);
 		rightPanel.add(buttonPanel, BorderLayout.SOUTH);
 		panel.add(rightPanel, BorderLayout.EAST);
@@ -187,8 +183,32 @@ public class GameOrderUI extends JFrame {
 				if (cartList.isEmpty()) {
 					JOptionPane.showMessageDialog(null, "장바구니가 비어있습니다.", "경고", JOptionPane.WARNING_MESSAGE);
 				} else {
-					JOptionPane.showMessageDialog(null, "구매가 완료되었습니다.");
-					cartList.clear();
+					MyInfoMgr mgr = new MyInfoMgr();
+					MyInfoBean bean = mgr.select(LoginUI.ID);
+					int money = bean.getMoney();
+					int total = Integer.parseInt(totalLabel.getText().split(": ")[1]);
+					if (money < total) {
+						JOptionPane.showMessageDialog(null, "잔액이 부족합니다.", "경고", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					for (int i = 0; i < cartList.size(); i++) {
+						OrderInfoBean beans = new OrderInfoBean();
+						GameBean bean2 = mgr.game(cartList.getElementAt(i).split(" | ")[0]);
+						Vector<ReserveBean> vlist;
+						vlist = mgr.reserveUser(LoginUI.ID);
+						ReserveBean bean3 = vlist.get(0);
+						beans.setRoom_no(bean3.getResvroom());
+						beans.setGamename(bean2.getGame());
+						beans.setGameprice(bean2.getGprice() * Integer.parseInt(cartList.getElementAt(i).split("x")[1]));
+						mgr.gamesales(beans);
+					}
+					bean.setMoney(money - total);
+					if (mgr.charge(bean)) {
+						JOptionPane.showMessageDialog(null, "구매가 완료되었습니다.");
+						cartList.clear(); // 장바구니 비우기
+						ReserveUI.a.doClick();
+						return;
+					}
 				}
 				totalLabel.setText("총 주문 금액: 0");
 			}

@@ -364,4 +364,104 @@ public class MyInfoMgr {
 		}
 		return flag;
 	}
+	
+	//음식주문
+	public boolean foodsales(OrderInfoBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "insert into food_sales values (NULL, ?, now(), ?, ?, ?, ?, FALSE)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1,  bean.getRoom_no());
+			pstmt.setString(2, bean.getFoodname());
+			pstmt.setInt(3, bean.getFoodcount());
+			pstmt.setInt(4,  bean.getFoodprice());
+			pstmt.setString(5,  bean.getFoodrequest());
+			
+			if (pstmt.executeUpdate() == 1) flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
+	
+	//음식 select
+	public FoodBean food(String fid) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		FoodBean bean = new FoodBean();
+		try {
+			con = pool.getConnection();
+			sql = "select * from food where food_name=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, fid); //첫번째 ?에 매개변수 id 값 세팅
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				bean.setFood(rs.getString(1));
+				bean.setFname(rs.getString(2));
+				bean.setFprice(rs.getInt(3));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return bean;
+	}
+	
+	//게임주문
+	public boolean gamesales(OrderInfoBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "insert into game_sales values (NULL, ?, now(), ?, ?, FALSE)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1,  bean.getRoom_no());
+			pstmt.setString(2, bean.getGamename());
+			pstmt.setInt(3, bean.getGameprice());
+			
+			if (pstmt.executeUpdate() == 1) flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
+	
+	//게임 select
+	public GameBean game(String gid) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		GameBean bean = new GameBean();
+		try {
+			con = pool.getConnection();
+			sql = "select * from game where game_name=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, gid); //첫번째 ?에 매개변수 id 값 세팅
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				bean.setGame(rs.getString(1));
+				bean.setGname(rs.getString(2));
+				bean.setGprice(rs.getInt(3));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return bean;
+	}
 }

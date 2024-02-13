@@ -30,11 +30,11 @@ public class OrderInfoMgr {
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				OrderInfoBean bean = new OrderInfoBean();
-				bean.setFoodtype(rs.getString("foods"));
+				bean.setFoodname(rs.getString("foods"));
 				bean.setFoodcount(rs.getInt("food_count"));
 				bean.setFoodrequest(rs.getString("food_request"));
 				bean.setFoodprice(rs.getInt("Sales_amount"));
-				bean.setRoom_no(rs.getInt("food_room"));
+				bean.setRoom_no(rs.getString("food_room"));
 				bean.setFoodstate(rs.getBoolean("food_state"));
 				bean.setOrdertime(rs.getString("sales_day"));
 				vlist.addElement(bean);
@@ -50,10 +50,10 @@ public class OrderInfoMgr {
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				OrderInfoBean bean = new OrderInfoBean();
-				bean.setGametype(rs.getString("games"));
+				bean.setGamename(rs.getString("games"));
 				bean.setGameprice(rs.getInt("sales_amount"));
 				bean.setOrdertime(rs.getString("sales_day"));
-				bean.setRoom_no(rs.getInt("game_room"));
+				bean.setRoom_no(rs.getString("game_room"));
 				vlist.addElement(bean);
 			}
 		} catch (Exception e) {
