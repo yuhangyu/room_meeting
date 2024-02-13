@@ -4,7 +4,6 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,7 +18,7 @@ public class AdminMainPageUI extends JFrame implements ActionListener{
 	JLabel adm_lb = new JLabel("관리자 :");
 	
 	JButton Sales_state = new JButton("매출 현황");
-	JButton	Order_history = new JButton("주문 현황");
+	JButton	OrderInfo = new JButton("주문 현황");
 	JButton Reserve = new JButton("예약 정보");
 	JButton Member_info = new JButton("회원 정보 관리");
 	
@@ -31,40 +30,42 @@ public class AdminMainPageUI extends JFrame implements ActionListener{
 		bean = mgr.select(id);
 		name = bean.getName();
 		
-		adm_lb.setText("관리자 : "+name);
+		adm_lb.setText("관리자 : "+ name);
 		
 		Container c = getContentPane();
 		c.setLayout(null);
 		setSize(1020, 600);
 		setTitle("관리자 페이지");
-		adm_lb.setBounds(200, 50, 300, 200);
+		
+		adm_lb.setBounds(80, 50, 300, 200);
 		Sales_state.setBounds(650, 50, 300, 150);
-		Order_history.setBounds(50, 300, 300, 150);
+		OrderInfo.setBounds(350, 50, 300, 150);
 		Reserve.setBounds(350, 300, 300, 150);
 		Member_info.setBounds(650, 300, 300, 150);
-		Log_out.setBounds(50, 200, 150, 100);
+		Log_out.setBounds(80, 300, 200, 150);
 		
 		Sales_state.addActionListener(this);
-		Order_history.addActionListener(this);
+		OrderInfo.addActionListener(this);
 		Reserve.addActionListener(this);
 		Member_info.addActionListener(this);
 		Log_out.addActionListener(this);
-		
-		
+				
 		c.add(adm_lb);
 		c.add(Sales_state);
-		c.add(Order_history);
+		c.add(OrderInfo);
 		c.add(Reserve);
 		c.add(Member_info);
 		c.add(Log_out);
 		
 		Font font = new Font("Dialog", Font.BOLD, 30);
+		Font font1 = new Font("Dialog", Font.BOLD, 27);
 		
 		adm_lb.setFont(font);
 		Sales_state.setFont(font);
-		Order_history.setFont(font);
+		OrderInfo.setFont(font);
 		Reserve.setFont(font);
 		Member_info.setFont(font);
+		Log_out.setFont(font1);
 		
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -77,14 +78,13 @@ public class AdminMainPageUI extends JFrame implements ActionListener{
 		Object obj = e.getSource();
 		if(obj == Sales_state) {
 			
-		}else if(obj == Order_history) {
+		}else if(obj == OrderInfo) {
 			OrderInfo orderinfo = new OrderInfo();
 		}else if(obj == Reserve) {
 			ReserveInfoUI reserveinfo_ui = new ReserveInfoUI();
 		}else if(obj == Member_info) {
 			MemberInfoUI MIUI = new MemberInfoUI();
-		}
-		else if(obj == Log_out) {
+		}else if(obj == Log_out) {
 			this.dispose();
 			LoginUI li = new LoginUI();
 		}

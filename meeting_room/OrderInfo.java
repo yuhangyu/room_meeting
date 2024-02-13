@@ -60,14 +60,19 @@ public class OrderInfo extends JFrame implements ActionListener{
 		public void mouseClicked(MouseEvent e) {
 			if(e.getClickCount() == 2) {
 				int row = orderTable.getSelectedRow();
-				TableModel tm = orderTable.getModel();
+				 if (row != -1) { // 선택된 행이 있는지 확인
+			            TableModel tm = orderTable.getModel();
+			            String orderNumber = tm.getValueAt(row, 0).toString();
+			            String roomNumber = tm.getValueAt(row, 1).toString();
+			            String orderTime = tm.getValueAt(row, 2).toString();
+			            String totalPrice = tm.getValueAt(row, 3).toString();
+			            String orderStatus = tm.getValueAt(row, 4).toString();
+				 }
 			}
 			super.mouseClicked(e);
 		}
 		
 	}
-		
-	
 	
 	public void orderview() {
 		Vector<OrderInfoBean> vlist ;
@@ -102,6 +107,6 @@ public class OrderInfo extends JFrame implements ActionListener{
 		}
 	}
 	public static void main(String[] args) {
-		OrderInfo orderinfo = new OrderInfo();
+		OrderInfo OIF = new OrderInfo();
 	}
 }
