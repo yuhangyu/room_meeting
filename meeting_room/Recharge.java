@@ -43,7 +43,8 @@ public class Recharge implements ActionListener {
 				cancelCharge();
 				break;
 			case "충전하기":
-				goCharge();
+				RechargeDetailUI rcdui = new RechargeDetailUI();
+				//goCharge();
 				break;
 			default:
 				break;

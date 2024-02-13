@@ -27,6 +27,7 @@ public class MainPage implements ActionListener{
 			case "충전":
 				// 충전 UI 띄우기 
 				RechargeUI rcg = new RechargeUI();
+				rcg.recharge_value_tf.setText("0");
 				break;
 			
 			case "음식 주문하기":

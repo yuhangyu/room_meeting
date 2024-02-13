@@ -127,6 +127,39 @@ public class ReserveDetail implements ActionListener {
 		JDialog dialog;
 		String roomInfo = rdUI.chosen_room_info_lb.getText();
 		
+		// 이용 시간을 입력하지 않았을 경우에 예외 처리 
+		if ("".equals(rdUI.time_tf.getText())) {
+			optionPane = new JOptionPane("이용할 시간을 입력해주세요.", JOptionPane.ERROR_MESSAGE);
+			dialog = optionPane.createDialog(rdUI, "예약 안내");
+			dialog.setLocationRelativeTo(rdUI);
+			dialog.setVisible(true);
+			return;
+		}
+		
+		// 현재 시간 보다 이전 시간에 예약 하는 경우에 대한 예외 처리 
+				if (currentYear == ((Integer)selectYear).intValue()) {
+					if (currentMonth == ((Integer)selectMonth).intValue()) {
+						if (currentDay > ((Integer)selectDay).intValue()) {
+							errorMsg();
+							return;
+						} else if (currentDay == ((Integer)selectDay).intValue()) {
+							if (currentHour == ((Integer)selectHour).intValue()) {
+								if (currentMin > ((Integer)selectMin).intValue() || currentMin == ((Integer)selectMin).intValue()) {
+									errorMsg();
+									return;
+								}
+							} else if (currentHour > ((Integer)selectHour).intValue()) {
+								errorMsg();
+								return;
+							}
+						}
+					} else if (currentMonth > ((Integer)selectMonth).intValue()) {
+						errorMsg();
+						return;
+					}
+				}
+		
+		
 		// 선택한 룸에 예약할 때 선택한 시간에 이미 예약이 차 있는 경우에 대한 예외 처리 
 		Vector<ReserveBean> reservelist;
 		MyInfoMgr mgr = new MyInfoMgr();
@@ -151,36 +184,9 @@ public class ReserveDetail implements ActionListener {
 		
 		
 		
-		// 현재 시간 보다 이전 시간에 예약 하는 경우에 대한 예외 처리 
-		if (currentYear == ((Integer)selectYear).intValue()) {
-			if (currentMonth == ((Integer)selectMonth).intValue()) {
-				if (currentDay > ((Integer)selectDay).intValue()) {
-					errorMsg();
-					return;
-				} else if (currentDay == ((Integer)selectDay).intValue()) {
-					if (currentHour == ((Integer)selectHour).intValue()) {
-						if (currentMin > ((Integer)selectMin).intValue() || currentMin == ((Integer)selectMin).intValue()) {
-							errorMsg();
-							return;
-						}
-					} else if (currentHour > ((Integer)selectHour).intValue()) {
-						errorMsg();
-						return;
-					}
-				}
-			} else if (currentMonth > ((Integer)selectMonth).intValue()) {
-				errorMsg();
-				return;
-			}
-		}
 		
-		if ("".equals(rdUI.time_tf.getText())) {
-			optionPane = new JOptionPane("이용할 시간을 입력해주세요.", JOptionPane.ERROR_MESSAGE);
-			dialog = optionPane.createDialog(rdUI, "예약 안내");
-			dialog.setLocationRelativeTo(rdUI);
-			dialog.setVisible(true);
-			return;
-		}
+		
+		
 		
 		ReserveBean bean = new ReserveBean();
 		mgr = new MyInfoMgr();

@@ -24,7 +24,7 @@ public class RechargeUI extends JFrame {
 	JButton charge_50000_btn = new JButton("50000원");
 	
 	JLabel recharge_amount_lb = new JLabel("충전금액");
-	JTextField recharge_value_tf = new JTextField("0", 30);
+	static JTextField recharge_value_tf = new JTextField("0", 30);
 	JLabel won_lb = new JLabel("원");
 	
 	JButton recharge_btn = new JButton("충전하기");
