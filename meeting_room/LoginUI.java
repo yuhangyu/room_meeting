@@ -64,8 +64,6 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 		pw_tf.setBounds(365, 358, 170, 25);
 		signup_btn.setBounds(243, 440, 130, 70);
 		login_btn.setBounds(401, 440, 130, 70);
-		
-		//admin_lb.setBounds(50, 94, 170, 25);
 		check_admin.setBounds(250, 394, 250, 25);
 		
 		//Font ÁöÁ¤
