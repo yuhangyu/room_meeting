@@ -50,7 +50,7 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
 		for(int i = 0; i < vlist.size();i++) {
 			OrderInfoBean bean = vlist.get(i);
 			conts[i][0] = String.valueOf(i+1);
-			conts[i][1] = bean.getFoodtype();
+			conts[i][1] = bean.getFoodname();
 			conts[i][2] = String.valueOf(bean.getFoodcount());
 			conts[i][3] = String.valueOf(bean.getFoodprice());
 			conts[i][4] = String.valueOf(bean.getFoodprice()*bean.getFoodcount());
