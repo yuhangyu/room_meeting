@@ -3,6 +3,8 @@ package meeting_room;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Vector;
 
 import javax.swing.JFrame;
@@ -56,7 +58,7 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
 			conts[i][2] = String.valueOf(bean.getFoodcount());
 			conts[i][3] = String.valueOf(bean.getFoodprice());
 			conts[i][4] = String.valueOf(bean.getFoodprice()*bean.getFoodcount());
-			conts[i][5] = String.valueOf(bean.isFoodstate());
+			conts[i][5] = bean.isFoodstate() ? "주문 완료" : "주문 미완료";
 		
 		DefaultTableModel model = new DefaultTableModel(conts, header) {
 			public boolean isCellEditable(int i, int c) {
@@ -71,7 +73,21 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
 		    ODT.getColumnModel().getColumn(j).setCellRenderer(centerRenderer);
 		}
 		pane = new JScrollPane(ODT);
-
-		}
-	}
+		
+		 ODT.addMouseListener(new MouseAdapter() {
+			 @Override
+			public void mouseClicked(MouseEvent e) {
+				 if (e.getClickCount() == 2) {
+                     int column = 5; // 더블 클릭할 열의 인덱스
+                     int row = ODT.getSelectedRow();
+                     if (row != -1) {
+                         // 더블 클릭된 행의 데이터 처리
+                         String selectedFood = (String) ODT.getValueAt(row, column);
+                         
+                     }
+			       }
+             }
+         });
+     }
+ }
 }
