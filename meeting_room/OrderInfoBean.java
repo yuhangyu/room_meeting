@@ -17,6 +17,7 @@ public class OrderInfoBean {
 	String gamename;
 	int gamecount;
 	int gameprice;
+	String gametype;
 	boolean gamestate;
 	
 	
@@ -96,6 +97,13 @@ public class OrderInfoBean {
 	}
 	public void setGamecount(int gamecount) {
 		this.gamecount = gamecount;
+	}
+	
+	public String getGametype() {
+		return gametype;
+	}
+	public void setGametype(String gametype) {
+		this.gametype = gametype;
 	}
 	
 	public boolean isGamestate() {

@@ -35,6 +35,23 @@ public class OrdMgr {
 				bean.setOrdertime(rs.getString("sales_day"));
 				bean.setRoom_no(rs.getString("game_room"));
 				bean.setGamestate(rs.getBoolean("game_state"));
+				bean.setGamecount(rs.getInt("game_count"));
+				vlist.addElement(bean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		}finally {
+			pool.freeConnection(con, pstmt, rs);
+	
+		}try{
+			con = pool.getConnection();
+			sql = "select * from game";
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				OrderInfoBean bean = new OrderInfoBean();
+				bean.setGametype(rs.getString("game_type"));
 				vlist.addElement(bean);
 			}
 		} catch (Exception e) {

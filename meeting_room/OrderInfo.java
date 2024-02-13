@@ -84,7 +84,7 @@ public class OrderInfo extends JFrame implements ActionListener{
 				conts[i][1] = bean.getRoom_no();
 				conts[i][2] = bean.getOrdertime();
 				conts[i][3] = String.valueOf(bean.getFoodprice()+bean.getGameprice());
-				conts[i][4] = String.valueOf(bean.isFoodstate());
+				conts[i][4] = String.valueOf(bean.isFoodstate()? "완료" : "대기중...");
 
 			}
 		DefaultTableModel model = new DefaultTableModel(conts, header) {

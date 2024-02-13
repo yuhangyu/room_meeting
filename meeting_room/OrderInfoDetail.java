@@ -116,7 +116,14 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
                     if (row != -1) {
                         // 더블 클릭된 행의 데이터 처리
                         String selectedStatus = (String) ODT.getValueAt(row, column);
-                        System.out.println("선택된 상태: " + selectedStatus);
+                        if (selectedStatus.equals("준비중...")) {
+                            // 테이블 모델을 가져옴
+                            DefaultTableModel model = (DefaultTableModel) ODT.getModel();
+                            // 해당 행의 상태를 "완료"로 변경
+                            model.setValueAt("완료", row, column);
+              
+                            
+                        }
                     }
                 }
             }
