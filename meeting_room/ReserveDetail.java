@@ -2,6 +2,11 @@ package meeting_room;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
+import java.util.Vector;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -65,6 +70,46 @@ public class ReserveDetail implements ActionListener {
 		dialog.setVisible(true);
 	}
 	
+	// 시간 중복 여부 판별 메서드
+	public boolean isTimeOverlap(String ReserveTime, int useTime) {
+		Vector<ReserveBean> reservelist;
+		MyInfoMgr mgr = new MyInfoMgr();
+		reservelist = mgr.reserveAll();
+		
+		// Spinner의 Value를 받아와 선택한 시간 데이터와 사용시간을 받아옴 
+		int year = (int) rdUI.yearSpinner.getValue();
+		Month month = Month.of((int) rdUI.monthSpinner.getValue());
+		int dayOfMonth = (int) rdUI.daySpinner.getValue();
+		int hour = (int) rdUI.hourSpinner.getValue();
+        int minute = (int) rdUI.minSpinner.getValue();
+        
+        int selectedUseTime = Integer.parseInt(rdUI.time_tf.getText());
+		
+        // String 형의 시간 데이트를 LocalDateTime 형으로 형식변경을 하기 위한 포맷 설정 
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		
+		// DB에 저장된 다른 예약정보의 시작 시간
+		LocalDateTime otherStartTime = LocalDateTime.parse(ReserveTime, formatter);
+		
+		// DB에 저장된 다른 예약정보의 종료 시간, use타임을 더함
+		LocalDateTime otherEndTime = otherStartTime.plusHours(useTime);
+		
+		// 선택한 시간을 LocalDateTime 형으로 형식 변경 
+		LocalDateTime selectedStartDateTime = LocalDateTime.of(year, month, dayOfMonth, hour, minute);
+		
+		// 선택한 시간에 사용시간을 더해 종료 시간을 LocalDateTime 형으로 종료 시간 설정 
+		LocalDateTime selectedEndDateTime = selectedStartDateTime.plusHours(selectedUseTime);
+		
+		// 시간이 겹치는지 확인 
+		// 선택한 시작 시간이 다른 예약의 종료 시간보다 이전이라면 중복, 선택한 종료 시간이 다른 예약 시작 시간보다 이후라면 중복
+	    if (selectedStartDateTime.isBefore(otherEndTime) && selectedEndDateTime.isAfter(otherStartTime)) {
+	        return true;
+	    } else {
+	        return false;
+	    }
+	    
+	}
+	
 	public void reserve() {
 		int currentYear = rdUI.currentYear;
 		int currentMonth = rdUI.currentMonth; // Calendar.MONTH는 0부터 시작하므로 1을 더해줌
@@ -80,7 +125,33 @@ public class ReserveDetail implements ActionListener {
 		
 		JOptionPane optionPane;
 		JDialog dialog;
+		String roomInfo = rdUI.chosen_room_info_lb.getText();
 		
+		// 선택한 룸에 예약할 때 선택한 시간에 이미 예약이 차 있는 경우에 대한 예외 처리 
+		Vector<ReserveBean> reservelist;
+		MyInfoMgr mgr = new MyInfoMgr();
+		reservelist = mgr.reserveAll();
+		
+		for(int i = 0; i < reservelist.size(); i++ ) {
+			ReserveBean bean3 = reservelist.get(i);
+			// 방 정보 비교
+			if(bean3.getResvroom().equals(roomInfo)) {
+				// 시간 중복 여부 판별 
+				if (isTimeOverlap(bean3.getResvtime(), bean3.getResvusetime())) {
+					// 예외처리
+					optionPane = new JOptionPane("선택한 날짜와 시간에 이미 예약이 존재합니다.", JOptionPane.ERROR_MESSAGE);
+					dialog = optionPane.createDialog(rdUI, "예약 중복");
+					dialog.setLocationRelativeTo(rdUI);
+					dialog.setVisible(true);
+					return;
+					
+		        }
+			}
+		}
+		
+		
+		
+		// 현재 시간 보다 이전 시간에 예약 하는 경우에 대한 예외 처리 
 		if (currentYear == ((Integer)selectYear).intValue()) {
 			if (currentMonth == ((Integer)selectMonth).intValue()) {
 				if (currentDay > ((Integer)selectDay).intValue()) {
@@ -112,7 +183,7 @@ public class ReserveDetail implements ActionListener {
 		}
 		
 		ReserveBean bean = new ReserveBean();
-		MyInfoMgr mgr = new MyInfoMgr();
+		mgr = new MyInfoMgr();
 		
 		String id = LoginUI.ID;
 		String str = selectYear.toString() + "-" + selectMonth.toString() + "-" + selectDay.toString() + " " + selectHour.toString() + ":" + selectMin.toString();
@@ -139,7 +210,6 @@ public class ReserveDetail implements ActionListener {
 			return;
 		}
 		
-		String roomInfo = rdUI.chosen_room_info_lb.getText();
 		RoomBean bean3 = mgr.room(roomInfo);
 		
 		bean.setResvid(bean2.getID());
