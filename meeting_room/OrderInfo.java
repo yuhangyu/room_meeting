@@ -22,7 +22,7 @@ public class OrderInfo extends JFrame implements ActionListener{
 	JTable orderTable;
 	JScrollPane pane;
 	static JButton jb = new JButton(" ");
-	
+	String [][] id;
 	Container c = getContentPane();
 	
 	public OrderInfo() {
@@ -63,6 +63,7 @@ public class OrderInfo extends JFrame implements ActionListener{
 				 if (row != -1) { // 선택된 행이 있는지 확인
 			            TableModel tm = orderTable.getModel();
 			            String no = tm.getValueAt(row,1).toString();
+			            System.out.println(id[row][0]);
 			            OrderInfoDetail OID = new OrderInfoDetail(no);
 				 } 
 			}
@@ -77,6 +78,7 @@ public class OrderInfo extends JFrame implements ActionListener{
 		vlist = mgr.orderfood();
 		String header[] = {"순서", "주문한 방", "주문 시간","총 금액", "주문 상태"};
 		String [][] conts = new String [vlist.size()][header.length];	
+		id = new String [vlist.size()][header.length];	
 
 			for (int i = 0; i < vlist.size(); i++) {
 				OrderInfoBean  bean = vlist.get(i);
@@ -85,7 +87,7 @@ public class OrderInfo extends JFrame implements ActionListener{
 				conts[i][2] = bean.getOrdertime();
 				conts[i][3] = String.valueOf(bean.getFoodprice()+bean.getGameprice());
 				conts[i][4] = String.valueOf(bean.isFoodstate()? "완료" : "대기중...");
-
+				id[i][0] = bean.getFoodid();
 			}
 		DefaultTableModel model = new DefaultTableModel(conts, header) {
 			public boolean isCellEditable(int i, int c) {return false;}
