@@ -169,13 +169,9 @@ public class GameOrderUI extends JFrame {
 		
 		//주문 요청사항 입력 패널
 		JPanel requestPanel = new JPanel();
-		JLabel requestLabel = new JLabel("주문 요청사항: ");
-		JTextField requestField = new JTextField(20);
-		requestField.setPreferredSize(new Dimension(200, 40));
-		requestPanel.add(requestLabel);
-		requestPanel.add(requestField);
+		rightPanel.setPreferredSize(new Dimension(225, 800)); // 원하는 크기로 설정
+
 		totalPanel.add(requestPanel, BorderLayout.SOUTH);
-		
 		rightPanel.add(totalPanel, BorderLayout.NORTH);
 		rightPanel.add(buttonPanel, BorderLayout.SOUTH);
 		panel.add(rightPanel, BorderLayout.EAST);
