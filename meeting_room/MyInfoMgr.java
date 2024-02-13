@@ -195,6 +195,7 @@ public class MyInfoMgr {
 				GameBean bean = new GameBean();
 				bean.setGame(rs.getString("game"));
 				bean.setGname(rs.getString("game_name"));
+				bean.setGperson(rs.getInt("game_person"));
 				bean.setGprice(rs.getInt("game_price"));
 				bean.setGstate(rs.getBoolean("game_state"));
 				bean.setGtype(rs.getString("game_type"));
@@ -373,13 +374,14 @@ public class MyInfoMgr {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "insert into food_sales values (NULL, ?, now(), ?, ?, ?, ?, FALSE)";
+			sql = "insert into food_sales values (NULL, ?, ?, now(), ?, ?, ?, ?, FALSE)";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1,  bean.getRoom_no());
-			pstmt.setString(2, bean.getFoodname());
-			pstmt.setInt(3, bean.getFoodcount());
-			pstmt.setInt(4,  bean.getFoodprice());
-			pstmt.setString(5,  bean.getFoodrequest());
+			pstmt.setString(2, bean.getFoodid());
+			pstmt.setString(3, bean.getFoodname());
+			pstmt.setInt(4, bean.getFoodcount());
+			pstmt.setInt(5,  bean.getFoodprice());
+			pstmt.setString(6,  bean.getFoodrequest());
 			
 			if (pstmt.executeUpdate() == 1) flag = true;
 		} catch (Exception e) {
@@ -424,11 +426,13 @@ public class MyInfoMgr {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "insert into game_sales values (NULL, ?, now(), ?, ?, FALSE)";
+			sql = "insert into game_sales values (NULL, ?, ?, now(), ?, 1, ?, FALSE)";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1,  bean.getRoom_no());
-			pstmt.setString(2, bean.getGamename());
-			pstmt.setInt(3, bean.getGameprice());
+			pstmt.setString(2,  bean.getGameid());
+			pstmt.setString(3, bean.getGamename());
+			pstmt.setInt(4,  bean.getGamecount());
+			pstmt.setInt(5, bean.getGameprice());
 			
 			if (pstmt.executeUpdate() == 1) flag = true;
 		} catch (Exception e) {
@@ -455,7 +459,7 @@ public class MyInfoMgr {
 			if (rs.next()) {
 				bean.setGame(rs.getString(1));
 				bean.setGname(rs.getString(2));
-				bean.setGprice(rs.getInt(3));
+				bean.setGprice(rs.getInt(4));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -463,5 +467,103 @@ public class MyInfoMgr {
 			pool.freeConnection(con, pstmt, rs);
 		}
 		return bean;
+	}
+	
+	//회원가입 등록
+	public boolean signup(MyInfoBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "insert into member values (?, ?, ?, ?, NULL, 1)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1,  bean.getID());
+			pstmt.setString(2, bean.getPW());
+			pstmt.setString(3, bean.getName());
+			pstmt.setString(4,  bean.getPhone());
+			
+			if (pstmt.executeUpdate() == 1) flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
+	
+	//토탈
+	public boolean total(TotalBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "insert into `use` values (NULL, ?, ?, ?, ?, ?, ?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1,  bean.getRoom());
+			pstmt.setString(2,  bean.getID());
+			pstmt.setString(3, bean.getDay());
+			pstmt.setString(4, bean.getIntime());
+			pstmt.setString(5,  bean.getOuttime());
+			pstmt.setInt(6,  bean.getTotal());
+			
+			if (pstmt.executeUpdate() == 1) flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
+	
+	//게임 select
+	public TotalBean selecttotal(String tid) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		TotalBean bean = new TotalBean();
+		try {
+			con = pool.getConnection();
+			sql = "select * from `use` where use_id=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, tid);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				bean.setRoom(rs.getString(2));
+				bean.setID(rs.getString(3));
+				bean.setTotal(rs.getInt(7));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return bean;
+	}
+	
+	//토탈금액
+	public boolean totalprice(TotalBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "update `use` set use_total=? where use_id=? and room_num=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1,  bean.getTotal());
+			pstmt.setString(2, bean.getID());
+			pstmt.setString(3,  bean.getRoom());
+			if (pstmt.executeUpdate() == 1) flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
 	}
 }

@@ -17,6 +17,7 @@ public class OrderInfoMgr {
 		}
 	}
 	
+	
 	public Vector<OrderInfoBean> orderfood() {
 		Connection con = null;
 		PreparedStatement pstmt =  null;
@@ -37,30 +38,40 @@ public class OrderInfoMgr {
 				bean.setRoom_no(rs.getString("food_room"));
 				bean.setFoodstate(rs.getBoolean("food_state"));
 				bean.setOrdertime(rs.getString("sales_day"));
+				bean.setFoodid(rs.getString("food_id"));
 				vlist.addElement(bean);
 			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			pool.freeConnection(con, pstmt, rs);
-		} try {
+		}
+		
+		
+		return vlist;
+		
+	}
+	public boolean update(OrderInfoBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
 			con = pool.getConnection();
-			sql = "select * from game_sales";
+			sql = "update food_sales set food_state=? where food_room=? and food_id=?";
 			pstmt = con.prepareStatement(sql);
-			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				OrderInfoBean bean = new OrderInfoBean();
-				bean.setGamename(rs.getString("games"));
-				bean.setGameprice(rs.getInt("sales_amount"));
-				bean.setOrdertime(rs.getString("sales_day"));
-				bean.setRoom_no(rs.getString("game_room"));
-				vlist.addElement(bean);
-			}
+			pstmt.setBoolean(1, bean.isFoodstate());
+			pstmt.setString(2, bean.getRoom_no());
+			pstmt.setString(3, bean.getFoodid());
+			if(pstmt.executeUpdate()==1) flag = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
-			pool.freeConnection(con, pstmt, rs);
+			pool.freeConnection(con, pstmt);
 		}
-		return vlist;
+		return flag;
 	}
+	
 }
+

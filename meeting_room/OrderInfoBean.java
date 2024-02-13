@@ -6,7 +6,8 @@ public class OrderInfoBean {
 	String ordertime;
 	int totalprice;
 	//주문 현황 디테일
-	
+	String foodid;
+	String gameid;
 	String foodname;
 	int foodcount;
 	int foodprice;
@@ -14,9 +15,13 @@ public class OrderInfoBean {
 	boolean foodstate;
 	
 	String gamename;
+	int gamecount;
 	int gameprice;
+	String gametype;
+	boolean gamestate;
 	
 	
+
 	public String getRoom_no() {
 		return room_no;
 	}
@@ -86,7 +91,38 @@ public class OrderInfoBean {
 	public void setGameprice(int gameprice) {
 		this.gameprice = gameprice;
 	}
+	
+	public int getGamecount() {
+		return gamecount;
+	}
+	public void setGamecount(int gamecount) {
+		this.gamecount = gamecount;
+	}
+	
+	public String getGametype() {
+		return gametype;
+	}
+	public void setGametype(String gametype) {
+		this.gametype = gametype;
+	}
+	
+	public boolean isGamestate() {
+		return gamestate;
+	}
+	public void setGamestate(boolean gamestate) {
+		this.gamestate = gamestate;
+	}
 
-
-
+	public String getGameid() {
+		return gameid;
+	}
+	public void setGameid(String gameid) {
+		this.gameid = gameid;
+	}
+	public String getFoodid() {
+		return foodid;
+	}
+	public void setFoodid(String foodid) {
+		this.foodid = foodid;
+	}
 }

@@ -177,6 +177,7 @@ public class FoodOrderUI extends JFrame {
 				} else {
 					MyInfoMgr mgr = new MyInfoMgr();
 					MyInfoBean bean = mgr.select(LoginUI.ID);
+					TotalBean bean4 = mgr.selecttotal(LoginUI.ID);
 					int money = bean.getMoney();
 					int total = Integer.parseInt(totalLabel.getText().split(": ")[1]);
 					if (money < total) {
@@ -190,14 +191,17 @@ public class FoodOrderUI extends JFrame {
 						vlist = mgr.reserveUser(LoginUI.ID);
 						ReserveBean bean3 = vlist.get(0);
 						beans.setRoom_no(bean3.getResvroom());
+						beans.setFoodid(LoginUI.ID);
 						beans.setFoodname(bean2.getFood());
 						beans.setFoodcount(Integer.parseInt(cartList.getElementAt(i).split("x")[1]));
 						beans.setFoodprice(bean2.getFprice() * Integer.parseInt(cartList.getElementAt(i).split("x")[1]));
 						beans.setFoodrequest(requestField.getText());
 						mgr.foodsales(beans);
 					}
+					int totalmoney = bean4.getTotal();
+					bean4.setTotal(totalmoney + total);
 					bean.setMoney(money - total);
-					if (mgr.charge(bean)) {
+					if (mgr.charge(bean) && mgr.totalprice(bean4)) {
 						JOptionPane.showMessageDialog(null, "구매가 완료되었습니다.");
 						cartList.clear(); // 장바구니 비우기
 						requestField.setText(""); // 주문 요청사항 초기화

@@ -4,6 +4,7 @@ public class GameBean {
 	
 	private String game;
 	private String gname;
+	private int gperson;
 	private int gprice;
 	private boolean gstate;
 	private String gtype;
@@ -19,6 +20,12 @@ public class GameBean {
 	}
 	public void setGname(String gname) {
 		this.gname = gname;
+	}
+	public int getGperson() {
+		return gperson;
+	}
+	public void setGperson(int gperson) {
+		this.gperson = gperson;
 	}
 	public int getGprice() {
 		return gprice;
