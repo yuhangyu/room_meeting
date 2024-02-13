@@ -10,24 +10,12 @@ public class OrderInfoBean {
 	String foodname;
 	int foodcount;
 	int foodprice;
-	String gamename;
-	int gameprice;
 	String foodrequest;
 	boolean foodstate;
 	
-	public boolean isFoodstate() {
-		return foodstate;
-	}
-	public void setFoodstate(boolean foodstate) {
-		this.foodstate = foodstate;
-	}
+	String gamename;
+	int gameprice;
 	
-	public String getFoodrequest() {
-		return foodrequest;
-	}
-	public void setFoodrequest(String foodrequest) {
-		this.foodrequest = foodrequest;
-	}
 	
 	public String getRoom_no() {
 		return room_no;
@@ -50,7 +38,6 @@ public class OrderInfoBean {
 		this.totalprice = totalprice;
 	}
 	
-	
 	public String getFoodname() {
 		return foodname;
 	}
@@ -72,6 +59,20 @@ public class OrderInfoBean {
 		this.foodprice = foodprice;
 	}
 	
+	public String getFoodrequest() {
+		return foodrequest;
+	}
+	public void setFoodrequest(String foodrequest) {
+		this.foodrequest = foodrequest;
+	}
+	
+	public boolean isFoodstate() {
+		return foodstate;
+	}
+	public void setFoodstate(boolean foodstate) {
+		this.foodstate = foodstate;
+	}
+	
 	public String getGamename() {
 		return gamename;
 	}
@@ -85,7 +86,7 @@ public class OrderInfoBean {
 	public void setGameprice(int gameprice) {
 		this.gameprice = gameprice;
 	}
-	
+
 
 
 }

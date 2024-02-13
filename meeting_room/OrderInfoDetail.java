@@ -19,17 +19,19 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
 	
 	Container c = getContentPane();
 	
-	public OrderInfoDetail() {
+	public OrderInfoDetail(String no) {
 		setSize(800,400);
-		setTitle("No.");
+		setTitle("No."+ no);
 		
 		
 		c.setLayout(null);
 		
-//		pane.setBounds(0, 0, 700, 400);
-
+		orderdetail();
 		
-//		c.add(pane);
+		pane.setBounds(0, 0, 700, 400);
+		
+		
+		c.add(pane);
 		
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -45,7 +47,7 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
 		Vector<OrderInfoBean> vlist;
 		OrderInfoMgr mgr = new OrderInfoMgr();
 		vlist = mgr.orderfood();
-		String header[] = {"순서", "주문한 음식", "음식 개수", "가격", "금액"};
+		String header[] = {"순서", "주문한 음식", "음식 개수", "가격", "금액", "상태"};
 		String [][] conts = new String [vlist.size()][header.length];
 		for(int i = 0; i < vlist.size();i++) {
 			OrderInfoBean bean = vlist.get(i);
@@ -54,16 +56,16 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
 			conts[i][2] = String.valueOf(bean.getFoodcount());
 			conts[i][3] = String.valueOf(bean.getFoodprice());
 			conts[i][4] = String.valueOf(bean.getFoodprice()*bean.getFoodcount());
+			conts[i][5] = String.valueOf(bean.isFoodstate());
 		}
 //		DefaultTableModel model = new DefaultTableModel(conts, header);{
 //			public boolean isCellEditable(int i, int c) {return false;}
 //		};
 //		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 //		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-//		
-	}
+//		for
 	
-	public static void main(String[] args) {
-		OrderInfoDetail OID = new OrderInfoDetail();
-	}
+	
+
+}
 }

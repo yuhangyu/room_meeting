@@ -62,12 +62,9 @@ public class OrderInfo extends JFrame implements ActionListener{
 				int row = orderTable.getSelectedRow();
 				 if (row != -1) { // 선택된 행이 있는지 확인
 			            TableModel tm = orderTable.getModel();
-			            String orderNumber = tm.getValueAt(row, 0).toString();
-			            String roomNumber = tm.getValueAt(row, 1).toString();
-			            String orderTime = tm.getValueAt(row, 2).toString();
-			            String totalPrice = tm.getValueAt(row, 3).toString();
-			            String orderStatus = tm.getValueAt(row, 4).toString();
-				 }
+			            String no = tm.getValueAt(row,1).toString();
+			            OrderInfoDetail OID = new OrderInfoDetail(no);
+				 } 
 			}
 			super.mouseClicked(e);
 		}
