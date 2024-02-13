@@ -7,7 +7,7 @@ public class OrderInfoBean {
 	int totalprice;
 	//주문 현황 디테일
 	
-	String foodtype;
+	String foodname;
 	int foodcount;
 	int foodprice;
 	String gamename;
@@ -51,11 +51,11 @@ public class OrderInfoBean {
 	}
 	
 	
-	public String getFoodtype() {
-		return foodtype;
+	public String getFoodname() {
+		return foodname;
 	}
-	public void setFoodtype(String foodtype) {
-		this.foodtype = foodtype;
+	public void setFoodname(String foodname) {
+		this.foodname = foodname;
 	}
 	
 	public int getFoodcount() {
@@ -86,12 +86,6 @@ public class OrderInfoBean {
 		this.gameprice = gameprice;
 	}
 	
-	String foodname;
-	public String getFoodname() {
-		return foodname;
-	}
-	public void setFoodname(String foodname) {
-		this.foodname = foodname;
-	}
+
 
 }
