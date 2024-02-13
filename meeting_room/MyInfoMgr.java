@@ -374,13 +374,14 @@ public class MyInfoMgr {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "insert into food_sales values (NULL, ?, now(), ?, ?, ?, ?, FALSE)";
+			sql = "insert into food_sales values (NULL, ?, ?, now(), ?, ?, ?, ?, FALSE)";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1,  bean.getRoom_no());
-			pstmt.setString(2, bean.getFoodname());
-			pstmt.setInt(3, bean.getFoodcount());
-			pstmt.setInt(4,  bean.getFoodprice());
-			pstmt.setString(5,  bean.getFoodrequest());
+			pstmt.setString(2, bean.getFoodid());
+			pstmt.setString(3, bean.getFoodname());
+			pstmt.setInt(4, bean.getFoodcount());
+			pstmt.setInt(5,  bean.getFoodprice());
+			pstmt.setString(6,  bean.getFoodrequest());
 			
 			if (pstmt.executeUpdate() == 1) flag = true;
 		} catch (Exception e) {
@@ -425,11 +426,12 @@ public class MyInfoMgr {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "insert into game_sales values (NULL, ?, now(), ?, ?, FALSE)";
+			sql = "insert into game_sales values (NULL, ?, ?, now(), ?, ?, FALSE)";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1,  bean.getRoom_no());
-			pstmt.setString(2, bean.getGamename());
-			pstmt.setInt(3, bean.getGameprice());
+			pstmt.setString(2,  bean.getGameid());
+			pstmt.setString(3, bean.getGamename());
+			pstmt.setInt(4, bean.getGameprice());
 			
 			if (pstmt.executeUpdate() == 1) flag = true;
 		} catch (Exception e) {

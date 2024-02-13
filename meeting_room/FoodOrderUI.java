@@ -190,6 +190,7 @@ public class FoodOrderUI extends JFrame {
 						vlist = mgr.reserveUser(LoginUI.ID);
 						ReserveBean bean3 = vlist.get(0);
 						beans.setRoom_no(bean3.getResvroom());
+						beans.setFoodid(LoginUI.ID);
 						beans.setFoodname(bean2.getFood());
 						beans.setFoodcount(Integer.parseInt(cartList.getElementAt(i).split("x")[1]));
 						beans.setFoodprice(bean2.getFprice() * Integer.parseInt(cartList.getElementAt(i).split("x")[1]));

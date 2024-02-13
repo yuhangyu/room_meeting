@@ -6,7 +6,8 @@ public class OrderInfoBean {
 	String ordertime;
 	int totalprice;
 	//주문 현황 디테일
-	
+	String foodid;
+	String gameid;
 	String foodname;
 	int foodcount;
 	int foodprice;
@@ -104,6 +105,16 @@ public class OrderInfoBean {
 		this.gamestate = gamestate;
 	}
 
-
-
+	public String getGameid() {
+		return gameid;
+	}
+	public void setGameid(String gameid) {
+		this.gameid = gameid;
+	}
+	public String getFoodid() {
+		return foodid;
+	}
+	public void setFoodid(String foodid) {
+		this.foodid = foodid;
+	}
 }

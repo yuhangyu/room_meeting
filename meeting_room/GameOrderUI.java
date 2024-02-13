@@ -198,6 +198,7 @@ public class GameOrderUI extends JFrame {
 						vlist = mgr.reserveUser(LoginUI.ID);
 						ReserveBean bean3 = vlist.get(0);
 						beans.setRoom_no(bean3.getResvroom());
+						beans.setGameid(LoginUI.ID);
 						beans.setGamename(bean2.getGame());
 						beans.setGameprice(bean2.getGprice() * Integer.parseInt(cartList.getElementAt(i).split("x")[1]));
 						mgr.gamesales(beans);
