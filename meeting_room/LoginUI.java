@@ -11,6 +11,8 @@ import java.awt.event.KeyListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Arrays;
+import java.util.Base64;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -38,6 +40,9 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 	private Statement stmt;
 	private DBConnection pool;
 
+	private static byte pbUserKey[] = "0123456789abcdef".getBytes(); // 16
+	private static byte pbCipher[] = new byte[50];
+	
 	public LoginUI() {
 		setTitle("로그인");
 		setSize(800, 630);
@@ -135,7 +140,10 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 			e.printStackTrace();
 		}
 		try {
-			ResultSet rs = stmt.executeQuery("SELECT * FROM member WHERE member_id='" + id_tf.getText() + "' AND member_pw=MD5('" + pw_tf.getText() + "') AND member_level='" + check_action + "'");
+			String id = id_tf.getText();
+			byte[] password = encrypt(pw_tf.getText());
+			String pw = new String(password);
+			ResultSet rs = stmt.executeQuery("SELECT * FROM member WHERE member_id='" + id + "' AND member_pw=('" + pw + "') AND member_level='" + check_action + "'");
 			if (rs.next()) {
 				JOptionPane.showMessageDialog(this, "로그인 성공!");
 				dispose();
@@ -164,6 +172,27 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 		}
 	}
 
+	public static byte[] encrypt(String str){
+		byte[] userBytes = str.getBytes();
+		byte pbData[] = new byte[16];
+			
+		for(int i=0; i<userBytes.length; i++) {
+			if (i < userBytes.length) 
+				pbData[i] = userBytes[i];
+			else
+				pbData[i] = 0x00;
+		}
+		
+		//암호화 함수 호출
+		pbCipher = KISA_SEED_ECB.SEED_ECB_Encrypt(pbUserKey, pbData,  0, pbData.length);
+		
+		/**JDK1.8 일 때 사용  */
+		java.util.Base64.Encoder encoder = Base64.getEncoder(); 
+		byte[] encArray = encoder.encode(Arrays.copyOf(pbCipher, 16)); // 인코딩할 바이트 배열의 길이를 16으로 수정
+		 
+		return encArray;
+	}
+	
 	public static void main(String[] args) {
 		LoginUI login = new LoginUI();
 	}

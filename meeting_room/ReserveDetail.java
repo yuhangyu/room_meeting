@@ -224,6 +224,8 @@ public class ReserveDetail implements ActionListener {
 		if(mgr.reserve(bean)) {
 			bean2.setMoney(money - totalPrice);
 			if (mgr.charge(bean2)) {				
+				MainPageUI.purchasefood_btn.setEnabled(true);
+				MainPageUI.rentgame_btn.setEnabled(true);
 				optionPane = new JOptionPane("예약이 완료되었습니다.", JOptionPane.INFORMATION_MESSAGE);
 				dialog = optionPane.createDialog(rdUI, "예약 안내");
 				dialog.setLocationRelativeTo(rdUI);

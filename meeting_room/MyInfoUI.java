@@ -4,8 +4,11 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.Encoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -39,11 +42,14 @@ public class MyInfoUI extends JFrame implements ActionListener {
 	JButton modify_info_btn = new JButton("정보 수정");
 	JButton ok_btn = new JButton("확인");
 	
+	private static byte pbUserKey[] = "0123456789abcdef".getBytes(); // 16
+	private static byte pbCipher[] = new byte[50];
+	
 	public String getID(MyInfoBean bean) {
 		return bean.getID();
 	}
 	
-	public MyInfoUI() {
+	public MyInfoUI() {		
 		setTitle("내 정보");
 		setSize(400, 500);
 
@@ -116,9 +122,10 @@ public class MyInfoUI extends JFrame implements ActionListener {
 		Object obj = e.getSource();
 		
 		if (obj == modify_info_btn) {
+			byte[] password = encrypt(pw_tf.getText());
 			if (!id_tf.getText().equals(id)) {
 				JOptionPane.showMessageDialog(this, "아이디는 변경할 수 없습니다.");
-			} else if (name_tf.getText().equals(name) && phone_tf.getText().equals(phone) && pw_tf.getText().equals(pw)) {
+			} else if (name_tf.getText().equals(name) && phone_tf.getText().equals(phone) && new String(password).equals(pw)) {
 				JOptionPane.showMessageDialog(this, "변경할 정보가 없습니다.");
 			} else if ("".equals(name_tf.getText()) || "".equals(phone_tf.getText()) || "".equals(pw_tf.getText())) {
 				JOptionPane.showMessageDialog(this, "공백으로 정보를 변경할 수 없습니다.");
@@ -133,7 +140,8 @@ public class MyInfoUI extends JFrame implements ActionListener {
 	}
 	
 	public void change() {
-		bean.setPW(md5Hash(pw_tf.getText()));
+		byte[] password = encrypt(pw_tf.getText());
+		bean.setPW(new String(password));
 		bean.setName(name_tf.getText());
 		bean.setPhone(phone_tf.getText());
 		if(mgr.update(bean)) {
@@ -145,23 +153,26 @@ public class MyInfoUI extends JFrame implements ActionListener {
 			dispose();
 		}
 	}
-	
-	// MD5 해시 함수
-	private static String md5Hash(String input) {
-		try {
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			byte[] messageDigest = md.digest(input.getBytes());
+
+	public static byte[] encrypt(String str){
+		byte[] userBytes = str.getBytes();
+		byte pbData[] = new byte[16];
 			
-			StringBuilder hexString = new StringBuilder();
-			for (byte b : messageDigest) {
-				hexString.append(String.format("%02x", b));
-			}
-			
-			return hexString.toString();
-		
-		} catch (NoSuchAlgorithmException e) {
-			throw new RuntimeException(e);
+		for(int i=0; i<userBytes.length; i++) {
+			if (i < userBytes.length) 
+				pbData[i] = userBytes[i];
+			else
+				pbData[i] = 0x00;
 		}
+		
+		//암호화 함수 호출
+		pbCipher = KISA_SEED_ECB.SEED_ECB_Encrypt(pbUserKey, pbData,  0, pbData.length);
+		
+		/**JDK1.8 일 때 사용  */
+		java.util.Base64.Encoder encoder = Base64.getEncoder(); 
+		byte[] encArray = encoder.encode(Arrays.copyOf(pbCipher, 16)); // 인코딩할 바이트 배열의 길이를 16으로 수정
+		 
+		return encArray;
 	}
 
 	public static void main(String[] args) {

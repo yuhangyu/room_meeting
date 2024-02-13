@@ -4,6 +4,7 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -29,8 +30,8 @@ public class MainPageUI extends JFrame implements ActionListener {
 	//Swing에서 \n을 통한 줄바꿈을 지원하지 않아서, HTML을 활용하여 버튼 내의 줄바꿈
 	JButton reserve_btn = new JButton("<html><div style='text-align: center;'>미팅룸<br>예약하기</div></html>");
 	JButton deposit_btn = new JButton("충전");
-	JButton purchasefood_btn = new JButton("음식 주문하기");
-	JButton rentgame_btn = new JButton("보드게임 대여");
+	static JButton purchasefood_btn = new JButton("음식 주문하기");
+	static JButton rentgame_btn = new JButton("보드게임 대여");
 	JButton logout_btn = new JButton("로그아웃");
 	JButton myinfo_btn = new JButton("내 정보");
 	static JButton as = new JButton("");
@@ -53,12 +54,11 @@ public class MainPageUI extends JFrame implements ActionListener {
 		balance_value_lb.setText(money + "원");
 		setIDMoney(money);
 		
-		
 		// 로고 추가
-        ImageIcon logoIcon = new ImageIcon("meeting_room/logo.jpg");
-        JLabel logoLabel = new JLabel(logoIcon);
-        logoLabel.setBounds(45, 20, 700, 270);
-        c.add(logoLabel);
+		ImageIcon logoIcon = new ImageIcon("meeting_room/logo.jpg");
+		JLabel logoLabel = new JLabel(logoIcon);
+		logoLabel.setBounds(45, 20, 700, 270);
+		c.add(logoLabel);
 		
 		//요소 위치 지정
 		memberinfo_lb.setBounds(480,  323,  100,  40);
@@ -111,6 +111,13 @@ public class MainPageUI extends JFrame implements ActionListener {
 		purchasefood_btn.addActionListener(mainPage);
 		rentgame_btn.addActionListener(mainPage);
 		as.addActionListener(this);
+		
+		Vector<ReserveBean> vlist;
+		vlist = mgr.reserveUser(LoginUI.ID);
+		if (vlist.size() == 0) {
+			purchasefood_btn.setEnabled(false);
+			rentgame_btn.setEnabled(false);
+		}
 		
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);

@@ -195,6 +195,7 @@ public class MyInfoMgr {
 				GameBean bean = new GameBean();
 				bean.setGame(rs.getString("game"));
 				bean.setGname(rs.getString("game_name"));
+				bean.setGperson(rs.getInt("game_person"));
 				bean.setGprice(rs.getInt("game_price"));
 				bean.setGstate(rs.getBoolean("game_state"));
 				bean.setGtype(rs.getString("game_type"));
@@ -463,5 +464,29 @@ public class MyInfoMgr {
 			pool.freeConnection(con, pstmt, rs);
 		}
 		return bean;
+	}
+	
+	//회원가입 등록
+	public boolean signup(MyInfoBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "insert into member values (?, ?, ?, ?, NULL, 1)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1,  bean.getID());
+			pstmt.setString(2, bean.getPW());
+			pstmt.setString(3, bean.getName());
+			pstmt.setString(4,  bean.getPhone());
+			
+			if (pstmt.executeUpdate() == 1) flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
 	}
 }
