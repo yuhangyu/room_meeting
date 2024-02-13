@@ -75,7 +75,6 @@ public class Reserve implements ActionListener {
 						
 						try {
 							Date date = originalFormat.parse(OriginalResvtime);
-							
 							// 콘솔 출력 테스트
 //							System.out.println(OriginalResvtime + "\t" + bean.getResvusetime()
 //							 +"\t" + bean.getResvperson());

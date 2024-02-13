@@ -492,4 +492,78 @@ public class MyInfoMgr {
 		}
 		return flag;
 	}
+	
+	//≈‰≈ª
+	public boolean total(TotalBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "insert into `use` values (NULL, ?, ?, ?, ?, ?, ?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1,  bean.getRoom());
+			pstmt.setString(2,  bean.getID());
+			pstmt.setString(3, bean.getDay());
+			pstmt.setString(4, bean.getIntime());
+			pstmt.setString(5,  bean.getOuttime());
+			pstmt.setInt(6,  bean.getTotal());
+			
+			if (pstmt.executeUpdate() == 1) flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
+	
+	//∞‘¿” select
+	public TotalBean selecttotal(String tid) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		TotalBean bean = new TotalBean();
+		try {
+			con = pool.getConnection();
+			sql = "select * from `use` where use_id=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, tid);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				bean.setRoom(rs.getString(2));
+				bean.setID(rs.getString(3));
+				bean.setTotal(rs.getInt(7));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return bean;
+	}
+	
+	//≈‰≈ª±›æ◊
+	public boolean totalprice(TotalBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "update `use` set use_total=? where use_id=? and room_num=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1,  bean.getTotal());
+			pstmt.setString(2, bean.getID());
+			pstmt.setString(3,  bean.getRoom());
+			if (pstmt.executeUpdate() == 1) flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
 }
