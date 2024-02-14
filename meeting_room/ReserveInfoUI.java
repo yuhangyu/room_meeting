@@ -21,7 +21,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-public class ReserveInfoUI extends JFrame implements ActionListener{
+public class ReserveInfoUI extends JFrame implements ActionListener {
 	JTable reservetable;
 	JScrollPane pane;
 	static JButton jb = new JButton(" ");
