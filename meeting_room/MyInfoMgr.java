@@ -566,4 +566,26 @@ public class MyInfoMgr {
 		}
 		return flag;
 	}
+	
+	//예약 취소
+	public boolean cancelresv(String id, String room, String time) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "delete from reserve where resv_id=? and resv_room=? and resv_time=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, room);
+			pstmt.setString(3,  time);
+			if (pstmt.executeUpdate() == 1) flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
 }

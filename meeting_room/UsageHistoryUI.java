@@ -113,7 +113,6 @@ public class UsageHistoryUI extends JFrame implements ActionListener {
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-										
 		setVisible(true);
 		setResizable(false);
 		
@@ -280,6 +279,6 @@ public class UsageHistoryUI extends JFrame implements ActionListener {
 	}
 	
 	public static void main(String[] args) {
-		new UsageHistoryUI();
+		
 	}
 }

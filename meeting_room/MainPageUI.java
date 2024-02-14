@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
@@ -119,7 +121,7 @@ public class MainPageUI extends JFrame implements ActionListener {
 		
 		Vector<ReserveBean> vlist;
 		vlist = mgr.reserveUser(LoginUI.ID);
-		if (vlist.size() == 0) {
+		if (vlist.size() == 0 || check() == false) {
 			purchasefood_btn.setEnabled(false);
 			rentgame_btn.setEnabled(false);
 		}
@@ -153,14 +155,10 @@ public class MainPageUI extends JFrame implements ActionListener {
 		} else if (obj == purchasefood_btn) {
 			if (check() == true) {
 				FoodOrderUI FUI = new FoodOrderUI();
-			} else {
-				JOptionPane.showMessageDialog(null, "아직 예약 시간이 되지 않았습니다.\n" + formattedDate2 + " 이후 사용 가능합니다.");
 			}
 		} else if (obj == rentgame_btn) {
 			if (check() == true) {
 				GameOrderUI GUI = new GameOrderUI();
-			} else {
-				JOptionPane.showMessageDialog(null, "아직 예약 시간이 되지 않았습니다.\n" + formattedDate2 + " 이후 사용 가능합니다.");
 			}
 		} else if (obj == myinfo_btn) {
 			MyInfoUI myinfo = new MyInfoUI();
@@ -188,6 +186,7 @@ public class MainPageUI extends JFrame implements ActionListener {
 				
 			//getResvusetime()을 시간으로 변환하고 더하기
 			Calendar calendar = Calendar.getInstance();
+			
 			calendar.setTime(date); // 캘린더의 데이트를 받아온 시간으로 변경
 			calendar.add(Calendar.HOUR_OF_DAY, resvtime); // 캘린더에 사용시간 더하기
 			
@@ -195,15 +194,15 @@ public class MainPageUI extends JFrame implements ActionListener {
 			formattedDate2 = newFormat2.format(date); // 포멧 변경 HH:MM:SS
 			EndformattedDate2 = newFormat2.format(calendar.getTime()); // 캘린더에 사용시간을 더하고 포맷 변경하여 출력
 			
-			// 현재 시간 가져오기
-			LocalTime currentTime = LocalTime.now();
+			//현재 시간 가져오기
+			LocalDateTime currentTime = LocalDateTime.now();
 			
-			// 특정 시간 범위 설정
-			LocalTime startTime = LocalTime.of(Integer.parseInt(formattedDate2.split(":")[0]), Integer.parseInt(formattedDate2.split(":")[1]));   // 시작 시간: 09:00
-			LocalTime endTime = LocalTime.of(Integer.parseInt(EndformattedDate2.split(":")[0]), Integer.parseInt(EndformattedDate2.split(":")[1]));    // 종료 시간: 17:00
+			//비교할 시간 가져오기
+			LocalDateTime resv = LocalDateTime.parse(formattedDate + "T" + formattedDate2);
+			LocalDateTime resv2 = LocalDateTime.parse(formattedDate + "T" + EndformattedDate2);
 			
-			// 현재 시간이 특정 시간 범위 내에 있는지 확인
-			if (isWithinTimeRange(currentTime, startTime, endTime)) {
+			//현재 시간이 특정 시간 범위 내에 있는지 확인
+			if (isDateTimeInRange(currentTime, resv, resv2)) {
 				flag = true;
 			} else {
 				flag = false;
@@ -215,8 +214,8 @@ public class MainPageUI extends JFrame implements ActionListener {
 	}
 	
 	// 현재 시간이 특정 시간 범위 내에 있는지 확인하는 메서드
-	private static boolean isWithinTimeRange(LocalTime currentTime, LocalTime startTime, LocalTime endTime) {
-		return !currentTime.isBefore(startTime) && !currentTime.isAfter(endTime);
+	private static boolean isDateTimeInRange(LocalDateTime dateTime, LocalDateTime startTime, LocalDateTime endTime) {
+		return !dateTime.isBefore(startTime) && !dateTime.isAfter(endTime);
 	}
 	
 	public static void main(String[] args) {
