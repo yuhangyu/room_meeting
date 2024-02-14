@@ -5,14 +5,14 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Timestamp;
-
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
-// JSpinner 사용
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
@@ -20,15 +20,11 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatter;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 
-
-public class UsageHistoryUI extends JFrame implements ActionListener{
-	private UsageHistory uh;
-	
+public class UsageHistoryUI extends JFrame implements ActionListener {
 	JLabel usage_history_lb = new JLabel("이용 내역");
 	JLabel start_date_lb = new JLabel("검색 시작일");
 	JLabel end_date_lb = new JLabel("검색 종료일");
@@ -65,11 +61,9 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
 	JSpinner DaySpinner2 = new JSpinner(spinnerNumberModel6);
 
 	UsageHistoryUI(){
-		uh = new UsageHistory(this);
-		
 		//버튼 이벤트 추가
-		ok_btn.addActionListener(uh);
-		search_btn.addActionListener(uh);
+		ok_btn.addActionListener(this);
+		search_btn.addActionListener(this);
 		
 		setTitle("내 정보");
 		setSize(1000, 500);
@@ -175,7 +169,6 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
 	}
 	
 	public void history() {
-
 		// 수평 스크롤바 비활성화
 		historyPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 	
@@ -205,8 +198,87 @@ public class UsageHistoryUI extends JFrame implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		Object obj = e.getSource();
+		
+		if (obj.equals(ok_btn)) {
+			dispose();
+		} else if (obj.equals(search_btn)) {
+			reservesearch();
+		}
 	}
 
+	public void reservesearch() {
+		String syear = String.valueOf(YearSpinner1.getValue());
+		String eyear = String.valueOf(YearSpinner2.getValue());
+		String smonth = String.valueOf(MonthSpinner1.getValue());
+		String emonth = String.valueOf(MonthSpinner2.getValue());
+		String sday = String.valueOf(DaySpinner1.getValue());
+		String eday = String.valueOf(DaySpinner2.getValue());
+		
+		if ("".equals(syear) || "".equals(eyear) || "".equals(smonth) || "".equals(emonth) || "".equals(sday) || "".equals(eday)) {
+			errormsg();
+			return;
+		}
+		
+		if (Integer.parseInt(syear) == Integer.parseInt(eyear)) {
+			if (Integer.parseInt(smonth) == Integer.parseInt(emonth)) {
+				if (Integer.parseInt(sday) > Integer.parseInt(eday)) {
+					errormsg();
+					return;
+				}
+			} else if (Integer.parseInt(smonth) > Integer.parseInt(emonth)) {
+				errormsg();
+				return;
+			}
+		} else if (Integer.parseInt(syear) > Integer.parseInt(eyear)) {
+			errormsg();
+			return;
+		}
+		
+		if (smonth.length() == 1) smonth = "0" + smonth;
+		if (emonth.length() == 1) emonth = "0" + emonth;
+		if (sday.length() == 1) sday = "0" + sday;
+		if (eday.length() == 1) eday = "0" + eday;
+		String startday = syear + "-" + smonth + "-" + sday + " 00:00:00";
+		String endday = eyear + "-" + emonth + "-" + eday + " 23:59:59";
+		
+		Vector<ReserveBean> vlist;
+		MyInfoMgr mgr = new MyInfoMgr();
+		vlist = mgr.reserveUserDetail(LoginUI.ID, startday, endday);
+		
+		// 데이터 및 컬럼명 배열 정의
+		String[] columnNames = {"순번", "ID", "이름", "전화번호", "이용 룸", "예약 날짜", "이용 시간", "이용 인원"};
+		String[][] data = new String[vlist.size()][columnNames.length];
+		
+		for (int i = 0; i < vlist.size(); i++) {
+			ReserveBean bean = vlist.get(i);
+			data[i][0] = String.valueOf(i + 1);
+			data[i][1] = bean.getResvid();
+			data[i][2] = bean.getResvname();
+			data[i][3] = bean.getResvphone();
+			data[i][4] = bean.getResvroom();
+			data[i][5] = bean.getResvtime();
+			data[i][6] = String.valueOf(bean.getResvusetime());
+			data[i][7] = String.valueOf(bean.getResvperson());
+		}
+		
+		DefaultTableModel model = new DefaultTableModel(data, columnNames) {
+			public boolean isCellEditable(int i, int c){ return false; }
+		};
+		historyTable.setModel(model);
+		history();
+	}
+	
+	public void errormsg() {
+		JOptionPane optionPane;
+		JDialog dialog;
+		
+		optionPane = new JOptionPane("날짜 선택 오류입니다.", JOptionPane.ERROR_MESSAGE);
+		dialog = optionPane.createDialog(null, "오류 안내");
+		dialog.setLocationRelativeTo(null);
+		dialog.setVisible(true);
+	}
+	
 	public static void main(String[] args) {
 		new UsageHistoryUI();
 	}

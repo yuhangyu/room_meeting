@@ -21,14 +21,14 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
     
     Container c = getContentPane();
     
-    public OrderInfoDetail(String no) {
+    public OrderInfoDetail(String no, String id) {
         setSize(800,400);
         setTitle(no);
         
         
         c.setLayout(null);
         
-        orderdetail();
+        orderdetail(id);
         
         pane.setBounds(0, 0, 700, 400);
         
@@ -45,7 +45,7 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
         
     }
     
-    public void orderdetail() {
+    public void orderdetail(String id) {
         Vector<OrderInfoBean> foodList;
         Vector<OrderInfoBean> gameList;
         OrderInfoMgr foodMgr = new OrderInfoMgr();
