@@ -119,13 +119,6 @@ public class MainPageUI extends JFrame implements ActionListener {
 		rentgame_btn.addActionListener(this);
 		as.addActionListener(this);
 		
-		Vector<ReserveBean> vlist;
-		vlist = mgr.reserveUser(LoginUI.ID);
-		if (vlist.size() == 0 || check() == false) {
-			purchasefood_btn.setEnabled(false);
-			rentgame_btn.setEnabled(false);
-		}
-		
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);
 		//프로그램 종료할 때 프로세스까지 함께 종료
@@ -153,13 +146,15 @@ public class MainPageUI extends JFrame implements ActionListener {
 		} else if (obj == deposit_btn ) {
 			RechargeUI rcg = new RechargeUI();
 		} else if (obj == purchasefood_btn) {
-			if (check() == true) {
-				FoodOrderUI FUI = new FoodOrderUI();
-			}
+			//if (check() == true) {
+				OrderRoomUI oui = new OrderRoomUI(new String("음식"));
+				//FoodOrderUI FUI = new FoodOrderUI();
+			//}
 		} else if (obj == rentgame_btn) {
-			if (check() == true) {
-				GameOrderUI GUI = new GameOrderUI();
-			}
+			OrderRoomUI oui = new OrderRoomUI(new String("게임"));
+//			if (check() == true) {
+//				GameOrderUI GUI = new GameOrderUI();
+//			}
 		} else if (obj == myinfo_btn) {
 			MyInfoUI myinfo = new MyInfoUI();
 		} else if (obj == logout_btn) {
