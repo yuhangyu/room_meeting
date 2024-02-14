@@ -5,11 +5,15 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.DocumentEvent;
 
@@ -90,6 +94,27 @@ public class RechargeUI extends JFrame implements ActionListener, DocumentListen
 		charge_50000_btn.addActionListener(this);	
 		cancel_btn.addActionListener(this);
 		recharge_btn.addActionListener(this);
+		
+		
+		recharge_value_tf.addKeyListener(new KeyAdapter() {
+		    @Override
+		    // 텍스트 필드에 숫자가 아닌 다른 입력을 하는 경우 무시 
+		    public void keyTyped(KeyEvent e) {
+		        char inputChar = e.getKeyChar();
+		        if (!Character.isDigit(inputChar)) {
+		            e.consume(); // 입력된 값이 숫자가 아니면 무시
+		        }
+		        //updateRechargeAmountOnTextChange();
+		    }
+		    
+//		    @Override
+//		    // 텍스트 필드가 0으로 시작하는 숫자열일때 앞자리의 0 들을 제거 
+//		    public void keyReleased(KeyEvent e) {
+//		        updateRechargeAmountOnTextChange();
+//		    }
+//		    
+		    
+		});
 
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);
@@ -99,6 +124,8 @@ public class RechargeUI extends JFrame implements ActionListener, DocumentListen
 		setVisible(true);
 		setResizable(false);
 	}
+	
+	
 	
 	// 텍스트 필드의 값이 바뀔때마다 충전하기 버튼을 활성화 할지 체크 
 	// DocumentListener 메서드 구현
@@ -118,10 +145,27 @@ public class RechargeUI extends JFrame implements ActionListener, DocumentListen
 	}
 
 	private void checkAndEnableButton() {
-	// 텍스트 필드의 값이 숫자이면서 0이 아닌지, 또는 공백이 아닌지 체크하여 버튼 활성화
+		// 텍스트 필드의 값이 숫자이면서 0이 아닌지, 또는 공백이 아닌지 체크하여 버튼 활성화
 		String textFieldValue = recharge_value_tf.getText().trim();
+		
 		recharge_btn.setEnabled(isNumeric(textFieldValue) && !textFieldValue.equals("0") && !textFieldValue.isEmpty());
-	}
+		}
+
+//	// 텍스트 필드에 직접 입력할 때 호출되는 메소드
+//	private void updateRechargeAmountOnTextChange() {
+//	    String currentText = recharge_value_tf.getText().trim();
+//
+//	    // 텍스트 필드 값이 0으로 시작하는 경우 앞자리 0 제거
+//        if (currentText.startsWith("0")) {
+//            currentText = currentText.replaceFirst("^0+(?!$)", "");
+//        }
+//	    
+//	    if (currentText.equals("")) {
+//	        recharge_btn.setEnabled(false);
+//	    } else {
+//	        recharge_btn.setEnabled(true);
+//	    }
+//	}
 	
 	// 숫자 여부 체크 메서드 추가
 	private boolean isNumeric(String str) {
@@ -151,14 +195,28 @@ public class RechargeUI extends JFrame implements ActionListener, DocumentListen
 		} else if (obj == cancel_btn) {
 			dispose();
 		} else if (obj == recharge_btn) {
+			if(Integer.parseInt(recharge_value_tf.getText()) == 0) {
+				JOptionPane.showMessageDialog(this, "충전 금액이 0원입니다. 충전 금액을 입력하세요.", "경고", JOptionPane.WARNING_MESSAGE);
+		        return;
+			}
 			RechargeDetailUI rcdui = new RechargeDetailUI();
 		}
 	}
 	
+	
+	// 공백으로 만들경우 0으로 만들지 않고 다른 문자열을 출력하는 오류 해결 불가
+	
+	// recharge_value_tf 필드가 공백일 경우에도 버튼을 클릭하면 해당 버튼의 금액만큼 tf를 변경하는 코드로 대체 
 	private void updateRechargeAmount(int money) {
-		int currentAmount = Integer.parseInt(recharge_value_tf.getText());
-		currentAmount += money;
-		recharge_value_tf.setText(Integer.toString(currentAmount));
+		if(recharge_value_tf.getText().equals("")) {
+			recharge_value_tf.setText(String.valueOf(money));
+		}
+		
+		else {
+			int currentAmount = Integer.parseInt(recharge_value_tf.getText());
+			currentAmount += money;
+			recharge_value_tf.setText(Integer.toString(currentAmount));
+		}
 	}
 	
 	public static void main(String[] args) {

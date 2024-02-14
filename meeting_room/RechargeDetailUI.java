@@ -37,7 +37,11 @@ public class RechargeDetailUI extends JFrame implements ActionListener {
 	public RechargeDetailUI() {
 		setTitle("충전 상세");
 		setSize(400, 500);
-		amount_value.setText(RechargeUI.recharge_value_tf.getText());
+		
+		// RechargeUI.recharge_value_tf.getText()의 값에서 0으로 시작하는 숫자열의 앞자리 0 제거
+	    String rechargeValue = RechargeUI.recharge_value_tf.getText().replaceFirst("^0+(?!$)", "");
+	    amount_value.setText(rechargeValue);
+		
 		//컨텐츠 패널의 객체 메소드 호출
 		Container c = getContentPane();
 		c.setLayout(null); //컨텐츠 패널 초기
