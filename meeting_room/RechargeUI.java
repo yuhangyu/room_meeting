@@ -10,10 +10,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.DocumentEvent;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-public class RechargeUI extends JFrame implements ActionListener {
+public class RechargeUI extends JFrame implements ActionListener, DocumentListener {
 	ImageIcon icon = new ImageIcon("meeting_room/img.png"); // 로고에 사용할 이미지 아이콘
 	JLabel logo_lb = new JLabel(icon); // 로고 레이블
 	
@@ -65,6 +68,9 @@ public class RechargeUI extends JFrame implements ActionListener {
 		recharge_amount_lb.setFont(font);
 		won_lb.setFont(font);
 		
+		recharge_btn.setEnabled(false);
+		recharge_value_tf.getDocument().addDocumentListener(this);
+		
 		c.add(logo_lb);
 		c.add(charge_1000_btn);
 		c.add(charge_5000_btn);
@@ -93,6 +99,40 @@ public class RechargeUI extends JFrame implements ActionListener {
 		setVisible(true);
 		setResizable(false);
 	}
+	
+	// 텍스트 필드의 값이 바뀔때마다 충전하기 버튼을 활성화 할지 체크 
+	// DocumentListener 메서드 구현
+	@Override
+	public void changedUpdate(DocumentEvent e) {
+		checkAndEnableButton();
+	}
+
+	@Override
+	public void insertUpdate(DocumentEvent e) {
+	    checkAndEnableButton();
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent e) {
+	    checkAndEnableButton();
+	}
+
+	private void checkAndEnableButton() {
+	// 텍스트 필드의 값이 숫자이면서 0이 아닌지, 또는 공백이 아닌지 체크하여 버튼 활성화
+		String textFieldValue = recharge_value_tf.getText().trim();
+		recharge_btn.setEnabled(isNumeric(textFieldValue) && !textFieldValue.equals("0") && !textFieldValue.isEmpty());
+	}
+	
+	// 숫자 여부 체크 메서드 추가
+	private boolean isNumeric(String str) {
+	    try {
+	        Integer.parseInt(str);
+	        return true;
+	    } catch (NumberFormatException e) {
+	        return false;
+	    }
+	}
+	
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {

@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
@@ -66,6 +67,7 @@ public class RechargeDetailUI extends JFrame implements ActionListener {
 		recharge_check_1.setBounds(35, 200, 350, 30);
 		recharge.setBounds(50, 300, 130, 100);
 		cancel.setBounds(210, 300, 130, 100);
+		
 
 		c.add(recharge_check);
 		c.add(amount);
@@ -88,6 +90,7 @@ public class RechargeDetailUI extends JFrame implements ActionListener {
 		setVisible(true);
 		setResizable(false);
 	}
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -109,7 +112,7 @@ public class RechargeDetailUI extends JFrame implements ActionListener {
 			if(mgr.charge(bean)) {
 				JOptionPane.showMessageDialog(null, "충전되었습니다.");
 				mgr.select(bean.getID());
-				MainPageUI.balance_value_lb.setText(String.valueOf(bean.getMoney()));
+				MainPageUI.balance_value_lb.setText(String.valueOf(bean.getMoney()) + "원");
 				RechargeUI.recharge_value_tf.setText("0");
 				RechargeUI.cancel_btn.doClick();
 				dispose();
