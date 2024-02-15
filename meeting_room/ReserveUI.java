@@ -139,7 +139,13 @@ public class ReserveUI extends JFrame implements ActionListener{
 		String[][] data = {{"", "", ""}};
 			
 		// DefaultTableModel을 사용하여 JTable에 데이터 설정
-		DefaultTableModel model = new DefaultTableModel(data, columnNames);
+		DefaultTableModel model = new DefaultTableModel(data, columnNames) {
+		    @Override
+		    public boolean isCellEditable(int row, int column) {
+		        // 모든 셀을 편집 불가능하도록 설정
+		        return false;
+		    }
+		};
 		reserveTable = new JTable(model);
 		reservePane = new JScrollPane(reserveTable);
 

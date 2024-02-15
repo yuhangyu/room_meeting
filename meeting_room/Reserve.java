@@ -17,13 +17,11 @@ import javax.swing.table.DefaultTableModel;
 
 public class Reserve implements ActionListener {
 	private ReserveUI reserveUI;
-	private JButton previousSelectedButton; // 이전 선택 버튼
+	private JButton previousSelectedButton;
 	
 	public Reserve(ReserveUI reserveUI) {
 		this.reserveUI = reserveUI;
 	}
-	
-	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -69,25 +67,23 @@ public class Reserve implements ActionListener {
 				
 				for(int i = 0; i < reservelist.size(); i++ ) {
 					ReserveBean bean = reservelist.get(i);
-					if(bean.getResvroom().equals(roomName)) { // 선택된 방과 reserve 테이블의 방을 비교 
+					// 선택된 방과 reserve 테이블의 방을 비교하고 종료시간이 현재 시간 이후인 경우에만 테이블에 추가
+					if(bean.getResvroom().equals(roomName) && endTimeIsAfterCurrentTime(bean.getResvtime())) {
 						String OriginalResvtime = bean.getResvtime();
-						int resvtime = bean.getResvusetime(); // 사용 시간을 받아옴
+						int resvtime = bean.getResvusetime(); //사용 시간을 받아옴
 						
 						try {
 							Date date = originalFormat.parse(OriginalResvtime);
-							// 콘솔 출력 테스트
-//							System.out.println(OriginalResvtime + "\t" + bean.getResvusetime()
-//							 +"\t" + bean.getResvperson());
 							
-							// getResvusetime()을 시간으로 변환하고 더하기
+							//getResvusetime()을 시간으로 변환하고 더하기
 				            Calendar calendar = Calendar.getInstance();
-				            calendar.setTime(date); // 캘린더의 데이트를 받아온 시간으로 변경
-				            calendar.add(Calendar.HOUR_OF_DAY, resvtime); // 캘린더에 사용시간 더하기
+				            calendar.setTime(date); //캘린더의 데이트를 받아온 시간으로 변경
+				            calendar.add(Calendar.HOUR_OF_DAY, resvtime); //캘린더에 사용시간 더하기
 							
 							
-							String formattedDate = newFormat.format(date); // 포멧 변경 YY-MM-DD
-							String formattedDate2 = newFormat2.format(date); // 포멧 변경 HH:MM:SS
-							String EndformattedDate2 = newFormat2.format(calendar.getTime()); // 캘린더에 사용시간을 더하고 포맷 변경하여 출력
+							String formattedDate = newFormat.format(date); //포멧 변경 YY-MM-DD
+							String formattedDate2 = newFormat2.format(date); //포멧 변경 HH:MM:SS
+							String EndformattedDate2 = newFormat2.format(calendar.getTime()); //캘린더에 사용시간을 더하고 포맷 변경하여 출력
 							
 							String[] rowData = { // 추가할 행의 데이터 
 									formattedDate,
@@ -118,7 +114,6 @@ public class Reserve implements ActionListener {
 		
 		// 예약하기 버튼 클릭시
 		else if (clickedButton == reserveUI.reserve_btn) {
-			JButton buttonStateChanger = previousSelectedButton;
 			// 예약된 방의 상태를 변경하기 위한 새로운 버튼 객체 생성 
 			
 			String selectedRoomInfo = previousSelectedButton.getText();
@@ -133,6 +128,17 @@ public class Reserve implements ActionListener {
 			reserveUI.dispose();
 		}
 	}
-}
 	
-
+	private boolean endTimeIsAfterCurrentTime(String endTime) {
+	    try {
+	        // SimpleDateFormat을 사용하여 날짜 비교
+	        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	        Date currentDate = new Date();
+	        Date endTimeDate = sdf.parse(endTime);
+	        return endTimeDate.after(currentDate);
+	    } catch (ParseException e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}	
+}
