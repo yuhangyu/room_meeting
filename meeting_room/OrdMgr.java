@@ -47,5 +47,26 @@ public class OrdMgr {
 		return vlist;	
 
 	}
+	public boolean update(OrderInfoBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "update game_sales set game_state=? where game_room=? and game_id=? and games=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setBoolean(1, bean.isGamestate());
+			pstmt.setString(2, bean.getRoom_no());
+			pstmt.setString(3, bean.getGameid());
+			pstmt.setString(4, bean.getGamename());
+			if(pstmt.executeUpdate()==1) flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
 }
 

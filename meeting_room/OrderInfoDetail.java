@@ -21,7 +21,7 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
     
     Container c = getContentPane();
 
-    public OrderInfoDetail(String no, String id, String foods) {
+    public OrderInfoDetail(String no, String id, String foods,String Gi, String Gn) {
 
         setSize(800,400);
         setTitle(no);
@@ -30,7 +30,7 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
         c.setLayout(null);
         
 
-        orderdetail(id,no,foods);
+        orderdetail(id,no,foods,Gi,Gn);
 
         pane.setBounds(0, 0, 700, 400);
         
@@ -48,13 +48,15 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
     }
     
 
-    public void orderdetail(String id, String no, String foods) {
+    public void orderdetail(String id, String no, String foods,String Gi, String Gn) {
 
         Vector<OrderInfoBean> foodList;
         Vector<OrderInfoBean> gameList;
+        
         OrderInfoMgr foodMgr = new OrderInfoMgr();
-        foodList = foodMgr.orderfood();
         OrdMgr gameMgr = new OrdMgr();
+        
+        foodList = foodMgr.orderfood();
         gameList = gameMgr.ordergame();
         
         // 데이터를 담을 벡터 및 헤더 생성
@@ -125,17 +127,29 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
                             DefaultTableModel model = (DefaultTableModel) ODT.getModel();
                             // 해당 행의 상태를 "완료"로 변경
                             OrderInfoBean bean = new OrderInfoBean();
-                            bean.setFoodstate(true);
-                            bean.setFoodid(id);
-                            bean.setRoom_no(no);
-                            bean.setFoodname(foods);
                             OrderInfoMgr mgr = new OrderInfoMgr();
-                            if(mgr.update(bean)) {
-                            	
-                            
-                            model.setValueAt("완료", row, column);
+                            OrdMgr mgr1 = new OrdMgr();
+                            if(ODT.getValueAt(row,0) == "음식") {
+	                            bean.setFoodstate(true);
+	                            bean.setFoodid(id);
+	                            bean.setRoom_no(no);
+	                            bean.setFoodname(foods);
+
+	                            if(mgr.update(bean)) { 
+	                            	model.setValueAt("완료", row, column);
+	                            }
+                            }else if(ODT.getValueAt(row, 0)=="게임") {
+                            	bean.setGamestate(true);
+                            	bean.setGameid(Gi);
+                            	bean.setRoom_no(no);
+                            	bean.setGamename(Gn);
+                            	System.out.println(Gi + " " + no + " " + Gn);
+                            	if(mgr1.update(bean)) { 
+	                            	System.out.println(2);
+	                            	model.setValueAt("완료", row, column);
+	                            	System.out.println(2);
+                            	}
                             }
-                            
                         }
                     }
                 }
