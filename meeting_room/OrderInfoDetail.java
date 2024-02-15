@@ -20,16 +20,18 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
     JScrollPane pane;
     
     Container c = getContentPane();
-    
+
     public OrderInfoDetail(String no, String id, String foods) {
+
         setSize(800,400);
         setTitle(no);
         
         
         c.setLayout(null);
         
+
         orderdetail(id,no,foods);
-        
+
         pane.setBounds(0, 0, 700, 400);
         
         
@@ -45,7 +47,9 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
         
     }
     
+
     public void orderdetail(String id, String no, String foods) {
+
         Vector<OrderInfoBean> foodList;
         Vector<OrderInfoBean> gameList;
         OrderInfoMgr foodMgr = new OrderInfoMgr();

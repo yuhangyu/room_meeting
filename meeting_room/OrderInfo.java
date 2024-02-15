@@ -63,8 +63,7 @@ public class OrderInfo extends JFrame implements ActionListener{
 				 if (row != -1) { // 선택된 행이 있는지 확인
 			            TableModel tm = orderTable.getModel();
 			            String no = tm.getValueAt(row,1).toString();
-			            
-			            OrderInfoDetail OID = new OrderInfoDetail(no,id[row][0], id[row][1]);
+			            OrderInfoDetail OID = new OrderInfoDetail(no, id[row][0]);
 				 } 
 			}
 			super.mouseClicked(e);
