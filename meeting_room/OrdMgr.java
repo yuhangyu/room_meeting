@@ -43,23 +43,6 @@ public class OrdMgr {
 			
 		}finally {
 			pool.freeConnection(con, pstmt, rs);
-	
-		}try{
-			con = pool.getConnection();
-			sql = "select * from game";
-			pstmt = con.prepareStatement(sql);
-			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				OrderInfoBean bean = new OrderInfoBean();
-				bean.setGametype(rs.getString("game_type"));
-				vlist.addElement(bean);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-		}finally {
-			pool.freeConnection(con, pstmt, rs);
-	
 		}
 		return vlist;	
 

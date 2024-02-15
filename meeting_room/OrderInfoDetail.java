@@ -21,14 +21,14 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
     
     Container c = getContentPane();
     
-    public OrderInfoDetail(String no) {
+    public OrderInfoDetail(String no, String id, String foods) {
         setSize(800,400);
         setTitle(no);
         
         
         c.setLayout(null);
         
-        orderdetail();
+        orderdetail(id,no,foods);
         
         pane.setBounds(0, 0, 700, 400);
         
@@ -45,7 +45,7 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
         
     }
     
-    public void orderdetail() {
+    public void orderdetail(String id, String no, String foods) {
         Vector<OrderInfoBean> foodList;
         Vector<OrderInfoBean> gameList;
         OrderInfoMgr foodMgr = new OrderInfoMgr();
@@ -120,13 +120,24 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
                             // 테이블 모델을 가져옴
                             DefaultTableModel model = (DefaultTableModel) ODT.getModel();
                             // 해당 행의 상태를 "완료"로 변경
+                            OrderInfoBean bean = new OrderInfoBean();
+                            bean.setFoodstate(true);
+                            bean.setFoodid(id);
+                            bean.setRoom_no(no);
+                            bean.setFoodname(foods);
+                            OrderInfoMgr mgr = new OrderInfoMgr();
+                            if(mgr.update(bean)) {
+                            	
+                            
                             model.setValueAt("완료", row, column);
-              
+                            }
                             
                         }
                     }
                 }
             }
         });
-    }
+    }  
+    	
+    
 }
