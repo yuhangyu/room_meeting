@@ -23,6 +23,7 @@ public class OrderInfo extends JFrame implements ActionListener{
 	JScrollPane pane;
 	static JButton jb = new JButton(" ");
 	String [][] id;
+	String [][] conts;
 	Container c = getContentPane();
 	
 	public OrderInfo() {
@@ -63,7 +64,7 @@ public class OrderInfo extends JFrame implements ActionListener{
 				 if (row != -1) { // 선택된 행이 있는지 확인
 			            TableModel tm = orderTable.getModel();
 			            String no = tm.getValueAt(row,1).toString();
-			            OrderInfoDetail OID = new OrderInfoDetail(no, id[row][0]);
+			            OrderInfoDetail OID = new OrderInfoDetail(no, id[row][0], id[row][1], conts[row][1]);
 				 } 
 			}
 			super.mouseClicked(e);
@@ -76,7 +77,7 @@ public class OrderInfo extends JFrame implements ActionListener{
 		OrderInfoMgr mgr = new OrderInfoMgr();
 		vlist = mgr.orderfood();
 		String header[] = {"순서", "주문한 방", "주문 시간","총 금액", "주문 상태"};
-		String [][] conts = new String [vlist.size()][header.length];	
+		conts = new String [vlist.size()][header.length];	
 		id = new String [vlist.size()][header.length];	
 
 			for (int i = 0; i < vlist.size(); i++) {
