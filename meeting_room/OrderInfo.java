@@ -63,8 +63,8 @@ public class OrderInfo extends JFrame implements ActionListener{
 				 if (row != -1) { // 선택된 행이 있는지 확인
 			            TableModel tm = orderTable.getModel();
 			            String no = tm.getValueAt(row,1).toString();
-			            System.out.println(id[row][0]);
-			            OrderInfoDetail OID = new OrderInfoDetail(no);
+			            
+			            OrderInfoDetail OID = new OrderInfoDetail(no,id[row][0], id[row][1]);
 				 } 
 			}
 			super.mouseClicked(e);
@@ -88,6 +88,7 @@ public class OrderInfo extends JFrame implements ActionListener{
 				conts[i][3] = String.valueOf(bean.getFoodprice()+bean.getGameprice());
 				conts[i][4] = String.valueOf(bean.isFoodstate()? "완료" : "대기중...");
 				id[i][0] = bean.getFoodid();
+				id[i][1] = bean.getFoodname();
 			}
 		DefaultTableModel model = new DefaultTableModel(conts, header) {
 			public boolean isCellEditable(int i, int c) {return false;}
