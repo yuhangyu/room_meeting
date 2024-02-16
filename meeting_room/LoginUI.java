@@ -170,6 +170,50 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 		}
 	}
 	
+	public void run() {
+		try {
+			String host = "127.0.0.1";
+			int port = MeetingServer.PORT;
+			connect(host, port);
+			
+			while(true) {
+				String line = in.readLine();
+				if(line==null)
+					break;
+				else
+					routine(line);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void connect(String host, int port) {
+		try {
+			sock = new Socket(host, port);
+			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+			out = new PrintWriter(sock.getOutputStream(),true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void routine(String line) {
+		int idx = line.indexOf(MeetingProtocol.MODE);
+		String cmd = line.substring(0, idx);
+		String data = line.substring(idx + 1);
+		
+		if (cmd.equals(MeetingProtocol.MESSAGE)) {
+			idx = data.indexOf(';');
+			cmd = data.substring(0, idx);
+			data = data.substring(idx + 1);
+		}
+	}
+	
+	public void sendMessage(String msg) {
+		out.println(msg);
+	}
+	
 	public static void main(String[] args) {
 		LoginUI login = new LoginUI();
 	}
