@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,6 +26,7 @@ import java.util.Vector;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -37,6 +39,7 @@ import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 
 class Game {
 	String type;
@@ -181,9 +184,10 @@ public class GameOrderUI extends JFrame implements Runnable, ActionListener {
 		
 		for (int i = 0; i < vlist.size(); i++) {
 			GameBean bean = vlist.get(i);
-			String name = bean.getGname().trim();  // 음식 이름 앞뒤의 공백 제거
+			String name = bean.getGname().trim();
+			String img = "./Game/" + name + ".jpg";
 			int price = bean.getGprice();
-			games.add(new Game(bean.getGtype(), name, "이미지", price));
+			games.add(new Game(bean.getGtype(), name, img, price));
 		}
 		showGame();
 		
@@ -372,8 +376,16 @@ public class GameOrderUI extends JFrame implements Runnable, ActionListener {
 
 	        for (Game game : games) {
 	            if (game.getType().equals(gameType)) {
-	            	JButton gameButton = new JButton("<html><center><img src='" + game.getImageUrl() + "' width='100' height='100'/><br/>" + game.getName() + "<br/>" + game.getPrice() + "</center></html>");
-					gameButton.setPreferredSize(new Dimension(100, 100));
+				ImageIcon icon = new ImageIcon(game.getImageUrl());
+				Image originalImage = icon.getImage();
+				Image resizedImage = originalImage.getScaledInstance(150, 140, Image.SCALE_SMOOTH);
+				ImageIcon resizedIcon = new ImageIcon(resizedImage);
+				
+	            	JButton gameButton = new JButton("<html><center>" + game.getName() + "<br>" + game.getPrice() + "원</center></html>");
+				gameButton.setIcon(resizedIcon);
+	            	gameButton.setVerticalTextPosition(SwingConstants.BOTTOM);
+	            	gameButton.setHorizontalTextPosition(SwingConstants.CENTER);
+	            	gameButton.setPreferredSize(new Dimension(100, 100));
 					gameButton.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
@@ -516,6 +528,6 @@ public class GameOrderUI extends JFrame implements Runnable, ActionListener {
 	}
 	
 	public static void main(String[] args) {
-		
+		new GameOrderUI("R01");
 	}
 }

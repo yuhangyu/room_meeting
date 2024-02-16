@@ -160,9 +160,11 @@ public class FoodOrderUI extends JFrame implements Runnable, ActionListener {
 		
 		for (int i = 0; i < vlist.size(); i++) {
 			FoodBean bean = vlist.get(i);
-			String name = bean.getFname().trim();  // 음식 이름 앞뒤의 공백 제거
+			String name = bean.getFname().trim();
+			String img = "./Food/" + name + ".jpg";
 			int price = bean.getFprice();
-			foods.add(new Food(bean.getFtype(), name, "이미지", price));
+			//String img = "./Food/\" + bean.getFname().trim() + \".jpg";
+			foods.add(new Food(bean.getFtype(), name, img, price));
 		}
 		showFood();
 		
@@ -356,7 +358,17 @@ public class FoodOrderUI extends JFrame implements Runnable, ActionListener {
 		
 			for (final Food food : foods) {
 				if (food.getType().equals(foodType)) {
-					JButton foodButton = new JButton("<html><center><img src='" + food.getImageUrl() + "' width='100' height='100'/><br/>" + food.getName() + "<br/>" + food.getPrice() + "</center></html>");
+					ImageIcon icon = new ImageIcon(food.getImageUrl());
+					Image originalImage = icon.getImage();
+					Image resizedImage = originalImage.getScaledInstance(150, 140, Image.SCALE_SMOOTH);
+					ImageIcon resizedIcon = new ImageIcon(resizedImage);
+					
+					JButton foodButton = new JButton("<html><center>" + food.getName() + "<br>" + food.getPrice() + "원</center></html>");
+					foodButton.setIcon(resizedIcon);
+					
+					foodButton.setVerticalTextPosition(SwingConstants.BOTTOM);
+					foodButton.setHorizontalTextPosition(SwingConstants.CENTER);
+					
 					foodButton.setPreferredSize(new Dimension(100, 100));  //생성된 버튼의 크기 고정
 					foodButton.addActionListener(new ActionListener() {
 						@Override
@@ -500,6 +512,6 @@ public class FoodOrderUI extends JFrame implements Runnable, ActionListener {
 	}
 	
 	public static void main(String[] args) {
-		
+		new FoodOrderUI("R01");
 	}
 }
