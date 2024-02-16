@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 public class OrderInfo extends JFrame implements ActionListener{
-	JTable orderTable;
+	static JTable orderTable;
 	JScrollPane pane;
 	static JButton jb = new JButton(" ");
 	String [][] id;
@@ -90,7 +90,7 @@ public class OrderInfo extends JFrame implements ActionListener{
 				conts[i][1] = bean.getOrder_room();
 				conts[i][2] = bean.getOrder_id();
 				conts[i][3] = bean.getOrder_time();
-				conts[i][4] = bean.getOrder_total();
+				conts[i][4] = String.valueOf(bean.getOrder_total());
 				conts[i][5] = String.valueOf(bean.isOrder_state()? "완료" : "대기중...");
 				
 			

@@ -60,7 +60,7 @@ public class OrderInfoMgr {
 		try {
 			con = pool.getConnection();
 			sql = "update food_sales set food_state=? where food_room=? and food_id=? and foods=?";
-			pstmt = con.prepareStatement(sql);
+			pstmt = con.prepareStatement(sql);	
 			pstmt.setBoolean(1, bean.isFoodstate());
 			pstmt.setString(2, bean.getRoom_no());
 			pstmt.setString(3, bean.getFoodid());

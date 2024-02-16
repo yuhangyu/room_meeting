@@ -35,7 +35,7 @@ public class OrderRoomUI extends JFrame {
 		this.info = info;
 		
 		setSize(1000,440);
-		setTitle("예약 정보 관리");
+		setTitle("주문 방 정보");
 		
 		c.setLayout(null);
 		
@@ -62,9 +62,9 @@ public class OrderRoomUI extends JFrame {
 				int row = reservetable.getSelectedRow();
 				TableModel tm = reservetable.getModel();
 				if (info.equals("음식")) {
-					FoodOrderUI fui = new FoodOrderUI();
+					FoodOrderUI fui = new FoodOrderUI(String.valueOf(tm.getValueAt(row, 4)));
 				} else if (info.equals("게임")) {
-					GameOrderUI gui = new GameOrderUI();
+					GameOrderUI gui = new GameOrderUI(String.valueOf(tm.getValueAt(row, 4)));
 				}
 			}
 			super.mouseClicked(e);

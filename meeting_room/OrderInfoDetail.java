@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.Vector;
 
 import javax.swing.JFrame;
@@ -18,7 +20,6 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
     
     JTable ODT;
     JScrollPane pane;
-    
     
     Container c = getContentPane();
 
@@ -133,7 +134,9 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
                             // 해당 행의 상태를 "완료"로 변경
                             OrderInfoBean bean = new OrderInfoBean();
                             OrderInfoMgr mgr = new OrderInfoMgr();
+                            
                             OrdMgr mgr1 = new OrdMgr();
+                            
                             String asdf = (String) ODT.getValueAt(row, 2);
                             if (asdf.charAt(0) == 'F') {
 	                            bean.setFoodstate(true);
@@ -142,7 +145,24 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
 	                            bean.setFoodname(asdf);
 	                            if(mgr.update(bean)) { 
 	                            	model.setValueAt("완료", row, column);
+	                            	System.out.println(data.size());
+	                            	for(int i = 0; i < data.size();i++) {
+	                                    String fost = (String) ODT.getValueAt(i, column);
+	                            		if(fost != "완료") return ;
+
+	                            	}
+	                            	OrderBean orderbean = new OrderBean();
+	                            	orderbean.setOrder_state(true);
+	                            	orderbean.setOrder_id(id);
+	                            	orderbean.setOrder_room(no);
+	                            	orderbean.setOrder_time(time);
+	                            	OrderMgr mgr2 = new OrderMgr();
+	                            	if(mgr2.update(orderbean)) {
+	                                    DefaultTableModel model1 = (DefaultTableModel) OrderInfo.orderTable.getModel();
+	                                    model1.setValueAt("완료", row, 6);
+	                            	}
 	                            }
+	                            
                             }else if (asdf.charAt(0) == 'G') {
                             	bean.setGamestate(true);
                             	bean.setRoom_no(no);

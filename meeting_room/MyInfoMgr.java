@@ -272,6 +272,40 @@ public class MyInfoMgr {
 		return vlist;
 	}
 	
+	//
+	public TotalBean useAll(String room, String id, String day) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		TotalBean bean = new TotalBean();
+		try {
+			con = pool.getConnection();
+			sql = "select * from `use` where room_num=? and use_id=? and use_day=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, room);
+			pstmt.setString(2, id);
+			pstmt.setString(3, day);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				bean.setID(id);
+				bean.setRoom(room);
+				bean.setDay(rs.getString("use_day"));
+				bean.setIntime(rs.getString("in_time"));
+				bean.setOuttime(rs.getString("out_time"));
+				bean.setFood_total(rs.getInt("food_total"));
+				bean.setGame_total(rs.getInt("game_total"));
+				bean.setRoom_total(rs.getInt("room_total"));
+				bean.setTotal(rs.getInt("use_total"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return bean;
+	}
+	
 	//한개의 레코드: select
 	public MyInfoBean select(String id) {
 		Connection con = null;
@@ -555,6 +589,28 @@ public class MyInfoMgr {
 		return flag;
 	}
 	
+	//토탈
+	public boolean order(OrderBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		try {
+			con = pool.getConnection();
+			sql = "insert into `order` values (NULL, ?, ?, now(), ?, FALSE)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, bean.getOrder_id());
+			pstmt.setString(2,  bean.getOrder_room());
+			pstmt.setInt(3, bean.getOrder_total());
+			if (pstmt.executeUpdate() == 1) flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
+	
 	//게임 select
 	public TotalBean selecttotal(String tid) {
 		Connection con = null;
@@ -589,14 +645,14 @@ public class MyInfoMgr {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "update `use` set food_total=? and game_total=? and room_total=? use_total=? where use_id=? and room_num=?";
+			sql = "update `use` set food_total=?, game_total=?, room_total=?, use_total=? where room_num=? and use_id=?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, bean.getFood_total());
 			pstmt.setInt(2,  bean.getGame_total());
 			pstmt.setInt(3,  bean.getRoom_total());
 			pstmt.setInt(4,  bean.getTotal());
-			pstmt.setString(5, bean.getID());
-			pstmt.setString(6,  bean.getRoom());
+			pstmt.setString(5,  bean.getRoom());
+			pstmt.setString(6, bean.getID());
 			if (pstmt.executeUpdate() == 1) flag = true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -636,4 +692,61 @@ public class MyInfoMgr {
 		}
 		return flag;
 	}
+	
+	//음식 select
+	public Vector<OrderInfoBean> orderfood(String room, String food) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<OrderInfoBean> vlist = new Vector<OrderInfoBean>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from food_sales where food_room=? and foods=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, room);
+			pstmt.setString(2, food);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				OrderInfoBean bean = new OrderInfoBean();
+				bean.setFoodcount(rs.getInt("food_count"));
+				bean.setFoodprice(rs.getInt("sales_amount"));
+				vlist.addElement(bean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return vlist;
+	}
+	
+	//게임 select
+	public Vector<OrderInfoBean> ordergame(String room, String game) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<OrderInfoBean> vlist = new Vector<OrderInfoBean>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from game_sales where game_room=? and games=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, room);
+			pstmt.setString(2, game);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				OrderInfoBean bean = new OrderInfoBean();
+				bean.setGamecount(rs.getInt("game_count"));
+				bean.setGameprice(rs.getInt("sales_amount"));
+				vlist.addElement(bean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return vlist;
+	}
 }
+

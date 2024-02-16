@@ -12,7 +12,7 @@ public class MeetingProtocol {
 	
 	//(C->S) CHAT:받는아이디;메세지 ex)CHAT:bbb;밥먹자
 	//(S->C) CHAT:보내는아이디;메세지 ex)CHAT:aaa;밥먹자
-	public static final String CHAT = "CHAT";
+	public static final String ORDER = "ORDER";
 	
 	//(C->S) CHATALL:메세지
 	//(S->C) CHATALL:[보내는아이디]메세지

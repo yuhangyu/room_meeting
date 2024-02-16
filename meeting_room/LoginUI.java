@@ -186,7 +186,7 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 	
 	public void run() {
 		try {
-			String host = "113.198.238.105";
+			String host = "127.0.0.1";
 			int port = MeetingServer.PORT;
 			connect(host, port);
 			
@@ -225,7 +225,8 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 	}
 	
 	public void sendMessage(String msg) {
-		out.println(msg);
+		if (out != null)
+			out.println(msg);
 	}
 	
 	public static void main(String[] args) {
