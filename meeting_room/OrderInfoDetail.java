@@ -22,14 +22,14 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
     
     Container c = getContentPane();
 
-    public OrderInfoDetail(String no, String id, String time) {
+    public OrderInfoDetail(String no, String id, String time, int num) {
 
         setSize(800,400);
         setTitle(no);
         
         
         c.setLayout(null);
-        orderdetail(no,id, time);
+        orderdetail(no,id, time, num);
 
         pane.setBounds(0, 0, 700, 400);
         
@@ -46,7 +46,7 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
         
     }
     
-    public void orderdetail(String no, String id, String time) {
+    public void orderdetail(String no, String id, String time, int num) {
 
         Vector<OrderInfoBean> foodList;
         Vector<OrderInfoBean> gameList;
@@ -130,26 +130,58 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
                         if (selectedStatus.equals("준비중...")) {
                             // 테이블 모델을 가져옴
                             DefaultTableModel model = (DefaultTableModel) ODT.getModel();
-                            // 해당 행의 상태를 "완료"로 변경
                             OrderInfoBean bean = new OrderInfoBean();
                             OrderInfoMgr mgr = new OrderInfoMgr();
+                            
                             OrdMgr mgr1 = new OrdMgr();
+                            
                             String asdf = (String) ODT.getValueAt(row, 2);
                             if (asdf.charAt(0) == 'F') {
 	                            bean.setFoodstate(true);
 	                            bean.setRoom_no(no);
 	                            bean.setFoodid(id);
 	                            bean.setFoodname(asdf);
+	                            bean.setOrdertime(time);
 	                            if(mgr.update(bean)) { 
 	                            	model.setValueAt("완료", row, column);
+	                            	for(int i = 0; i < data.size();i++) {
+	                                    String fost = (String) ODT.getValueAt(i, column);
+	                            		if(fost != "완료") return ;
+	                            	}
+	                            	OrderBean orderbean = new OrderBean();
+	                            	orderbean.setOrder_state(true);
+	                            	orderbean.setOrder_id(id);
+	                            	orderbean.setOrder_room(no);
+	                            	orderbean.setOrder_time(time);
+	                            	OrderMgr mgr2 = new OrderMgr();
+	                            	if(mgr2.update(orderbean)) {
+	                                    DefaultTableModel model1 = (DefaultTableModel) OrderInfo.orderTable.getModel();
+	                                    model1.setValueAt("완료", num, column);
+	                            	}
 	                            }
+	                            
                             }else if (asdf.charAt(0) == 'G') {
                             	bean.setGamestate(true);
                             	bean.setRoom_no(no);
 	                            bean.setGameid(id);
 	                            bean.setGamename(asdf);
+	                            bean.setOrdertime(time);
                             	if(mgr1.update(bean)) { 
 	                            	model.setValueAt("완료", row, column);
+	                            	for(int i = 0; i < data.size();i++) {
+	                                    String fost = (String) ODT.getValueAt(i, column);
+	                            		if(fost != "완료") return ;
+	                            	}
+	                            	OrderBean orderbean = new OrderBean();
+	                            	orderbean.setOrder_state(true);
+	                            	orderbean.setOrder_id(id);
+	                            	orderbean.setOrder_room(no);
+	                            	orderbean.setOrder_time(time);
+	                            	OrderMgr mgr2 = new OrderMgr();
+	                            	if(mgr2.update(orderbean)) {
+	                                    DefaultTableModel model1 = (DefaultTableModel) OrderInfo.orderTable.getModel();
+	                                    model1.setValueAt("완료", num, column);
+	                            	}
                             	}
                             }
                         }

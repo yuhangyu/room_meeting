@@ -5,6 +5,10 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
@@ -24,15 +28,20 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 
-public class UsageHistoryUI extends JFrame implements ActionListener {
-	JLabel usage_history_lb = new JLabel("이용 내역");
+public class SalesDetailUI extends JFrame implements ActionListener {
+	JLabel sales_history_lb = new JLabel("판매 내역");
 	JLabel start_date_lb = new JLabel("검색 시작일");
 	JLabel end_date_lb = new JLabel("검색 종료일");
 	JButton ok_btn = new JButton("확인");
 	JButton search_btn = new JButton("검색");
-	JTable historyTable;
-	JScrollPane historyPane;
-
+	String room;
+	
+	JTable foodTable;
+	JScrollPane foodPane;
+	
+	JTable gameTable;
+	JScrollPane gamePane;
+	
 	// 현재 날짜를 얻어옴
 	Date currentDate = new Date();
 	Calendar calendar = Calendar.getInstance();
@@ -59,29 +68,32 @@ public class UsageHistoryUI extends JFrame implements ActionListener {
 	
 	SpinnerNumberModel spinnerNumberModel6 = new SpinnerNumberModel(currentDay, 1, 31, 1);
 	JSpinner DaySpinner2 = new JSpinner(spinnerNumberModel6);
-
-	UsageHistoryUI(){
+	
+	SalesDetailUI(String room) {
+		this.room = room;
+		
 		//버튼 이벤트 추가
 		ok_btn.addActionListener(this);
 		search_btn.addActionListener(this);
 		
-		setTitle("내 정보");
+		setTitle(room + " - 판매 정보");
 		setSize(1000, 500);
 		
 		//컨텐츠 패널의 객체 메소드 호출
 		Container c = getContentPane();
 		c.setLayout(null); //컨텐츠 패널 초기
-
+	
 		calendar.setTime(currentDate);
 		
-		usage_history_lb.setBounds(20,10,200,40);
+		sales_history_lb.setBounds(20,10,200,40);
 		start_date_lb.setBounds(40, 50, 150, 50);
 		end_date_lb.setBounds(420, 50, 150, 50);
 		ok_btn.setBounds(800, 60, 140, 70);
 		search_btn.setBounds(640, 60, 140, 70);
 		
-		viewhistoryPane(); // 테이블 활성화 메서드 
-		historyPane.setBounds(40, 150, 905, 270); 
+		viewSalesPane(); // 테이블 활성화 메서드 
+		foodPane.setBounds(40, 150, 430, 270); 
+		gamePane.setBounds(500, 150, 430, 270);
 
 		YearSpinner1.setBounds(40, 100, 50, 30);
 		YearSpinner2.setBounds(420, 100, 50, 30);
@@ -93,11 +105,11 @@ public class UsageHistoryUI extends JFrame implements ActionListener {
 		Font font = new Font("Dialog", Font.BOLD, 27);
 		Font font1 = new Font("Dialog", Font.BOLD, 18);
 
-		usage_history_lb.setFont(font);
+		sales_history_lb.setFont(font);
 		start_date_lb.setFont(font1);
 		end_date_lb.setFont(font1);
 		
-		c.add(usage_history_lb);
+		c.add(sales_history_lb);
 		c.add(start_date_lb);
 		c.add(end_date_lb);
 		c.add(YearSpinner1);
@@ -108,8 +120,9 @@ public class UsageHistoryUI extends JFrame implements ActionListener {
 		c.add(DaySpinner2);
 		c.add(ok_btn);
 		c.add(search_btn);
-		c.add(historyPane);
-			
+		c.add(foodPane);
+		c.add(gamePane);
+		
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -118,80 +131,139 @@ public class UsageHistoryUI extends JFrame implements ActionListener {
 		
 		// JSpinner에 사용되는 DefaultFormatter 가져오기
 		JFormattedTextField.AbstractFormatter formatter = ((JSpinner.DefaultEditor) YearSpinner1.getEditor()).getTextField().getFormatter();
-		
+				
 		// AllowsInvalid를 false로 설정하여 유효하지 않은 값을 허용하지 않도록 함
 		if (formatter instanceof DefaultFormatter) {
 			((DefaultFormatter) formatter).setAllowsInvalid(false);
 		}
-
+		
 		// JSpinner의 에디터를 변경하여 쉼표가 없는 형식으로 표시되도록 함
 		JSpinner.NumberEditor editor = new JSpinner.NumberEditor(YearSpinner1, "####");
 		YearSpinner1.setEditor(editor);
-		
+				
 		JSpinner.NumberEditor editor2 = new JSpinner.NumberEditor(YearSpinner2, "####");
 		YearSpinner2.setEditor(editor2);
+			
 	}
 	
-	public void viewhistoryPane() {
-		Vector<ReserveBean> vlist;
-		MyInfoMgr mgr;
-		
-		mgr = new MyInfoMgr();
-		vlist = mgr.reserveUser(LoginUI.ID);
-		
+	public void viewSalesPane() {
+		MyInfoMgr mgr = new MyInfoMgr();
+
+		Vector<FoodBean> flist;
+		Vector<OrderInfoBean> fslist;
+		flist = mgr.foodAll();
+
 		// 데이터 및 컬럼명 배열 정의
-		String[] columnNames = {"순번", "ID", "이름", "전화번호", "이용 룸", "예약 날짜", "이용 시간", "이용 인원"};
-		String[][] data = new String[vlist.size()][columnNames.length];
-		
-		//순번, 아이디, 이름, 전화번호, 현재잔액 값 conts 배열에 저장
-		for(int i = 0; i < vlist.size(); i++) {
-			ReserveBean bean = vlist.get(i);
+		String[] columnNames = {"순번", "음식", "수량", "총 가격"};
+		String[][] data = new String[flist.size()][columnNames.length];
+
+		for(int i = 0; i < flist.size(); i++) {
+			FoodBean bean = flist.get(i);
+			int count = 0;
+			int amount = 0;
+			
+			fslist = mgr.orderfood(room, bean.getFood(), 1);
+			for (int j = 0; j < fslist.size(); j++) {
+				OrderInfoBean bean1 = fslist.get(j);
+				count += Integer.valueOf(bean1.getFoodcount());
+				amount += Integer.valueOf(bean1.getFoodprice());
+			}
+
 			data[i][0] = String.valueOf(i + 1);
-			data[i][1] = bean.getResvid();
-			data[i][2] = bean.getResvname();
-			data[i][3] = bean.getResvphone();
-			data[i][4] = bean.getResvroom();
-			data[i][5] = bean.getResvtime();
-			data[i][6] = String.valueOf(bean.getResvusetime());
-			data[i][7] = String.valueOf(bean.getResvperson());
+			data[i][1] = bean.getFname();
+			data[i][2] = String.valueOf(count);
+			data[i][3] = String.valueOf(amount);
 		}
 
+		Vector<GameBean> glist;
+		Vector<OrderInfoBean> gslist;
+		glist = mgr.gameAll();
+		
+		String[] columnNames1 = {"순번", "보드게임", "수량", "총 가격"};
+		String[][] data1 = new String[glist.size()][columnNames1.length];
+		
+		for(int i = 0; i < glist.size(); i++) {
+			GameBean bean = glist.get(i);
+			int count = 0;
+			int amount = 0;
+			
+			gslist = mgr.ordergame(room, bean.getGame(), 1);
+			for (int j = 0; j < gslist.size(); j++) {
+				OrderInfoBean bean1 = gslist.get(j);
+				count += Integer.valueOf(bean1.getGamecount());
+				amount += Integer.valueOf(bean1.getGameprice());
+			}
+			
+			data1[i][0] = String.valueOf(i + 1);
+			data1[i][1] = bean.getGname();
+			data1[i][2] = String.valueOf(count);
+			data1[i][3] = String.valueOf(amount);
+		}
+		
 		// DefaultTableModel을 사용하여 JTable에 데이터 설정
 		//테이블 직접 편집 불가능
 		DefaultTableModel model = new DefaultTableModel(data, columnNames) {
 			public boolean isCellEditable(int i, int c){ return false; }
 		};
-		historyTable = new JTable(model);
-		historyPane = new JScrollPane(historyTable);
 		
-		history();
+		DefaultTableModel model1 = new DefaultTableModel(data1, columnNames1) {
+			public boolean isCellEditable(int i, int c){ return false; }
+		};
+		
+		
+		foodTable = new JTable(model);
+		foodPane = new JScrollPane(foodTable);
+		
+		gameTable = new JTable(model1);
+		gamePane = new JScrollPane(gameTable);
+				
+		sales();
 	}
 	
-	public void history() {
+	public void sales() {
 		// 수평 스크롤바 비활성화
-		historyPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-	
+		foodPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		gamePane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);	
+			
 		//컬럼 사이즈 지정
-		historyTable.getColumnModel().getColumn(0).setPreferredWidth(30);
-		historyTable.getColumnModel().getColumn(1).setPreferredWidth(50);
-		historyTable.getColumnModel().getColumn(2).setPreferredWidth(50);
-		historyTable.getColumnModel().getColumn(3).setPreferredWidth(140);
-		historyTable.getColumnModel().getColumn(4).setPreferredWidth(50);
-		historyTable.getColumnModel().getColumn(5).setPreferredWidth(210);
-		historyTable.getColumnModel().getColumn(6).setPreferredWidth(50);
-		historyTable.getColumnModel().getColumn(7).setPreferredWidth(50);
-		historyTable.setRowHeight(20);
+		foodTable.getColumnModel().getColumn(0).setPreferredWidth(70);
+		foodTable.getColumnModel().getColumn(1).setPreferredWidth(140);
+		foodTable.getColumnModel().getColumn(2).setPreferredWidth(50);
+		foodTable.getColumnModel().getColumn(3).setPreferredWidth(120);
+		
+		foodTable.setRowHeight(20);
+
+		gameTable.getColumnModel().getColumn(0).setPreferredWidth(70);
+		gameTable.getColumnModel().getColumn(1).setPreferredWidth(140);
+		gameTable.getColumnModel().getColumn(2).setPreferredWidth(50);
+		gameTable.getColumnModel().getColumn(3).setPreferredWidth(120);
+		
+		gameTable.setRowHeight(20);
+		
+				
+		//크기 조절 불가능
+		foodTable.getTableHeader().setResizingAllowed(false);
+		//위치 조정 불가능
+		foodTable.getTableHeader().setReorderingAllowed(false);
 		
 		//크기 조절 불가능
-		historyTable.getTableHeader().setResizingAllowed(false);
+		gameTable.getTableHeader().setResizingAllowed(false);
 		//위치 조정 불가능
-		historyTable.getTableHeader().setReorderingAllowed(false);
-	
+		gameTable.getTableHeader().setReorderingAllowed(false);
+		
+			
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-		
-		for (int i = 0; i < historyTable.getColumnCount(); i++) {
-			historyTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+				
+		for (int i = 0; i < foodTable.getColumnCount(); i++) {
+			foodTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+		}
+				
+		DefaultTableCellRenderer centerRenderer1 = new DefaultTableCellRenderer();
+		centerRenderer1.setHorizontalAlignment(JLabel.CENTER);
+					
+		for (int i = 0; i < gameTable.getColumnCount(); i++) {
+			gameTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer1);	
 		}
 	}
 	
@@ -202,11 +274,13 @@ public class UsageHistoryUI extends JFrame implements ActionListener {
 		if (obj.equals(ok_btn)) {
 			dispose();
 		} else if (obj.equals(search_btn)) {
-			reservesearch();
+			salessearch();
 		}
+		
+		
 	}
-
-	public void reservesearch() {
+	
+	public void salessearch() {
 		String syear = String.valueOf(YearSpinner1.getValue());
 		String eyear = String.valueOf(YearSpinner2.getValue());
 		String smonth = String.valueOf(MonthSpinner1.getValue());
@@ -240,32 +314,83 @@ public class UsageHistoryUI extends JFrame implements ActionListener {
 		if (eday.length() == 1) eday = "0" + eday;
 		String startday = syear + "-" + smonth + "-" + sday + " 00:00:00";
 		String endday = eyear + "-" + emonth + "-" + eday + " 23:59:59";
-		
-		Vector<ReserveBean> vlist;
+
 		MyInfoMgr mgr = new MyInfoMgr();
-		vlist = mgr.reserveUserDetail(LoginUI.ID, startday, endday);
 		
+		Vector<OrderInfoBean> vlist;
+		Vector<FoodBean> flist;
+		Vector<OrderInfoBean> fslist;
+		flist = mgr.foodAll();
+
 		// 데이터 및 컬럼명 배열 정의
-		String[] columnNames = {"순번", "ID", "이름", "전화번호", "이용 룸", "예약 날짜", "이용 시간", "이용 인원"};
-		String[][] data = new String[vlist.size()][columnNames.length];
-		
-		for (int i = 0; i < vlist.size(); i++) {
-			ReserveBean bean = vlist.get(i);
+		String[] columnNames = {"순번", "음식", "수량", "총 가격"};
+		String[][] data = new String[flist.size()][columnNames.length];
+
+		for(int i = 0; i < flist.size(); i++) {
+			FoodBean bean = flist.get(i);
+			int count = 0;
+			int amount = 0;
+			
+			fslist = mgr.orderfood(room, bean.getFood(), 0);
+			for (int j = 0; j < fslist.size(); j++) {
+				OrderInfoBean bean1 = fslist.get(j);
+
+				vlist = mgr.salesFoodDetail(room, bean1.getOrdertime(), bean.getFood(), startday, endday);
+				
+				for (int k = 0; k < vlist.size(); k++) {
+					OrderInfoBean bean2 = vlist.get(k);
+					count += Integer.valueOf(bean2.getFoodcount());
+					amount += Integer.valueOf(bean2.getFoodprice());
+				}
+			}
+			
 			data[i][0] = String.valueOf(i + 1);
-			data[i][1] = bean.getResvid();
-			data[i][2] = bean.getResvname();
-			data[i][3] = bean.getResvphone();
-			data[i][4] = bean.getResvroom();
-			data[i][5] = bean.getResvtime();
-			data[i][6] = String.valueOf(bean.getResvusetime());
-			data[i][7] = String.valueOf(bean.getResvperson());
+			data[i][1] = bean.getFname();
+			data[i][2] = String.valueOf(count);
+			data[i][3] = String.valueOf(amount);
+		}
+		
+		Vector<GameBean> glist;
+		Vector<OrderInfoBean> gslist;
+		glist = mgr.gameAll();
+		
+		String[] columnNames1 = {"순번", "보드게임", "수량", "총 가격"};
+		String[][] data1 = new String[glist.size()][columnNames1.length];
+		
+		for(int i = 0; i < glist.size(); i++) {
+			GameBean bean = glist.get(i);
+			int count = 0;
+			int amount = 0;
+			
+			gslist = mgr.ordergame(room, bean.getGame(), 0);
+			for (int j = 0; j < gslist.size(); j++) {
+				OrderInfoBean bean1 = gslist.get(j);
+				vlist = mgr.salesGameDetail(room, bean1.getOrdertime(), bean.getGame(), startday, endday);
+				
+				for (int k = 0; k < vlist.size(); k++) {
+					OrderInfoBean bean2 = vlist.get(k);
+					count += Integer.valueOf(bean2.getGamecount());
+					amount += Integer.valueOf(bean2.getGameprice());
+				}
+			}
+			
+			data1[i][0] = String.valueOf(i + 1);
+			data1[i][1] = bean.getGname();
+			data1[i][2] = String.valueOf(count);
+			data1[i][3] = String.valueOf(amount);
 		}
 		
 		DefaultTableModel model = new DefaultTableModel(data, columnNames) {
 			public boolean isCellEditable(int i, int c){ return false; }
 		};
-		historyTable.setModel(model);
-		history();
+		foodTable.setModel(model);
+		
+		DefaultTableModel model1 = new DefaultTableModel(data1, columnNames1) {
+			public boolean isCellEditable(int i, int c){ return false; }
+		};
+		gameTable.setModel(model1);
+		
+		sales();
 	}
 	
 	public void errormsg() {
@@ -279,6 +404,6 @@ public class UsageHistoryUI extends JFrame implements ActionListener {
 	}
 	
 	public static void main(String[] args) {
-		new UsageHistoryUI();
+		new SalesUI();
 	}
 }

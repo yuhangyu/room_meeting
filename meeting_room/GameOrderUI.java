@@ -5,29 +5,41 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import javax.net.ssl.SSLContext;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 
 class Game {
 	String type;
@@ -45,10 +57,15 @@ class Game {
 	String getType() { return type; }
 	String getName() { return name; }
 	String getImageUrl() { return imageUrl; }
-	int getPrice() { return price; }
+	 int getPrice() { return price; }
 }
 
-public class GameOrderUI extends JFrame {
+public class GameOrderUI extends JFrame implements Runnable, ActionListener {
+	
+	Socket sock;
+	BufferedReader in;
+	PrintWriter out;
+	
 	JPanel panel = new JPanel(new BorderLayout());
 	JLabel totalLabel = new JLabel("총 주문 금액: 0");
 	//상단 카테고리 표시
@@ -63,14 +80,59 @@ public class GameOrderUI extends JFrame {
 	JScrollPane cartScrollPane = new JScrollPane(cart);
 	//게임 리스트 생성
 	List<Game> games = new ArrayList<>();
-	
+	JButton purchaseButton = new JButton("주문하기");
 	JFrame gameDetail;
+	String room;
 	
-	public GameOrderUI() {
+	public void updateTotalPrice() {
+	    int total = 0;
+	    for (int i = 0; i < cartList.size(); i++) {
+	        String item = cartList.getElementAt(i);
+	        String[] split = item.split("\\s+(?=x)");
+	        String gameInfo = split[0].trim();  // "호텔의 제왕 - 2000"
+	        int quantity = split.length == 2 ? Integer.parseInt(split[1].trim().replaceAll("[^0-9]", "")) : 1;
+	        String gameName = gameInfo.replaceAll("\\s+-.*", "").trim();
+	        int price = 0;
+	        for (Game game : games) {
+	            if (game.getName().equals(gameName)) {
+	                price = game.getPrice();
+	                break;
+	            }
+	        }
+	        total += price * quantity;
+	    }
+	    totalLabel.setText("총 주문 금액: " + total + "원");
+	}
+
+	       
+	 
+	 
+
+	
+	public GameOrderUI(String room) {
+		this.room = room;
 		setTitle("게임 메뉴");
 		setSize(1000, 800);
 		setLocationRelativeTo(this);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+		cart.setCellRenderer(new CartItemRenderer());
+		
+		cart.setFixedCellHeight(50); // Adjust the value as needed
+
+		cart.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selectedIndex = cart.locationToIndex(e.getPoint());
+                if (selectedIndex != -1) {
+                    Rectangle bounds = cart.getCellBounds(selectedIndex, selectedIndex);
+                    if (bounds != null && e.getX() >= bounds.width - 80) { // Adjust the value as needed
+                        cartList.remove(selectedIndex);
+                        updateTotalPrice();
+                    }
+                }
+            }
+        });
 		
 		//창을 X 를 눌러서 닫을 때
 		this.addWindowListener(new WindowAdapter() {
@@ -81,6 +143,40 @@ public class GameOrderUI extends JFrame {
 			}
 		});
 		
+		cart.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseClicked(MouseEvent e) {
+		        if (e.getClickCount() == 2) {
+		            int index = cart.locationToIndex(e.getPoint());
+		            if (index >= 0) {
+		                String item = cartList.getElementAt(index);
+		                String[] split = item.split("x");
+		                int oldQuantity = 1;
+		                if (split.length == 2) {
+		                    try {
+		                        oldQuantity = Integer.parseInt(split[1].trim().replaceAll("[^0-9]", ""));
+		                    } catch (NumberFormatException ex) {
+		                        // Handle the exception
+		                    }
+		                }
+
+		                SpinnerNumberModel model = new SpinnerNumberModel(oldQuantity, 1, 10, 1);
+		                JSpinner spinner = new JSpinner(model);
+		                JOptionPane.showMessageDialog(null, spinner, "수량을 입력하세요", JOptionPane.QUESTION_MESSAGE);
+		                try {
+		                    int newQuantity = (Integer) spinner.getValue();
+		                    cartList.setElementAt(split[0].trim() + " x" + newQuantity, index);
+		                    
+		                  
+		                    updateTotalPrice();
+		                } catch (NumberFormatException ex) {
+		                    JOptionPane.showMessageDialog(null, "유효한 수량을 입력하세요", "오류", JOptionPane.ERROR_MESSAGE);
+		                }
+		            }
+		        }
+		    }
+		});
+		
 		//게임 데이터 생성
 		Vector<GameBean> vlist;
 		MyInfoMgr mgr = new MyInfoMgr();
@@ -88,7 +184,10 @@ public class GameOrderUI extends JFrame {
 		
 		for (int i = 0; i < vlist.size(); i++) {
 			GameBean bean = vlist.get(i);
-			games.add(new Game(bean.getGtype(), bean.getGname(), "이미지", bean.getGprice()));
+			String name = bean.getGname().trim();
+			String img = "./Game/" + name + ".jpg";
+			int price = bean.getGprice();
+			games.add(new Game(bean.getGtype(), name, img, price));
 		}
 		showGame();
 		
@@ -132,94 +231,141 @@ public class GameOrderUI extends JFrame {
 		JPanel rightPanel = new JPanel(new BorderLayout());
 		rightPanel.add(cartScrollPane, BorderLayout.CENTER);
 
-		JPanel buttonPanel = new JPanel(new GridLayout(0, 2));
+		JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
 
-		//장바구니에 추가된 게임을 취소하는 버튼 생성
-		JButton cancelButton = new JButton("취소");
-		cancelButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (cart.getSelectedIndex() != -1) {
-					//선택한 항목의 가격과 수량을 가져옴
-					String selected = cartList.getElementAt(cart.getSelectedIndex());
-					String[] split = selected.split(" ");
-					int price = 0;
-					for (int i = split.length - 1; i >= 0; i--) {
-						try {
-							price = Integer.parseInt(split[i]);
-							break;
-						} catch (NumberFormatException ex) {
-							//숫자가 아닌 문자열을 만나면 무시하고 계속 진행
-						}
-					}
-					int quantity = split[split.length - 1].startsWith("x") ? Integer.parseInt(split[split.length - 1].substring(1)) : 1;
+		// 전체 취소 버튼의 이벤트 핸들러
+				JButton cancelButton = new JButton("전체 취소");
+				cancelButton.addActionListener(new ActionListener() {
+				    @Override
+				    public void actionPerformed(ActionEvent e) {
+				        // 장바구니 내 모든 항목 삭제
+				        cartList.clear(); 
+				        // 총 주문 금액 업데이트
+				        totalLabel.setText("총 주문 금액: 0");
+				    }
+				});
+				buttonPanel.add(cancelButton);
+		
+				//총 주문 금액 표시
+				JPanel totalPanel = new JPanel(new BorderLayout());
+				totalPanel.add(totalLabel, BorderLayout.NORTH);
+				
+				//주문 요청사항 입력 패널
+				JPanel requestPanel = new JPanel();
+				JLabel requestLabel = new JLabel("주문 요청사항: ");
+				JTextField requestField = new JTextField(20);
+				requestField.setPreferredSize(new Dimension(200, 40));
+				requestPanel.add(requestLabel);
+				requestPanel.add(requestField);
+				totalPanel.add(requestPanel, BorderLayout.CENTER);
+				
+				rightPanel.add(totalPanel, BorderLayout.NORTH);
+				rightPanel.add(buttonPanel, BorderLayout.SOUTH);
+				
+				panel.add(rightPanel, BorderLayout.EAST);
+		
 
-					cartList.remove(cart.getSelectedIndex());
-					
-					int total = Integer.parseInt(totalLabel.getText().split(": ")[1]);
-					totalLabel.setText("총 주문 금액: " + (total - price * quantity));
-				}
-			}
-		});
-		buttonPanel.add(cancelButton);
-		
-		//총 주문 금액 표시
-		JPanel totalPanel = new JPanel(new BorderLayout());
-		totalPanel.add(totalLabel, BorderLayout.CENTER);
-		
-		//주문 요청사항 입력 패널
-		JPanel requestPanel = new JPanel();
-		rightPanel.setPreferredSize(new Dimension(225, 800)); // 원하는 크기로 설정
+		purchaseButton.addActionListener(this);
 
-		totalPanel.add(requestPanel, BorderLayout.SOUTH);
-		rightPanel.add(totalPanel, BorderLayout.NORTH);
-		rightPanel.add(buttonPanel, BorderLayout.SOUTH);
-		panel.add(rightPanel, BorderLayout.EAST);
-		
-		JButton purchaseButton = new JButton("주문하기");
-		purchaseButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (cartList.isEmpty()) {
-					JOptionPane.showMessageDialog(null, "장바구니가 비어있습니다.", "경고", JOptionPane.WARNING_MESSAGE);
-				} else {
-					MyInfoMgr mgr = new MyInfoMgr();
-					MyInfoBean bean = mgr.select(LoginUI.ID);
-					TotalBean bean4 = mgr.selecttotal(LoginUI.ID);
-					int money = bean.getMoney();
-					int total = Integer.parseInt(totalLabel.getText().split(": ")[1]);
-					if (money < total) {
-						JOptionPane.showMessageDialog(null, "잔액이 부족합니다.", "경고", JOptionPane.ERROR_MESSAGE);
-						return;
-					}
-					for (int i = 0; i < cartList.size(); i++) {
-						OrderInfoBean beans = new OrderInfoBean();
-						GameBean bean2 = mgr.game(cartList.getElementAt(i).split(" | ")[0]);
-						Vector<ReserveBean> vlist;
-						vlist = mgr.reserveUser(LoginUI.ID);
-						ReserveBean bean3 = vlist.get(0);
-						beans.setRoom_no(bean3.getResvroom());
-						beans.setGameid(LoginUI.ID);
-						beans.setGamename(bean2.getGame());
-						beans.setGameprice(bean2.getGprice() * Integer.parseInt(cartList.getElementAt(i).split("x")[1]));
-						mgr.gamesales(beans);
-					}
-					int totalmoney = bean4.getTotal();
-					bean4.setTotal(totalmoney + total);
-					bean.setMoney(money - total);
-					if (mgr.charge(bean) && mgr.totalprice(bean4)) {
-						JOptionPane.showMessageDialog(null, "구매가 완료되었습니다.");
-						cartList.clear(); // 장바구니 비우기
-						ReserveUI.a.doClick();
-						return;
-					}
-				}
-				totalLabel.setText("총 주문 금액: 0");
-			}
-		});
 		buttonPanel.add(purchaseButton);
 		add(panel);
 		setVisible(true);
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == purchaseButton) {
+			try {
+		            if (cartList.isEmpty()) {
+		                JOptionPane.showMessageDialog(null, "장바구니가 비어있습니다.", "경고", JOptionPane.WARNING_MESSAGE);
+		            } else {
+		                MyInfoMgr mgr = new MyInfoMgr();
+		                MyInfoBean bean = mgr.select(LoginUI.ID);
+		                int money = bean.getMoney();
+		                int total = Integer.parseInt(totalLabel.getText().split(": ")[1].replace("원", ""));
+		                if (money < total) {
+		                    JOptionPane.showMessageDialog(null, "잔액이 부족합니다.", "경고", JOptionPane.ERROR_MESSAGE);
+		                    return;
+		                }
+
+		                new Thread(this).start();
+		                for (int i = 0; i < cartList.size(); i++) {
+		                    OrderInfoBean beans = new OrderInfoBean();
+		                        GameBean bean2 = mgr.game(cartList.getElementAt(i).split(" - ")[0]);
+		                        beans.setRoom_no(room);
+		                        beans.setGamename(bean2.getGame());
+		                        beans.setGameid(LoginUI.ID);
+		                        beans.setGameprice(bean2.getGprice() * Integer.parseInt(cartList.getElementAt(i).split("x")[1]));
+		                        beans.setGamecount(Integer.parseInt(cartList.getElementAt(i).split("x")[1]));
+		                        mgr.gamesales(beans);
+		                }
+		                OrderBean bean4 = new OrderBean();
+		                bean4.setOrder_id(LoginUI.ID);
+		                bean4.setOrder_room(room);
+		                bean4.setOrder_total(total);
+		                
+		                LocalDateTime currentTime = LocalDateTime.now();
+		                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		                String day = currentTime.format(formatter);
+		                TotalBean bean5 = mgr.useAll(room,  LoginUI.ID, day);
+		                bean5.setGame_total(bean5.getGame_total() + total);
+		                bean5.setTotal(bean5.getTotal() + total);
+		                bean.setMoney(money - total);
+		                if (mgr.charge(bean) && mgr.order(bean4) && mgr.totalprice(bean5)) {
+		                    JOptionPane.showMessageDialog(null, "구매가 완료되었습니다.");
+					sendMessage(MeetingProtocol.ID + MeetingProtocol.MODE + LoginUI.ID);
+		                    sendMessage(MeetingProtocol.ORDER + MeetingProtocol.MODE + room);
+		                    cartList.clear(); // 장바구니 비우기
+		                    ReserveUI.a.doClick();
+		                    dispose();
+		                    return;
+		                }
+		            }
+		            totalLabel.setText("총 주문 금액: 0");
+		        } catch (Exception ex) {
+		            ex.printStackTrace();
+		        }
+		}
+	}
+	
+	class CartItemRenderer extends JPanel implements ListCellRenderer<Object> {
+	    private static final long serialVersionUID = 1L;
+
+	    private JLabel label;
+	    private JButton cancelButton;
+
+	    public CartItemRenderer() {
+	        setLayout(new BorderLayout());
+	        setOpaque(true);
+
+	        label = new JLabel();
+	        label.setPreferredSize(new Dimension(200, 30));
+
+	        cancelButton = new JButton("취소");
+	        
+
+	        JPanel contentPanel = new JPanel(new BorderLayout());
+	        contentPanel.add(label, BorderLayout.CENTER);
+	        contentPanel.add(cancelButton, BorderLayout.EAST);
+
+	        add(contentPanel, BorderLayout.CENTER);
+	    }
+
+	    @Override
+	    public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+	            boolean cellHasFocus) {
+	        label.setText(value.toString());
+
+	        if (isSelected) {
+	            setBackground(list.getSelectionBackground());
+	            setForeground(list.getSelectionForeground());
+	        } else {
+	            setBackground(list.getBackground());
+	            setForeground(list.getForeground());
+	        }
+
+	        return this;
+	    }
 	}
 
 	public void showGame() {
@@ -230,26 +376,45 @@ public class GameOrderUI extends JFrame {
 
 	        for (Game game : games) {
 	            if (game.getType().equals(gameType)) {
-	                JButton gameButton = new JButton("<html><center><img src='" + game.getImageUrl() + "' width='100' height='100'/><br/>" + game.getName() + "<br/>" + game.getPrice() + "</center></html>");
-
-	                gameButton.addActionListener(new ActionListener() {
+				ImageIcon icon = new ImageIcon(game.getImageUrl());
+				Image originalImage = icon.getImage();
+				Image resizedImage = originalImage.getScaledInstance(150, 140, Image.SCALE_SMOOTH);
+				ImageIcon resizedIcon = new ImageIcon(resizedImage);
+				
+	            	JButton gameButton = new JButton("<html><center>" + game.getName() + "<br>" + game.getPrice() + "원</center></html>");
+				gameButton.setIcon(resizedIcon);
+	            	gameButton.setVerticalTextPosition(SwingConstants.BOTTOM);
+	            	gameButton.setHorizontalTextPosition(SwingConstants.CENTER);
+	            	gameButton.setPreferredSize(new Dimension(100, 100));
+					gameButton.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							//팝업 창을 생성하고 보여줌
+							if (gameDetail != null && gameDetail.isVisible() == true) gameDetail.dispose();
 							gameDetail = new JFrame("게임 상세 정보");
-							gameDetail.setSize(250, 120);
+							gameDetail.setSize(250, 150);
 							gameDetail.setLocationRelativeTo(null);
 							
 							//팝업 창에 음식 정보를 표시
-							JPanel detailPanel = new JPanel();
+							JPanel gamePanel = new JPanel();
+							gamePanel.setLayout(new BoxLayout(gamePanel, BoxLayout.Y_AXIS));
 							
 							JLabel nameLabel = new JLabel("게임 이름: " + game.getName());	
 							JLabel priceLabel = new JLabel("가격: " + game.getPrice());
 							
-							JPanel gamePanel = new JPanel();
-							gamePanel.setLayout(new BoxLayout(gamePanel, BoxLayout.Y_AXIS));
+							SpinnerNumberModel model = new SpinnerNumberModel(1, 1, 10, 1);  // 초기 값 1, 최소 값 1, 최대 값 10, 단계 1
+							JSpinner quantitySpinner = new JSpinner(model);
+							JLabel quantityLabel = new JLabel("수량: ");
+							quantitySpinner.setPreferredSize(new Dimension(50, 25));
+							
+							JPanel quantityPanel = new JPanel();
+							quantityPanel.add(quantityLabel);
+							quantityPanel.add(quantitySpinner);
+							quantityLabel.setLabelFor(quantitySpinner);
+							
 							gamePanel.add(nameLabel);
 							gamePanel.add(priceLabel);
+							gamePanel.add(quantityPanel);
 							
 							//담기 버튼 추가
 							JButton addButton = new JButton("담기");
@@ -257,37 +422,54 @@ public class GameOrderUI extends JFrame {
 								@Override
 								public void actionPerformed(ActionEvent e) {
 									//주문 내역에 게임 추가
-									String gameNamePrice = game.getName() + " | " + game.getPrice();
+									String gameNamePrice = game.getName() + " - " + game.getPrice();
 									
-									//주문 내역에 이미 같은 게임이 있으면ㄴ
+									//스피너에서 선택된 수량을 가져옴
+							        int quantity = (Integer) quantitySpinner.getValue();
+
+									//주문 내역에 이미 같은 게임이 있으면
 									int currentIndex = -1;
 									for (int i = 0; i < cartList.size(); i++) {
-										if (cartList.get(i).startsWith(game.getName())) {// 게임 이름으로 찾기
+										if (cartList.get(i).startsWith(gameNamePrice)) {// 게임 이름으로 찾기
 											currentIndex = i;
 											break;
 										}
 									}
 
-									//이미 리스트에 있다면
-									if (currentIndex != -1) {
-										JOptionPane.showMessageDialog(null, "게임은 최대 1개만 선택 가능합니다.", "경고", JOptionPane.WARNING_MESSAGE);
-									} else { //리스트에 없다면
-										cartList.addElement(gameNamePrice + " x" + 1);// 새로 추가
-										totalLabel.setText("총 주문 금액: " + ((Integer.parseInt(totalLabel.getText().split(": ")[1]) + game.getPrice())));
-									}
-									gameDetail.dispose();
-								}
+									 //이미 리스트에 있다면
+							        if (currentIndex != -1) {
+							            String oldEntry = cartList.getElementAt(currentIndex);
+							            String[] split = oldEntry.split("x");
+							            int oldCount = split.length == 2 ? Integer.parseInt(split[1].trim().replaceAll("[^0-9]", "")) : 1;
+							            cartList.setElementAt(gameNamePrice + " x" + (oldCount + quantity), currentIndex);  // 수량 증가
+							        } else {  //리스트에 없다면
+							            cartList.addElement(gameNamePrice + " x" + quantity);  // 수량만큼 새로 추가
+							        
+							        }
+							     // 총 주문 금액 업데이트
+							        int total = Integer.parseInt(totalLabel.getText().split(": ")[1].replaceAll("[^0-9]", "")) + game.getPrice() * quantity;
+							        totalLabel.setText("총 주문 금액: " + total);
+							        
+
+
+							        // 총 주문 금액 업데이트
+							        updateTotalPrice();
+
+							        gameDetail.dispose();
+							    }
 							});
 							gamePanel.add(addButton);
-							gamePanel.add(detailPanel);
 							gameDetail.add(gamePanel, BorderLayout.NORTH);
 							gameDetail.setVisible(true);
+
 						}
-	                });
+					});
 	                gamePanel.add(gameButton);
-	                count++;
-	            }
-	        }
+					count++;
+				}
+			}
+	             
+	           
 	        //총 20개의 칸 중에서 게임 버튼으로 채우지 못한 나머지 칸을 빈 패널로 채우기
 	        for (int i = count; i < 20; i++) {
 	            JPanel emptyPanel = new JPanel();
@@ -300,7 +482,52 @@ public class GameOrderUI extends JFrame {
 	    }
 	}
 	
+	public void run() {
+		try {
+			String host = "127.0.0.1";
+			int port = MeetingServer.PORT;
+			connect(host, port);
+			
+			while(true) {
+				String line = in.readLine();
+				if(line==null)
+					break;
+				else
+					routine(line);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void routine(String line) {
+		int idx = line.indexOf(MeetingProtocol.MODE);
+		String cmd = line.substring(0, idx);
+		String data = line.substring(idx + 1);
+		
+		if (cmd.equals(MeetingProtocol.MESSAGE)) {
+			idx = data.indexOf(';');
+			cmd = data.substring(0, idx);
+			data = data.substring(idx + 1);
+		}
+	}
+	
+	public void connect(String host, int port) {
+		try {
+			sock = new Socket(host, port);
+			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+			out = new PrintWriter(sock.getOutputStream(),true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void sendMessage(String msg) {
+		if (out != null)
+			out.println(msg);
+	}
+	
 	public static void main(String[] args) {
-		GameOrderUI GOUI = new GameOrderUI();
+		new GameOrderUI("R01");
 	}
 }
