@@ -55,7 +55,7 @@ private DBConnection pool;
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "update order set order_state = ? where order_id = ? and order_room=? and order_time=?";
+			sql = "update `order` set order_state = ? where order_id = ? and order_room=? and order_time=?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setBoolean(1, bean.isOrder_state());
 			pstmt.setString(2, bean.getOrder_id());

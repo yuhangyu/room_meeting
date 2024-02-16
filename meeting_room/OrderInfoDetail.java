@@ -22,14 +22,14 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
     
     Container c = getContentPane();
 
-    public OrderInfoDetail(String no, String id, String time) {
+    public OrderInfoDetail(String no, String id, String time, int num) {
 
         setSize(800,400);
         setTitle(no);
         
         
         c.setLayout(null);
-        orderdetail(no,id, time);
+        orderdetail(no,id, time, num);
 
         pane.setBounds(0, 0, 700, 400);
         
@@ -46,7 +46,7 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
         
     }
     
-    public void orderdetail(String no, String id, String time) {
+    public void orderdetail(String no, String id, String time, int num) {
 
         Vector<OrderInfoBean> foodList;
         Vector<OrderInfoBean> gameList;
@@ -144,7 +144,6 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
 	                            bean.setFoodname(asdf);
 	                            if(mgr.update(bean)) { 
 	                            	model.setValueAt("완료", row, column);
-	                            	System.out.println(data.size());
 	                            	for(int i = 0; i < data.size();i++) {
 	                                    String fost = (String) ODT.getValueAt(i, column);
 	                            		if(fost != "완료") return ;
@@ -158,7 +157,7 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
 	                            	OrderMgr mgr2 = new OrderMgr();
 	                            	if(mgr2.update(orderbean)) {
 	                                    DefaultTableModel model1 = (DefaultTableModel) OrderInfo.orderTable.getModel();
-	                                    model1.setValueAt("완료", row, 6);
+	                                    model1.setValueAt("완료", num, column);
 	                            	}
 	                            }
 	                            
