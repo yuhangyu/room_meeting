@@ -1,22 +1,13 @@
 package meeting_room;
 
-import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Container;
 import java.awt.Font;
-import java.awt.Frame;
-import java.awt.Label;
-import java.awt.Panel;
-import java.awt.TextArea;
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -33,13 +24,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class LoginUI extends JFrame implements ActionListener, ItemListener, KeyListener, Runnable {	
+public class LoginUI extends JFrame implements ActionListener, ItemListener, KeyListener {
 	public static String ID;
 	Socket sock;
 	BufferedReader in;
 	PrintWriter out;
-	
-	public static String sstr;
 	
 	//요소생성
 	JLabel id_lb = new JLabel("아이디");	
@@ -155,10 +144,7 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 			ResultSet rs = stmt.executeQuery("SELECT * FROM member WHERE member_id='" + id + "' AND member_pw=('" + pw + "') AND member_level='" + check_action + "'");
 			if (rs.next()) {
 				ID = id;
-				sstr = MeetingProtocol.ID + MeetingProtocol.MODE + ID;
-				new Thread(this).start();
 				JOptionPane.showMessageDialog(this, "로그인 성공!");
-				sendMessage(sstr);
 				if (check_action == 1) { //일반 사용자
 					MainPageUI mainpage = new MainPageUI();
 				} else if (check_action == 2) {
@@ -186,7 +172,7 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 	
 	public void run() {
 		try {
-			String host = "113.198.238.105";
+			String host = "127.0.0.1";
 			int port = MeetingServer.PORT;
 			connect(host, port);
 			
