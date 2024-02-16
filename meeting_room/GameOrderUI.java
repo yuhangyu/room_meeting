@@ -309,6 +309,7 @@ public class GameOrderUI extends JFrame implements Runnable, ActionListener {
 		                bean.setMoney(money - total);
 		                if (mgr.charge(bean) && mgr.order(bean4) && mgr.totalprice(bean5)) {
 		                    JOptionPane.showMessageDialog(null, "구매가 완료되었습니다.");
+					sendMessage(MeetingProtocol.ID + MeetingProtocol.MODE + LoginUI.ID);
 		                    sendMessage(MeetingProtocol.ORDER + MeetingProtocol.MODE + room);
 		                    cartList.clear(); // 장바구니 비우기
 		                    ReserveUI.a.doClick();
@@ -377,6 +378,7 @@ public class GameOrderUI extends JFrame implements Runnable, ActionListener {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							//팝업 창을 생성하고 보여줌
+							if (gameDetail != null && gameDetail.isVisible() == true) gameDetail.dispose();
 							gameDetail = new JFrame("게임 상세 정보");
 							gameDetail.setSize(250, 150);
 							gameDetail.setLocationRelativeTo(null);

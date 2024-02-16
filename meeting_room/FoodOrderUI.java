@@ -33,8 +33,6 @@ class Food {
 		this.price = price;
 	}
 	
-	
-	
 	String getType() { return type; }
 	String getName() { return name; }
 	String getImageUrl() { return imageUrl; }
@@ -295,6 +293,7 @@ public class FoodOrderUI extends JFrame implements Runnable, ActionListener {
 				bean.setMoney(money - total);
 				if (mgr.charge(bean) && mgr.order(bean4) && mgr.totalprice(bean5)) {
 					JOptionPane.showMessageDialog(null, "구매가 완료되었습니다.");
+					sendMessage(MeetingProtocol.ID + MeetingProtocol.MODE + LoginUI.ID);
 					sendMessage(MeetingProtocol.ORDER + MeetingProtocol.MODE + room);
 					cartList.clear(); // 장바구니 비우기
 					ReserveUI.a.doClick();
@@ -363,6 +362,7 @@ public class FoodOrderUI extends JFrame implements Runnable, ActionListener {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							//팝업 창을 생성하고 보여줌
+							if (detailDialog != null && detailDialog.isVisible() == true) detailDialog.dispose();
 							detailDialog = new JFrame("음식 상세 정보");
 							detailDialog.setSize(250, 150);
 							detailDialog.setLocationRelativeTo(null);
