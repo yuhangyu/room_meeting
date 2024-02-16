@@ -19,9 +19,10 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
     JTable ODT;
     JScrollPane pane;
     
+    
     Container c = getContentPane();
 
-    public OrderInfoDetail(String no, String id, String foods,String Gi, String Gn) {
+    public OrderInfoDetail(String no, String id, String time) {
 
         setSize(800,400);
         setTitle(no);
@@ -30,7 +31,7 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
         c.setLayout(null);
         
 
-        orderdetail(id,no,foods,Gi,Gn);
+        orderdetail(no,id, time);
 
         pane.setBounds(0, 0, 700, 400);
         
@@ -48,7 +49,7 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
     }
     
 
-    public void orderdetail(String id, String no, String foods,String Gi, String Gn) {
+    public void orderdetail(String no, String id, String time) {
 
         Vector<OrderInfoBean> foodList;
         Vector<OrderInfoBean> gameList;
@@ -62,38 +63,45 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
         // 데이터를 담을 벡터 및 헤더 생성
         Vector<Vector<String>> data = new Vector<>();
         Vector<String> header = new Vector<>();
-        header.add("종류");
         header.add("순서");
+        header.add("time");
         header.add("주문한 항목");
         header.add("수량");
         header.add("가격");
         header.add("상태");
         
+
         // 음식 데이터 추가
-        for (int i = 0; i < foodList.size(); i++) {
-            OrderInfoBean bean = foodList.get(i);
-            Vector<String> row = new Vector<>();
-            row.add("음식");
-            row.add(String.valueOf(i + 1));
-            row.add(bean.getFoodname());
-            row.add(String.valueOf(bean.getFoodcount()));
-            row.add(String.valueOf(bean.getFoodprice()));
-            row.add(bean.isFoodstate() ? "완료" : "준비중...");
-            data.add(row);
-        }
-        
+	        for (int i = 0; i < foodList.size(); i++) {
+	            OrderInfoBean bean = foodList.get(i);
+	            Vector<String> row = new Vector<>();
+	            if (bean.getOrdertime().equals(time)&&bean.getRoom_no().equals(no)) {
+		            row.add(String.valueOf(i + 1));
+		            row.add(bean.getOrdertime());
+		            row.add(bean.getFoodname());
+		            row.add(String.valueOf(bean.getFoodcount()));
+		            row.add(String.valueOf(bean.getFoodprice()));
+		            row.add(bean.isFoodstate() ? "완료" : "준비중...");
+		            data.add(row);
+		            
+		        }
+	        }
+	        
         // 게임 데이터 추가
-        for (int i = 0; i < gameList.size(); i++) {
-            OrderInfoBean bean = gameList.get(i);
-            Vector<String> row = new Vector<>();
-            row.add("게임");
-            row.add(String.valueOf(i + 1));
-            row.add(bean.getGamename());
-            row.add(String.valueOf(bean.getGamecount()));
-            row.add(String.valueOf(bean.getGameprice()));
-            row.add(bean.isGamestate() ? "완료" : "준비중...");
-            data.add(row);
-        }
+        
+	        for (int i = 0; i < gameList.size(); i++) {
+	            OrderInfoBean bean = gameList.get(i);
+	            Vector<String> row = new Vector<>();
+	            if (bean.getOrdertime().equals(time) && bean.getRoom_no().equals(no)) {
+	            row.add(String.valueOf(i + 1));
+	            row.add(bean.getOrdertime());
+	            row.add(bean.getGamename());
+	            row.add(String.valueOf(bean.getGamecount()));
+	            row.add(String.valueOf(bean.getGameprice()));
+	            row.add(bean.isGamestate() ? "완료" : "준비중...");
+	            data.add(row);
+	            }
+	        }
         
         // 테이블 모델 생성 및 데이터 설정
         DefaultTableModel model = new DefaultTableModel(data, header) {
@@ -129,25 +137,22 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
                             OrderInfoBean bean = new OrderInfoBean();
                             OrderInfoMgr mgr = new OrderInfoMgr();
                             OrdMgr mgr1 = new OrdMgr();
-                            if(ODT.getValueAt(row,0) == "음식") {
+                            String asdf = (String) ODT.getValueAt(row, 2);
+                            if (asdf.charAt(0) == 'F') {
 	                            bean.setFoodstate(true);
-	                            bean.setFoodid(id);
 	                            bean.setRoom_no(no);
-	                            bean.setFoodname(foods);
-
+	                            bean.setFoodid(id);
+	                            bean.setFoodname(asdf);
 	                            if(mgr.update(bean)) { 
 	                            	model.setValueAt("완료", row, column);
 	                            }
-                            }else if(ODT.getValueAt(row, 0)=="게임") {
+                            }else if (asdf.charAt(0) == 'G') {
                             	bean.setGamestate(true);
-                            	bean.setGameid(Gi);
                             	bean.setRoom_no(no);
-                            	bean.setGamename(Gn);
-                            	System.out.println(Gi + " " + no + " " + Gn);
+	                            bean.setGameid(id);
+	                            bean.setGamename(asdf);
                             	if(mgr1.update(bean)) { 
-	                            	System.out.println(2);
 	                            	model.setValueAt("완료", row, column);
-	                            	System.out.println(2);
                             	}
                             }
                         }
@@ -156,6 +161,9 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
             }
         });
     }  
-    	
     
+    public static void main(String[] args) {
+		OrderInfo as = new OrderInfo();
+	}
+
 }
