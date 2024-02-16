@@ -5,6 +5,10 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
@@ -158,7 +162,7 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 			int count = 0;
 			int amount = 0;
 			
-			fslist = mgr.orderfood(room, bean.getFood());
+			fslist = mgr.orderfood(room, bean.getFood(), 1);
 			for (int j = 0; j < fslist.size(); j++) {
 				OrderInfoBean bean1 = fslist.get(j);
 				count += Integer.valueOf(bean1.getFoodcount());
@@ -183,7 +187,7 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 			int count = 0;
 			int amount = 0;
 			
-			gslist = mgr.ordergame(room, bean.getGame());
+			gslist = mgr.ordergame(room, bean.getGame(), 1);
 			for (int j = 0; j < gslist.size(); j++) {
 				OrderInfoBean bean1 = gslist.get(j);
 				count += Integer.valueOf(bean1.getGamecount());
@@ -247,16 +251,13 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 		//위치 조정 불가능
 		gameTable.getTableHeader().setReorderingAllowed(false);
 		
-		
 			
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-		
 				
 		for (int i = 0; i < foodTable.getColumnCount(); i++) {
 			foodTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
 		}
-		
 				
 		DefaultTableCellRenderer centerRenderer1 = new DefaultTableCellRenderer();
 		centerRenderer1.setHorizontalAlignment(JLabel.CENTER);
@@ -264,7 +265,6 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 		for (int i = 0; i < gameTable.getColumnCount(); i++) {
 			gameTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer1);	
 		}
-		
 	}
 	
 	@Override
@@ -314,15 +314,71 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 		if (eday.length() == 1) eday = "0" + eday;
 		String startday = syear + "-" + smonth + "-" + sday + " 00:00:00";
 		String endday = eyear + "-" + emonth + "-" + eday + " 23:59:59";
+
+		MyInfoMgr mgr = new MyInfoMgr();
 		
-		
+		Vector<OrderInfoBean> vlist;
+		Vector<FoodBean> flist;
+		Vector<OrderInfoBean> fslist;
+		flist = mgr.foodAll();
+
 		// 데이터 및 컬럼명 배열 정의
-		String[] columnNames = {"음식", "수량", "총 가격"};
-		String[][] data = {};
+		String[] columnNames = {"순번", "음식", "수량", "총 가격"};
+		String[][] data = new String[flist.size()][columnNames.length];
+
+		for(int i = 0; i < flist.size(); i++) {
+			FoodBean bean = flist.get(i);
+			int count = 0;
+			int amount = 0;
+			
+			fslist = mgr.orderfood(room, bean.getFood(), 0);
+			for (int j = 0; j < fslist.size(); j++) {
+				OrderInfoBean bean1 = fslist.get(j);
+
+				vlist = mgr.salesFoodDetail(room, bean1.getOrdertime(), bean.getFood(), startday, endday);
+				
+				for (int k = 0; k < vlist.size(); k++) {
+					OrderInfoBean bean2 = vlist.get(k);
+					count += Integer.valueOf(bean2.getFoodcount());
+					amount += Integer.valueOf(bean2.getFoodprice());
+				}
+			}
+			
+			data[i][0] = String.valueOf(i + 1);
+			data[i][1] = bean.getFname();
+			data[i][2] = String.valueOf(count);
+			data[i][3] = String.valueOf(amount);
+		}
 		
-		String[] columnNames1 = {"보드게임", "수량", "총 가격"};
-		String[][] data1 = {};
+		Vector<GameBean> glist;
+		Vector<OrderInfoBean> gslist;
+		glist = mgr.gameAll();
 		
+		String[] columnNames1 = {"순번", "보드게임", "수량", "총 가격"};
+		String[][] data1 = new String[glist.size()][columnNames1.length];
+		
+		for(int i = 0; i < glist.size(); i++) {
+			GameBean bean = glist.get(i);
+			int count = 0;
+			int amount = 0;
+			
+			gslist = mgr.ordergame(room, bean.getGame(), 0);
+			for (int j = 0; j < gslist.size(); j++) {
+				OrderInfoBean bean1 = gslist.get(j);
+				vlist = mgr.salesGameDetail(room, bean1.getOrdertime(), bean.getGame(), startday, endday);
+				
+				for (int k = 0; k < vlist.size(); k++) {
+					OrderInfoBean bean2 = vlist.get(k);
+					count += Integer.valueOf(bean2.getGamecount());
+					amount += Integer.valueOf(bean2.getGameprice());
+				}
+			}
+			
+			data1[i][0] = String.valueOf(i + 1);
+			data1[i][1] = bean.getGname();
+			data1[i][2] = String.valueOf(count);
+			data1[i][3] = String.valueOf(amount);
+		}
 		
 		DefaultTableModel model = new DefaultTableModel(data, columnNames) {
 			public boolean isCellEditable(int i, int c){ return false; }

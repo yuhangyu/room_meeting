@@ -3,6 +3,9 @@ package meeting_room;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Vector;
 
 public class MyInfoMgr {
@@ -151,6 +154,68 @@ public class MyInfoMgr {
 		return vlist;
 	}
 	
+	//사용자 예약 리스트 날짜별
+	public Vector<OrderInfoBean> salesFoodDetail(String room, String day, String name, String start, String end) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<OrderInfoBean> vlist = new Vector<OrderInfoBean>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from food_sales where food_room=? and sales_day=? and foods=? and sales_day BETWEEN ? and ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, room);
+			pstmt.setString(2, day);
+			pstmt.setString(3, name);
+			pstmt.setString(4, start);
+			pstmt.setString(5, end);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				OrderInfoBean bean = new OrderInfoBean();
+				bean.setFoodcount(rs.getInt("food_count"));
+				bean.setFoodprice(rs.getInt("sales_amount"));
+				vlist.addElement(bean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return vlist;
+	}
+
+	//사용자 예약 리스트 날짜별
+	public Vector<OrderInfoBean> salesGameDetail(String room, String day, String name, String start, String end) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<OrderInfoBean> vlist = new Vector<OrderInfoBean>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from game_sales where game_room=? and sales_day=? and games=? and sales_day BETWEEN ? and ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, room);
+			pstmt.setString(2, day);
+			pstmt.setString(3, name);
+			pstmt.setString(4, start);
+			pstmt.setString(5, end);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				OrderInfoBean bean = new OrderInfoBean();
+				bean.setGamecount(rs.getInt("game_count"));
+				bean.setGameprice(rs.getInt("sales_amount"));
+				vlist.addElement(bean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return vlist;
+	}
+	
 	//음식 리스트
 	public Vector<FoodBean> foodAll() {
 		Connection con = null;
@@ -250,9 +315,15 @@ public class MyInfoMgr {
 		Vector<TotalBean> vlist = new Vector<TotalBean>();
 		try {
 			con = pool.getConnection();
-			sql = "select * from `use` where room_num=?";
+			sql = "select * from `use` where room_num=? and use_day BETWEEN ? and ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, room); //첫번째 ?에 매개변수 id 값 세팅
+			LocalDateTime now = LocalDateTime.now();
+			LocalDateTime startOfDay = now.with(LocalTime.MIN);
+			LocalDateTime endOfDay = now.with(LocalTime.MAX);
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			pstmt.setString(2,  String.valueOf(startOfDay.format(formatter)));
+			pstmt.setString(3,  String.valueOf(endOfDay.format(formatter)));
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				TotalBean bean = new TotalBean();
@@ -694,7 +765,7 @@ public class MyInfoMgr {
 	}
 	
 	//음식 select
-	public Vector<OrderInfoBean> orderfood(String room, String food) {
+	public Vector<OrderInfoBean> orderfood(String room, String food, int a) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -702,15 +773,29 @@ public class MyInfoMgr {
 		Vector<OrderInfoBean> vlist = new Vector<OrderInfoBean>();
 		try {
 			con = pool.getConnection();
-			sql = "select * from food_sales where food_room=? and foods=?";
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, room);
-			pstmt.setString(2, food);
+			if (a == 1) {
+				sql = "select * from food_sales where food_room=? and foods=? and sales_day BETWEEN ? and ?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, room);
+				pstmt.setString(2, food);
+				LocalDateTime now = LocalDateTime.now();
+				LocalDateTime startOfDay = now.with(LocalTime.MIN);
+				LocalDateTime endOfDay = now.with(LocalTime.MAX);
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				pstmt.setString(3,  String.valueOf(startOfDay.format(formatter)));
+				pstmt.setString(4,  String.valueOf(endOfDay.format(formatter)));
+			} else if (a == 0) {
+				sql = "select * from food_sales where food_room=? and foods=?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, room);
+				pstmt.setString(2, food);
+			}
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				OrderInfoBean bean = new OrderInfoBean();
 				bean.setFoodcount(rs.getInt("food_count"));
 				bean.setFoodprice(rs.getInt("sales_amount"));
+				bean.setOrdertime(rs.getString("sales_day"));
 				vlist.addElement(bean);
 			}
 		} catch (Exception e) {
@@ -722,7 +807,7 @@ public class MyInfoMgr {
 	}
 	
 	//게임 select
-	public Vector<OrderInfoBean> ordergame(String room, String game) {
+	public Vector<OrderInfoBean> ordergame(String room, String game, int a) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -730,15 +815,29 @@ public class MyInfoMgr {
 		Vector<OrderInfoBean> vlist = new Vector<OrderInfoBean>();
 		try {
 			con = pool.getConnection();
-			sql = "select * from game_sales where game_room=? and games=?";
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, room);
-			pstmt.setString(2, game);
+			if (a == 1) {
+				sql = "select * from game_sales where game_room=? and games=? and sales_day BETWEEN ? and ?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, room);
+				pstmt.setString(2, game);
+				LocalDateTime now = LocalDateTime.now();
+				LocalDateTime startOfDay = now.with(LocalTime.MIN);
+				LocalDateTime endOfDay = now.with(LocalTime.MAX);
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				pstmt.setString(3,  String.valueOf(startOfDay.format(formatter)));
+				pstmt.setString(4,  String.valueOf(endOfDay.format(formatter)));
+			} else if (a == 0) {
+				sql = "select * from game_sales where game_room=? and games=?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, room);
+				pstmt.setString(2, game);
+			}
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				OrderInfoBean bean = new OrderInfoBean();
 				bean.setGamecount(rs.getInt("game_count"));
 				bean.setGameprice(rs.getInt("sales_amount"));
+				bean.setOrdertime(rs.getString("sales_day"));
 				vlist.addElement(bean);
 			}
 		} catch (Exception e) {

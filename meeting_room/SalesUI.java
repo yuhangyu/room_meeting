@@ -5,6 +5,9 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Vector;
 import javax.swing.JFrame;
@@ -21,18 +24,28 @@ public class SalesUI extends JFrame  {
 	JScrollPane pane;
 
 	public SalesUI() {
-		setSize(1000, 422);
-		setTitle("예약 정보 관리");
+		setSize(1100, 522);
+		setTitle("매출 현황");
+
+		LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+		Font font = new Font("Dialog", Font.BOLD, 50);
+		
+		JLabel title = new JLabel(now.format(formatter) + " 매출 현황");
 		
 		viewlist();
 		
 		Container c = getContentPane();
 		c.setLayout(null);
-
-		pane.setBounds(0, 0, 986, 400);	
+		
+		title.setFont(font);
+		title.setBounds(290, 15, 600, 45);
+		pane.setBounds(55, 70, 986, 385);
 		
 		totaltable.addMouseListener(new MouseAction());
-			
+		
+		c.add(title);
 		c.add(pane);
 		
 		setLocationRelativeTo(null);
