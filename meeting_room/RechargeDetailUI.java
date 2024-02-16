@@ -110,7 +110,7 @@ public class RechargeDetailUI extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(null, "비밀번호가 틀렸습니다. 다시 한 번 확인해주세요.");
 				return;
 			}
-		
+			
 			bean.setID(id);
 			bean.setMoney(Integer.parseInt(amount_value.getText()) + money);
 			if(mgr.charge(bean)) {

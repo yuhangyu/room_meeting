@@ -13,11 +13,28 @@ import java.util.Date;
 import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class Reserve implements ActionListener {
 	private ReserveUI reserveUI;
 	private JButton previousSelectedButton;
+	
+	String formattedDate;
+	String formattedDate2;
+	String EndformattedDate;
+	String EndformattedDate2;
+	Date endtime;
+	Date reservationDate;
+	Calendar calendar;
+ 
+	SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+	SimpleDateFormat newFormat2 = new SimpleDateFormat("HH:mm:ss");
 	
 	public Reserve(ReserveUI reserveUI) {
 		this.reserveUI = reserveUI;
@@ -26,11 +43,6 @@ public class Reserve implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton clickedButton = (JButton) e.getSource();
-		
-		// DB에서 받아온 DATE타입을 테이블에 업데이트 하기 위해 포맷을 변경하기 위한 선언
-		SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd"); 
-		SimpleDateFormat newFormat2 = new SimpleDateFormat("HH:mm:ss");
 		
 		// 방을 클릭할때 테이블을 출력하고 선택된 방 레이블을 변경하고 선택한 방에 대한 예약 테이블 출력
 		if(e.getSource() == clickedButton) {
@@ -67,33 +79,42 @@ public class Reserve implements ActionListener {
 				
 				for(int i = 0; i < reservelist.size(); i++ ) {
 					ReserveBean bean = reservelist.get(i);
-					// 선택된 방과 reserve 테이블의 방을 비교하고 종료시간이 현재 시간 이후인 경우에만 테이블에 추가
-					if(bean.getResvroom().equals(roomName) && endTimeIsAfterCurrentTime(bean.getResvtime())) {
-						String OriginalResvtime = bean.getResvtime();
-						int resvtime = bean.getResvusetime(); //사용 시간을 받아옴
-						
-						try {
-							Date date = originalFormat.parse(OriginalResvtime);
+					try {
+						// 선택된 방과 reserve 테이블의 방을 비교하고 종료시간이 현재 시간 이후인 경우에만 테이블에 추가
+			                  Date reservationDate = originalFormat.parse(bean.getResvtime());
+			                  Date currentDate = new Date();
+			                  Calendar calendar = Calendar.getInstance();
+			                  calendar.setTime(reservationDate); // 캘린더의 데이트를 받아온 시간으로 변경
+			                  calendar.add(Calendar.HOUR_OF_DAY, bean.getResvusetime()); // 캘린더에 사용시간 더하기
+			                  
+			                  String EndformattedDate = originalFormat.format(calendar.getTime()); // 캘린더에 사용시간을 더하고 포맷 변경하여 출력
+			                  String EndformattedDate2 = newFormat2.format(calendar.getTime());
+			                  Date endtime = originalFormat.parse(EndformattedDate);
+		                  
+			                  
+						if(bean.getResvroom().equals(roomName) && endtime.after(currentDate)) {
+							String OriginalResvtime = bean.getResvtime();
+							int resvtime = bean.getResvusetime(); //사용 시간을 받아옴
 							
-							//getResvusetime()을 시간으로 변환하고 더하기
-				            Calendar calendar = Calendar.getInstance();
-				            calendar.setTime(date); //캘린더의 데이트를 받아온 시간으로 변경
-				            calendar.add(Calendar.HOUR_OF_DAY, resvtime); //캘린더에 사용시간 더하기
-							
-							
-							String formattedDate = newFormat.format(date); //포멧 변경 YY-MM-DD
-							String formattedDate2 = newFormat2.format(date); //포멧 변경 HH:MM:SS
-							String EndformattedDate2 = newFormat2.format(calendar.getTime()); //캘린더에 사용시간을 더하고 포맷 변경하여 출력
-							
-							String[] rowData = { // 추가할 행의 데이터 
-									formattedDate,
-									formattedDate2,
-									EndformattedDate2
-		                    };
-		                    model.addRow(rowData);
-						} catch (Exception e2) {
-							e2.printStackTrace();
+							try {
+								Date date = originalFormat.parse(OriginalResvtime);
+								
+								
+								String formattedDate = newFormat.format(date); //포멧 변경 YY-MM-DD
+								String formattedDate2 = newFormat2.format(date); //포멧 변경 HH:MM:SS
+								
+								String[] rowData = { // 추가할 행의 데이터 
+										formattedDate,
+										formattedDate2,
+										EndformattedDate2
+								};
+								model.addRow(rowData);
+							} catch (Exception e2) {
+								e2.printStackTrace();
+							}
 						}
+					} catch (ParseException e3) {
+						e3.printStackTrace();
 					}
 				}
 			}
@@ -128,17 +149,4 @@ public class Reserve implements ActionListener {
 			reserveUI.dispose();
 		}
 	}
-	
-	private boolean endTimeIsAfterCurrentTime(String endTime) {
-	    try {
-	        // SimpleDateFormat을 사용하여 날짜 비교
-	        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	        Date currentDate = new Date();
-	        Date endTimeDate = sdf.parse(endTime);
-	        return endTimeDate.after(currentDate);
-	    } catch (ParseException e) {
-	        e.printStackTrace();
-	        return false;
-	    }
-	}	
 }

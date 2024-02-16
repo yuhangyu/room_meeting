@@ -73,6 +73,7 @@ public class MyInfoMgr {
 				bean.setResvtime(rs.getString("resv_time"));
 				bean.setResvusetime(rs.getInt("resv_usetime"));
 				bean.setResvperson(rs.getInt("resv_person"));
+				bean.setResvtotal(rs.getInt("resv_total"));
 				vlist.addElement(bean);
 			}
 		} catch (Exception e) {
@@ -105,6 +106,7 @@ public class MyInfoMgr {
 				bean.setResvtime(rs.getString("resv_time"));
 				bean.setResvusetime(rs.getInt("resv_usetime"));
 				bean.setResvperson(rs.getInt("resv_person"));
+				bean.setResvtotal(rs.getInt("resv_total"));
 				vlist.addElement(bean);
 			}
 		} catch (Exception e) {
@@ -229,6 +231,37 @@ public class MyInfoMgr {
 				bean.setRprice(rs.getInt("room_price"));
 				bean.setRadd(rs.getInt("room_add"));
 				bean.setRstate(rs.getBoolean("room_state"));
+				vlist.addElement(bean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return vlist;
+	}
+	
+	//매출
+	public Vector<TotalBean> salesAll(String room) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<TotalBean> vlist = new Vector<TotalBean>();
+		try {
+			con = pool.getConnection();
+			sql = "select * from `use` where room_num=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, room); //첫번째 ?에 매개변수 id 값 세팅
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				TotalBean bean = new TotalBean();
+				bean.setRoom(rs.getString("room_num"));
+				bean.setDay(rs.getString("use_day"));
+				bean.setFood_total(rs.getInt("food_total"));
+				bean.setGame_total(rs.getInt("game_total"));
+				bean.setRoom_total(rs.getInt("room_total"));
+				bean.setTotal(rs.getInt("use_total"));
 				vlist.addElement(bean);
 			}
 		} catch (Exception e) {
@@ -501,14 +534,17 @@ public class MyInfoMgr {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "insert into `use` values (NULL, ?, ?, ?, ?, ?, ?)";
+			sql = "insert into `use` values (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1,  bean.getRoom());
 			pstmt.setString(2,  bean.getID());
 			pstmt.setString(3, bean.getDay());
 			pstmt.setString(4, bean.getIntime());
 			pstmt.setString(5,  bean.getOuttime());
-			pstmt.setInt(6,  bean.getTotal());
+			pstmt.setInt(6,  bean.getFood_total());
+			pstmt.setInt(7,  bean.getGame_total());
+			pstmt.setInt(8,  bean.getRoom_total());
+			pstmt.setInt(9,  bean.getTotal());
 			
 			if (pstmt.executeUpdate() == 1) flag = true;
 		} catch (Exception e) {
@@ -553,11 +589,14 @@ public class MyInfoMgr {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "update `use` set use_total=? where use_id=? and room_num=?";
+			sql = "update `use` set food_total=? and game_total=? and room_total=? use_total=? where use_id=? and room_num=?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1,  bean.getTotal());
-			pstmt.setString(2, bean.getID());
-			pstmt.setString(3,  bean.getRoom());
+			pstmt.setInt(1, bean.getFood_total());
+			pstmt.setInt(2,  bean.getGame_total());
+			pstmt.setInt(3,  bean.getRoom_total());
+			pstmt.setInt(4,  bean.getTotal());
+			pstmt.setString(5, bean.getID());
+			pstmt.setString(6,  bean.getRoom());
 			if (pstmt.executeUpdate() == 1) flag = true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -571,7 +610,9 @@ public class MyInfoMgr {
 	public boolean cancelresv(String id, String room, String time) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
+		PreparedStatement pstmt2 = null;
 		String sql = null;
+		String sql2 = null;
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
@@ -580,7 +621,14 @@ public class MyInfoMgr {
 			pstmt.setString(1, id);
 			pstmt.setString(2, room);
 			pstmt.setString(3,  time);
-			if (pstmt.executeUpdate() == 1) flag = true;
+			
+			sql = "delete from `use` where room_num=? and use_id=? and in_time=?";
+			pstmt2 = con.prepareStatement(sql);
+			pstmt2.setString(1, room);
+			pstmt2.setString(2, id);
+			pstmt2.setString(3,  time);
+			
+			if (pstmt.executeUpdate() == 1 && pstmt2.executeUpdate() == 1) flag = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

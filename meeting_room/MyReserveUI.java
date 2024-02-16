@@ -34,7 +34,21 @@ public class MyReserveUI extends JFrame implements ActionListener, ListSelection
 	JButton ok_btn = new JButton("확인");
 	
 	JTable reserveTable;
-    JScrollPane reservePane;
+	JScrollPane reservePane;
+	
+	int[] money;
+	
+	String formattedDate;
+	String formattedDate2;
+	String EndformattedDate;
+	String EndformattedDate2;
+	Date endtime;
+	Date reservationDate;
+	Calendar calendar;
+ 
+	SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+	SimpleDateFormat newFormat2 = new SimpleDateFormat("HH:mm:ss");
 	
 	public MyReserveUI() {
 		setTitle("내 예약정보");
@@ -42,7 +56,7 @@ public class MyReserveUI extends JFrame implements ActionListener, ListSelection
 
 		//컨텐츠 패널의 객체 메소드 호출
 		Container c = getContentPane();
-		c.setLayout(null);  //컨텐츠 패널 초기화
+		c.setLayout(null);//컨텐츠 패널 초기화
 		
 		// 로고 추가
 		ImageIcon logoIcon = new ImageIcon("meeting_room/logo.jpg");
@@ -94,16 +108,16 @@ public class MyReserveUI extends JFrame implements ActionListener, ListSelection
 	}
 	
 	@Override
-    public void valueChanged(ListSelectionEvent e) {
-        // 사용자가 어떤 행을 선택했는지 확인
-        if (!e.getValueIsAdjusting() && reserveTable.getSelectedRow() != -1) {
-            // 특정 행이 선택되었을 때 예약 취소 버튼 활성화
-            reserveCancel_btn.setEnabled(true);
-        } else {
-            // 아무 행도 선택되지 않았을 때 예약 취소 버튼 비활성화
-            reserveCancel_btn.setEnabled(false);
-        }
-    }
+	public void valueChanged(ListSelectionEvent e) {
+		// 사용자가 어떤 행을 선택했는지 확인
+		if (!e.getValueIsAdjusting() && reserveTable.getSelectedRow() != -1) {
+			// 특정 행이 선택되었을 때 예약 취소 버튼 활성화
+			reserveCancel_btn.setEnabled(true);
+		} else {
+			// 아무 행도 선택되지 않았을 때 예약 취소 버튼 비활성화
+			reserveCancel_btn.setEnabled(false);
+		}
+	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -112,10 +126,23 @@ public class MyReserveUI extends JFrame implements ActionListener, ListSelection
 		if (obj == reserve_btn) {
 			ReserveUI rui = new ReserveUI();
 			this.dispose();
-		}
-		else if (obj == reserveCancel_btn) {
+		} else if (obj == reserveCancel_btn) {
 			int row = reserveTable.getSelectedRow();
 			TableModel tm = reserveTable.getModel();
+			String time = (String)tm.getValueAt(row, 0) + " " + (String) tm.getValueAt(row,1);
+			
+			try {
+				Date resvday = originalFormat.parse(time);
+				Date currentDate = new Date();
+				
+				if (resvday.before(currentDate)) {
+					JOptionPane.showMessageDialog(this, "시간이 지난 예약은 취소할 수 없습니다.");
+					return;
+				}
+			} catch (ParseException e1) {
+				e1.printStackTrace();
+			}
+			
 			int option = JOptionPane.showOptionDialog(null, "해당 예약을 취소하시겠습니까?", "예약 확인", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"예약취소", "취소"}, "취소");
 			
 			if (option == JOptionPane.YES_OPTION) {
@@ -123,43 +150,122 @@ public class MyReserveUI extends JFrame implements ActionListener, ListSelection
 				ReserveBean bean = new ReserveBean();
 				bean.setResvid(LoginUI.ID);
 				bean.setResvroom((String) reserveTable.getValueAt(row, 3));
-				bean.setResvtime((String) reserveTable.getValueAt(row, 0) + " " + (String) reserveTable.getValueAt(row, 1));
+				bean.setResvtime(time);
 				
 				String id = bean.getResvid();
 				String room = bean.getResvroom();
-				String time = bean.getResvtime();
+				String time2 = bean.getResvtime();
 				
-				if (mgr.cancelresv(id, room, time)) {
+				MyInfoBean bean2 = mgr.select(id);
+				int usermoney = bean2.getMoney();
+				
+				bean2.setID(id);
+				bean2.setMoney(usermoney + money[row]);
+				
+				if (mgr.cancelresv(id, room, time2) && mgr.charge(bean2)) {
 					JOptionPane.showMessageDialog(null, "예약이 취소되었습니다.");
+					mgr.select(bean2.getID());
+					MainPageUI.balance_value_lb.setText(String.valueOf(bean2.getMoney()) + "원");
+					RechargeUI.recharge_value_tf.setText("0");
+					RechargeUI.cancel_btn.doClick();
+					dispose();
 					viewlist();
 				}
 			}
-		}
-		else if (obj == ok_btn) {
+		} else if (obj == ok_btn) {
 			this.dispose();
 		}
 	}
 	
 	public void viewlist() {
 		//테이블 추가
+		Date currentDate = new Date();
+		Vector<ReserveBean> reservelist;
+		MyInfoMgr mgr = new MyInfoMgr();
+		reservelist = mgr.reserveAll();
+		 
+		String loginID = LoginUI.ID;
+		
+		int a = 0;
+		money = new int[reservelist.size()];
+		
+		for(int i = 0; i < reservelist.size(); i++ ) {
+			ReserveBean bean = reservelist.get(i);
+			try {
+				reservationDate = originalFormat.parse(bean.getResvtime());
+				calendar = Calendar.getInstance();
+				calendar.setTime(reservationDate);
+				calendar.add(Calendar.HOUR_OF_DAY, bean.getResvusetime());
+				
+				EndformattedDate = originalFormat.format(calendar.getTime());
+				EndformattedDate2 = newFormat2.format(calendar.getTime());
+				endtime = originalFormat.parse(EndformattedDate);
+				formattedDate = newFormat.format(reservationDate);
+				formattedDate2 = newFormat2.format(reservationDate);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			
+			if(loginID.equals(bean.getResvid())) {
+				if(endtime.after(currentDate)) {
+					a++;
+				}
+			}
+		}
+
 		// 데이터 및 컬럼명 배열 정의
 		String[] columnNames = {"예약 날짜", "시작 시간", "종료 시간", "예약 룸"};
-		String[][] data = {{"", "", "", ""}};
-					
+		String[][] data = new String[a][columnNames.length];
+		
+		a = 0;
+		for(int i = 0; i < reservelist.size(); i++ ) {
+			ReserveBean bean = reservelist.get(i);
+			try {
+				reservationDate = originalFormat.parse(bean.getResvtime());
+				calendar = Calendar.getInstance();
+				calendar.setTime(reservationDate);
+				calendar.add(Calendar.HOUR_OF_DAY, bean.getResvusetime());
+				
+				EndformattedDate = originalFormat.format(calendar.getTime());
+				EndformattedDate2 = newFormat2.format(calendar.getTime());
+				endtime = originalFormat.parse(EndformattedDate);
+				formattedDate = newFormat.format(reservationDate);
+				formattedDate2 = newFormat2.format(reservationDate);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			
+			if(loginID.equals(bean.getResvid())) {
+				if(endtime.after(currentDate)) {
+					data[a][0] = formattedDate;
+					data[a][1] = formattedDate2;
+					data[a][2] = EndformattedDate2;
+					data[a][3] = bean.getResvroom();
+					money[a] = bean.getResvtotal();
+					a++;
+				}
+			}
+		}
+		
 		// DefaultTableModel을 사용하여 JTable에 데이터 설정
 		DefaultTableModel model = new DefaultTableModel(data, columnNames) {
 			@Override
-			public boolean isCellEditable(int row, int column) {
-				// 모든 셀을 편집 불가능하도록 설정
-                return false;
-			}
+			public boolean isCellEditable(int row, int column) { return false; }
 		};
+		
+		if (reserveTable != null) {
+			model = (DefaultTableModel) reserveTable.getModel();// 기존 모델 가져오기
+			model.setRowCount(0);// 모델의 행 초기화
+			
+			for (int i = 0; i < a; i++) {
+				model.addRow(data[i]);// 새로운 데이터로 모델 업데이트
+			}
+		}
+		
 		reserveTable = new JTable(model);
-		reserveTable.getTableHeader().setReorderingAllowed(false); // 테이블 헤더 이동 비활성화
-
-        // 테이블의 셀 편집을 비활성화하여 테이블 전체를 편집 불가능하게 만듭니다.
-        reserveTable.setDefaultEditor(Object.class, null);
-        reserveTable.getTableHeader().setResizingAllowed(false);
+		reserveTable.getTableHeader().setReorderingAllowed(false);
+		reserveTable.getTableHeader().setResizingAllowed(false);
+		reserveTable.setDefaultEditor(Object.class, null);
 		
 		reservePane = new JScrollPane(reserveTable);
 
@@ -167,10 +273,10 @@ public class MyReserveUI extends JFrame implements ActionListener, ListSelection
 		reservePane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 		// 컬럼 너비 조절
-		reserveTable.getColumnModel().getColumn(0).setPreferredWidth(120);
-		reserveTable.getColumnModel().getColumn(1).setPreferredWidth(80);
-		reserveTable.getColumnModel().getColumn(2).setPreferredWidth(80);
-		reserveTable.getColumnModel().getColumn(3).setPreferredWidth(60);
+		reserveTable.getColumnModel().getColumn(0).setPreferredWidth(90);
+		reserveTable.getColumnModel().getColumn(1).setPreferredWidth(90);
+		reserveTable.getColumnModel().getColumn(2).setPreferredWidth(90);
+		reserveTable.getColumnModel().getColumn(3).setPreferredWidth(70);
 
 		// 행 높이 조절
 		reserveTable.setRowHeight(20);
@@ -180,77 +286,26 @@ public class MyReserveUI extends JFrame implements ActionListener, ListSelection
 		for (int i = 0; i < reserveTable.getColumnCount(); i++) {
 			reserveTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
 		}
-		
-		// DB에서 받아온 DATE타입을 테이블에 업데이트 하기 위해 포맷을 변경하기 위한 선언
-		SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd"); 
-		SimpleDateFormat newFormat2 = new SimpleDateFormat("HH:mm:ss");
-		
-		Vector<ReserveBean> reservelist;
-		MyInfoMgr mgr = new MyInfoMgr();
-		reservelist = mgr.reserveAll();
-		 
-		String loginID = LoginUI.ID;
-		// 테이블 업데이트
-		model = (DefaultTableModel) reserveTable.getModel();
-        model.setRowCount(0); // 기존 테이블 내용 지우기
-        
-        // reservelist를 날짜에 따라 정렬
-        Collections.sort(reservelist, new Comparator<ReserveBean>() {
-            @Override
-            public int compare(ReserveBean bean1, ReserveBean bean2) {
-                Date date1 = null;
-                Date date2 = null;
 
-                try {
-                    date1 = originalFormat.parse(bean1.getResvtime());
-                    date2 = originalFormat.parse(bean2.getResvtime());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                return date1.compareTo(date2);
-            }
-        });
-        
-        Date currentDate = new Date();
+		//reservelist를 날짜에 따라 정렬
+		Collections.sort(reservelist, new Comparator<ReserveBean>() {
+			@Override
+			public int compare(ReserveBean bean1, ReserveBean bean2) {
+				Date date1 = null;
+				Date date2 = null;
 		
-		for(int i = 0; i < reservelist.size(); i++ ) {
-			ReserveBean bean = reservelist.get(i);
-			
-			// 로그인 아이디와 예약 bean의 같은 경우만 테이블에 출력 
-			if(loginID.equals(bean.getResvid())) {
-			
 				try {
-                    Date reservationDate = originalFormat.parse(bean.getResvtime());
-
-                    // 시작시간이 현재 시간 이후인지 검사하고 이후인 경우에만 테이블에 출력 
-                    if (reservationDate.after(currentDate)) {
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.setTime(reservationDate); // 캘린더의 데이트를 받아온 시간으로 변경
-                        calendar.add(Calendar.HOUR_OF_DAY, bean.getResvusetime()); // 캘린더에 사용시간 더하기
-
-                        String formattedDate = newFormat.format(reservationDate); // 포멧 변경 YY-MM-DD
-                        String formattedDate2 = newFormat2.format(reservationDate); // 포멧 변경 HH:MM:SS
-                        String EndformattedDate2 = newFormat2.format(calendar.getTime()); // 캘린더에 사용시간을 더하고 포맷 변경하여 출력
-
-                        String[] rowData = { // 추가할 행의 데이터
-                                formattedDate,
-                                formattedDate2,
-                                EndformattedDate2,
-                                bean.getResvroom()
-                        };
-                        model.addRow(rowData);
-                    }
-                } catch (ParseException e2) {
-                    e2.printStackTrace();
-                }
+					date1 = originalFormat.parse(bean1.getResvtime());
+					date2 = originalFormat.parse(bean2.getResvtime());
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				return date1.compareTo(date2);
 			}
-			
-		}
+		});
 	}
 	
 	public static void main(String[] args) {
-		MyReserveUI mrUI = new MyReserveUI();
+		
 	}
 }

@@ -21,7 +21,7 @@ public class MemberInfoUI extends JFrame implements ActionListener {
 
 	JTable membertable;
 	JScrollPane pane;
-	static JButton jb = new JButton("a");;
+	static JButton jb = new JButton("a");
 
 	//컨텐츠 패널의 객체 메소드 호출
 	Container c = getContentPane();

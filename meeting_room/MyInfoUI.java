@@ -53,7 +53,7 @@ public class MyInfoUI extends JFrame implements ActionListener {
 	
 	public MyInfoUI() {		
 		setTitle("≥ª ¡§∫∏");
-		setSize(600, 760);
+		setSize(380, 580);
 
 		id = LoginUI.ID;
 		mgr = new MyInfoMgr();
@@ -62,7 +62,6 @@ public class MyInfoUI extends JFrame implements ActionListener {
 		name = bean.getName();
 		phone = bean.getPhone();
 		amount = bean.getMoney();
-		
 		
 		id_tf.setText(id);
 		name_tf.setText(name);
@@ -76,26 +75,26 @@ public class MyInfoUI extends JFrame implements ActionListener {
 		Container c = getContentPane();
 		c.setLayout(null); //ƒ¡≈Ÿ√˜ ∆–≥Œ √ ±‚
 		
-		id_lb.setBounds(185,  50,  100,  40);
-		pw_lb.setBounds(185,  100,  100,  40);
-		pwcheck_lb.setBounds(185, 150, 100, 40);
-		name_lb.setBounds(185,  200,  100,  40);
-		phone_lb.setBounds(185,  250,  100,  40);
-		amount_lb.setBounds(185, 300, 100, 40);
+		id_lb.setBounds(85,  50,  100,  40);
+		pw_lb.setBounds(85,  100,  100,  40);
+		pwcheck_lb.setBounds(85, 150, 100, 40);
+		name_lb.setBounds(85,  200,  100,  40);
+		phone_lb.setBounds(85,  250,  100,  40);
+		amount_lb.setBounds(85, 300, 100, 40);
 		
 		id_tf.setForeground(Color.RED);
 		amount_tf.setForeground(Color.RED);
 		
-		id_tf.setBounds(280, 50, 100, 40);
-		pw_tf.setBounds(280, 100, 100, 40);
-		pwcheck_tf.setBounds(280, 150, 100, 40);
-		name_tf.setBounds(280, 200, 100, 40);
-		phone_tf.setBounds(280, 250, 100, 40);
-		amount_tf.setBounds(280, 300, 100, 40);
+		id_tf.setBounds(180, 50, 100, 40);
+		pw_tf.setBounds(180, 100, 100, 40);
+		pwcheck_tf.setBounds(180, 150, 100, 40);
+		name_tf.setBounds(180, 200, 100, 40);
+		phone_tf.setBounds(180, 250, 100, 40);
+		amount_tf.setBounds(180, 300, 100, 40);
 		
-		my_usage_btn.setBounds(185, 450, 200, 70);
-		modify_info_btn.setBounds(185, 540, 90, 70);
-		ok_btn.setBounds(295, 540, 90, 70);
+		my_usage_btn.setBounds(85, 360, 200, 50);
+		modify_info_btn.setBounds(85, 430, 90, 50);
+		ok_btn.setBounds(195, 430, 90, 50);
 		
 		Font font = new Font("Dialog", Font.BOLD, 18);
 		Font font2 = new Font("Dialog", Font.BOLD, 14);
@@ -183,6 +182,6 @@ public class MyInfoUI extends JFrame implements ActionListener {
 	}
 
 	public static void main(String[] args) {
-		
+		new MyInfoUI();
 	}
 }

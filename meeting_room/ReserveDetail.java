@@ -241,7 +241,7 @@ public class ReserveDetail implements ActionListener {
 		TotalBean bean4 = new TotalBean();
 		try {
 			Date date = originalFormat.parse(str + ":00");
-			System.out.println(date);
+			
 			// getResvusetime()을 시간으로 변환하고 더하기
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date); // 캘린더의 데이트를 받아온 시간으로 변경
@@ -256,6 +256,7 @@ public class ReserveDetail implements ActionListener {
 			bean4.setDay(day);
 			bean4.setIntime(formattedDate + " " + formattedDate2);
 			bean4.setOuttime(formattedDate + " " + EndformattedDate2);
+			bean4.setRoom_total(totalPrice);
 			bean4.setTotal(totalPrice);
 		} catch (Exception e) {
 			return;

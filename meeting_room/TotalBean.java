@@ -6,8 +6,29 @@ public class TotalBean {
 	private String day;
 	private String intime;
 	private String outtime;
+	private int food_total;
+	private int game_total;
+	private int room_total;
 	private int total;
 	
+	public int getFood_total() {
+		return food_total;
+	}
+	public void setFood_total(int food_total) {
+		this.food_total = food_total;
+	}
+	public int getGame_total() {
+		return game_total;
+	}
+	public void setGame_total(int game_total) {
+		this.game_total = game_total;
+	}
+	public int getRoom_total() {
+		return room_total;
+	}
+	public void setRoom_total(int room_total) {
+		this.room_total = room_total;
+	}
 	public String getRoom() {
 		return room;
 	}

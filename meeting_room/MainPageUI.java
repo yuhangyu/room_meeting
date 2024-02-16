@@ -37,7 +37,7 @@ public class MainPageUI extends JFrame implements ActionListener {
 	static JLabel balance_value_lb = new JLabel("0원");
 	
 	//Swing에서 \n을 통한 줄바꿈을 지원하지 않아서, HTML을 활용하여 버튼 내의 줄바꿈
-	JButton reserve_btn = new JButton("<html><div style='text-align: center;'>예약 /<br>내 예약정보</div></html>");
+	JButton reserve_btn = new JButton("예약하기");
 	JButton deposit_btn = new JButton("충전");
 	JButton myinfo_btn = new JButton("내 정보");
 	JButton logout_btn = new JButton("로그아웃");
