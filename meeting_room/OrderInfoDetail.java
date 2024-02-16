@@ -5,8 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.Vector;
 
 import javax.swing.JFrame;
@@ -20,6 +18,7 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
     
     JTable ODT;
     JScrollPane pane;
+    
     
     Container c = getContentPane();
 
