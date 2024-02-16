@@ -287,7 +287,7 @@ public class FoodOrderUI extends JFrame implements Runnable, ActionListener {
 		                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		                String day = currentTime.format(formatter);
 		                
-		                TotalBean bean5 = mgr.useAll(room,  LoginUI.ID, day);
+		                TotalBean bean5 = mgr.useAll(room, LoginUI.ID, day);
 		                bean5.setFood_total(bean5.getFood_total() + total);
 		                bean5.setTotal(bean5.getTotal() + total);
 		                bean.setMoney(money - total);
@@ -298,6 +298,7 @@ public class FoodOrderUI extends JFrame implements Runnable, ActionListener {
 					sendMessage(MeetingProtocol.ORDER + MeetingProtocol.MODE + room);
 					cartList.clear(); // 장바구니 비우기
 					ReserveUI.a.doClick();
+					dispose();
 					return;
 				}
 			}

@@ -312,6 +312,7 @@ public class GameOrderUI extends JFrame implements Runnable, ActionListener {
 		                    sendMessage(MeetingProtocol.ORDER + MeetingProtocol.MODE + room);
 		                    cartList.clear(); // 장바구니 비우기
 		                    ReserveUI.a.doClick();
+		                    dispose();
 		                    return;
 		                }
 		            }

@@ -1,8 +1,6 @@
 package meeting_room;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Font;
 import java.awt.List;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -13,14 +11,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Vector;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 
 public class MeetingServer extends JFrame {
 	
@@ -125,7 +117,7 @@ public class MeetingServer extends JFrame {
 				id = data;
 			} else if (cmd.equals(MeetingProtocol.ORDER)) {
 				room = data;
-				JOptionPane.showMessageDialog(null, room + " 에서 새로운 주문이 있습니다.");
+				JOptionPane.showMessageDialog(MeetingServer.this, room + " 에서 새로운 주문이 있습니다.");
 				LocalDateTime currentTime = LocalDateTime.now();
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:SS");
 				String time = currentTime.format(formatter);
