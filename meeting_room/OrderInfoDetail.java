@@ -29,8 +29,6 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
         
         
         c.setLayout(null);
-        
-
         orderdetail(no,id, time);
 
         pane.setBounds(0, 0, 700, 400);
@@ -48,7 +46,6 @@ public class OrderInfoDetail extends JFrame implements ActionListener{
         
     }
     
-
     public void orderdetail(String no, String id, String time) {
 
         Vector<OrderInfoBean> foodList;
