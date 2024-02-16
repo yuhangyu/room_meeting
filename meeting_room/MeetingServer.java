@@ -9,9 +9,12 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -25,17 +28,17 @@ public class MeetingServer extends JFrame {
 	ServerSocket server;
 	Vector<ClientThread2> vc;
 	
-	static List slist = new List();
+	List slist = new List();
 	
 	public MeetingServer() {
-		setTitle("사용자 리스트");
+		setTitle("주문 리스트");
 		setSize(300, 500);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		JPanel p2 = new JPanel();
 		p2.setLayout(new BorderLayout());
-		slist.add("** 접속자 리스트 **");
+		slist.add("** 주문 리스트 **");
 		p2.add(BorderLayout.CENTER, slist);
 		add(p2);
 		
@@ -72,118 +75,13 @@ public class MeetingServer extends JFrame {
 		vc.remove(ct);
 	}
 	
-	//접속된 모든 id 리스트 리턴 ex)aaa;bbb;홍길동;강호동;
-	public String getIdList() {
-		String list = "";
-		slist.removeAll();
-		slist.add("** 사용자 리스트 **");
-		for (int i = 0; i < vc.size(); i++) {
-			ClientThread2 ct = vc.get(i);
-			slist.add(ct.id);
-			list += ct.id + ";";
-		}
-		return list;
-	}
-	
-	class Order extends JFrame {
-		
-		JTable membertable;
-		JScrollPane pane;
-		Container c = getContentPane();
-		
-		public Order() {
-			setTitle("주문");
-			setSize(400, 300);
-			setLocationRelativeTo(null);
-			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			setVisible(true);
-			setResizable(false);
-			
-			c.setLayout(null);
-			
-			JLabel info = new JLabel("주문 정보");
-			
-			Font font = new Font("Dialog", Font.BOLD, 40);
-			info.setFont(font);
-			
-			info.setBounds(105, 20, 200, 50);
-			
-			c.add(info);
-		}
-		
-		//24.02.14 구현해야함ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ
-		public void orderlist() {
-			Vector<MyInfoBean> vlist;
-			MyInfoMgr mgr;
-			
-			mgr = new MyInfoMgr();
-			vlist = mgr.selectAll();
-			
-			String header[]= {"번호", "아이디", "이름", "전화번호", "현재잔액"};
-			String[][] conts = new String[vlist.size()][header.length];
-			
-			//순번, 아이디, 이름, 전화번호, 현재잔액 값 conts 배열에 저장
-			for(int i = 0; i < vlist.size(); i++) {
-				MyInfoBean bean = vlist.get(i);
-				conts[i][0] = String.valueOf(i + 1);
-				conts[i][1] = bean.getID();
-				conts[i][2] = bean.getName();
-				conts[i][3] = bean.getPhone();
-				conts[i][4] = String.valueOf(bean.getMoney());
-			}
-			
-			//테이블 직접 편집 불가능
-			DefaultTableModel model = new DefaultTableModel(conts, header) {
-				public boolean isCellEditable(int i, int c){ return false; }
-			};
-			
-			//테이블 가운데 정렬
-			DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-			centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-	            
-			//선언
-			membertable = new JTable(model);
-			pane = new JScrollPane(membertable);
-			pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);// 항상 세로 스크롤바 표시
-			
-			//폰트 설정
-			Font font = new Font("Dialog", Font.BOLD, 16);
-			membertable.setFont(font);
-
-			//크기 조절 불가능
-			membertable.getTableHeader().setResizingAllowed(false);
-			
-			//컬럼 사이즈 지정
-			membertable.getColumnModel().getColumn(0).setPreferredWidth(25);
-			membertable.getColumnModel().getColumn(1).setPreferredWidth(70);
-			membertable.getColumnModel().getColumn(2).setPreferredWidth(70);
-			membertable.getColumnModel().getColumn(3).setPreferredWidth(160);
-			membertable.getColumnModel().getColumn(4).setPreferredWidth(110);
-			membertable.setRowHeight(30);
-
-			//header 추가, 가운데 정렬
-			for (int i = 0; i < membertable.getColumnCount(); i++) {
-				membertable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-			}
-		}
-	}
-	
-	//매개변수 id값으로 ClientThread2를 검색 : 귓속말, 쪽지에 사용
-	public ClientThread2 findClient(String id) {
-		ClientThread2 ct = null;
-		for (int i = 0; i < vc.size(); i++) {
-			ct = vc.elementAt(i);
-			if (ct.id.equals(id)) break;
-		}
-		return ct;
-	}
-	
 	class ClientThread2 extends Thread{
 		
 		Socket sock;
 		BufferedReader in;
 		PrintWriter out;
 		String id;
+		String room;
 		
 		public ClientThread2(Socket sock) {
 			try {
@@ -225,7 +123,13 @@ public class MeetingServer extends JFrame {
 			
 			if (cmd.equals(MeetingProtocol.ID)) {
 				id = data;
-				sendMessage(MeetingProtocol.CHATLIST + MeetingProtocol.MODE + getIdList());
+			} else if (cmd.equals(MeetingProtocol.ORDER)) {
+				room = data;
+				JOptionPane.showMessageDialog(null, room + " 에서 새로운 주문이 있습니다.");
+				LocalDateTime currentTime = LocalDateTime.now();
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:SS");
+				String time = currentTime.format(formatter);
+				slist.add("[" + time + "] " + room + " 주문");
 			}
 		}
 		

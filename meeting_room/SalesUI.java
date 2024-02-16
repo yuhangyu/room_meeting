@@ -48,6 +48,7 @@ public class SalesUI extends JFrame  {
 				int row = totaltable.getSelectedRow();
 				TableModel model = totaltable.getModel();
 				String room = String.valueOf(model.getValueAt(row,  0));
+				SalesDetailUI sdui = new SalesDetailUI(room);
 			}
 			super.mouseClicked(e);
 		}

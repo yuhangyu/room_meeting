@@ -30,15 +30,13 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 	JLabel end_date_lb = new JLabel("검색 종료일");
 	JButton ok_btn = new JButton("확인");
 	JButton search_btn = new JButton("검색");
+	String room;
 	
 	JTable foodTable;
 	JScrollPane foodPane;
 	
 	JTable gameTable;
 	JScrollPane gamePane;
-	
-	
-	
 	
 	// 현재 날짜를 얻어옴
 	Date currentDate = new Date();
@@ -67,12 +65,14 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 	SpinnerNumberModel spinnerNumberModel6 = new SpinnerNumberModel(currentDay, 1, 31, 1);
 	JSpinner DaySpinner2 = new JSpinner(spinnerNumberModel6);
 	
-	SalesDetailUI(){
+	SalesDetailUI(String room) {
+		this.room = room;
+		
 		//버튼 이벤트 추가
 		ok_btn.addActionListener(this);
 		search_btn.addActionListener(this);
 		
-		setTitle("판매 정보");
+		setTitle(room + " - 판매 정보");
 		setSize(1000, 500);
 		
 		//컨텐츠 패널의 객체 메소드 호출
@@ -143,12 +143,58 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 	}
 	
 	public void viewSalesPane() {
+		MyInfoMgr mgr = new MyInfoMgr();
+
+		Vector<FoodBean> flist;
+		Vector<OrderInfoBean> fslist;
+		flist = mgr.foodAll();
+
 		// 데이터 및 컬럼명 배열 정의
-		String[] columnNames = {"음식", "수량", "총 가격"};
-		String[][] data = {};
+		String[] columnNames = {"순번", "음식", "수량", "총 가격"};
+		String[][] data = new String[flist.size()][columnNames.length];
+
+		for(int i = 0; i < flist.size(); i++) {
+			FoodBean bean = flist.get(i);
+			int count = 0;
+			int amount = 0;
+			
+			fslist = mgr.orderfood(room, bean.getFood());
+			for (int j = 0; j < fslist.size(); j++) {
+				OrderInfoBean bean1 = fslist.get(j);
+				count += Integer.valueOf(bean1.getFoodcount());
+				amount += Integer.valueOf(bean1.getFoodprice());
+			}
+
+			data[i][0] = String.valueOf(i + 1);
+			data[i][1] = bean.getFname();
+			data[i][2] = String.valueOf(count);
+			data[i][3] = String.valueOf(amount);
+		}
+
+		Vector<GameBean> glist;
+		Vector<OrderInfoBean> gslist;
+		glist = mgr.gameAll();
 		
-		String[] columnNames1 = {"보드게임", "수량", "총 가격"};
-		String[][] data1 = {};
+		String[] columnNames1 = {"순번", "보드게임", "수량", "총 가격"};
+		String[][] data1 = new String[glist.size()][columnNames1.length];
+		
+		for(int i = 0; i < glist.size(); i++) {
+			GameBean bean = glist.get(i);
+			int count = 0;
+			int amount = 0;
+			
+			gslist = mgr.ordergame(room, bean.getGame());
+			for (int j = 0; j < gslist.size(); j++) {
+				OrderInfoBean bean1 = gslist.get(j);
+				count += Integer.valueOf(bean1.getGamecount());
+				amount += Integer.valueOf(bean1.getGameprice());
+			}
+			
+			data1[i][0] = String.valueOf(i + 1);
+			data1[i][1] = bean.getGname();
+			data1[i][2] = String.valueOf(count);
+			data1[i][3] = String.valueOf(amount);
+		}
 		
 		// DefaultTableModel을 사용하여 JTable에 데이터 설정
 		//테이블 직접 편집 불가능
@@ -176,15 +222,17 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 		gamePane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);	
 			
 		//컬럼 사이즈 지정
-		foodTable.getColumnModel().getColumn(0).setPreferredWidth(200);
-		foodTable.getColumnModel().getColumn(1).setPreferredWidth(80);
-		foodTable.getColumnModel().getColumn(2).setPreferredWidth(150);
+		foodTable.getColumnModel().getColumn(0).setPreferredWidth(70);
+		foodTable.getColumnModel().getColumn(1).setPreferredWidth(140);
+		foodTable.getColumnModel().getColumn(2).setPreferredWidth(50);
+		foodTable.getColumnModel().getColumn(3).setPreferredWidth(120);
 		
 		foodTable.setRowHeight(20);
-		
-		gameTable.getColumnModel().getColumn(0).setPreferredWidth(200);
-		gameTable.getColumnModel().getColumn(1).setPreferredWidth(80);
-		gameTable.getColumnModel().getColumn(2).setPreferredWidth(150);
+
+		gameTable.getColumnModel().getColumn(0).setPreferredWidth(70);
+		gameTable.getColumnModel().getColumn(1).setPreferredWidth(140);
+		gameTable.getColumnModel().getColumn(2).setPreferredWidth(50);
+		gameTable.getColumnModel().getColumn(3).setPreferredWidth(120);
 		
 		gameTable.setRowHeight(20);
 		
@@ -275,7 +323,6 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 		String[] columnNames1 = {"보드게임", "수량", "총 가격"};
 		String[][] data1 = {};
 		
-
 		
 		DefaultTableModel model = new DefaultTableModel(data, columnNames) {
 			public boolean isCellEditable(int i, int c){ return false; }
@@ -287,10 +334,7 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 		};
 		gameTable.setModel(model1);
 		
-		
-		
 		sales();
-		
 	}
 	
 	public void errormsg() {
@@ -303,13 +347,7 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 		dialog.setVisible(true);
 	}
 	
-	
-
-
 	public static void main(String[] args) {
-		SalesDetailUI sd = new SalesDetailUI();
+		new SalesUI();
 	}
-
-	
-
 }
