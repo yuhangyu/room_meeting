@@ -54,12 +54,13 @@ public class OrdMgr {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "update game_sales set game_state=? where game_room=? and game_id=? and games=?";
+			sql = "update game_sales set game_state=? where game_room=? and game_id=? and games=? and sales_day=?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setBoolean(1, bean.isGamestate());
 			pstmt.setString(2, bean.getRoom_no());
 			pstmt.setString(3, bean.getGameid());
 			pstmt.setString(4, bean.getGamename());
+			pstmt.setString(5,  bean.getOrdertime());
 			if(pstmt.executeUpdate()==1) flag = true;
 		} catch (Exception e) {
 			e.printStackTrace();

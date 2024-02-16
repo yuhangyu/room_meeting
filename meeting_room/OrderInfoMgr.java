@@ -59,12 +59,13 @@ public class OrderInfoMgr {
 		boolean flag = false;
 		try {
 			con = pool.getConnection();
-			sql = "update food_sales set food_state=? where food_room=? and food_id=? and foods=?";
+			sql = "update food_sales set food_state=? where food_room=? and food_id=? and foods=? and sales_day=?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setBoolean(1, bean.isFoodstate());
 			pstmt.setString(2, bean.getRoom_no());
 			pstmt.setString(3, bean.getFoodid());
 			pstmt.setString(4, bean.getFoodname());
+			pstmt.setString(5,  bean.getOrdertime());
 			if(pstmt.executeUpdate()==1) flag = true;
 		} catch (Exception e) {
 			e.printStackTrace();

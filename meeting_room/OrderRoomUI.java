@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -28,6 +30,10 @@ public class OrderRoomUI extends JFrame {
 	String formattedDate; // 포멧 변경 YY-MM-DD
 	String formattedDate2; // 포멧 변경 HH:MM:SS
 	String EndformattedDate2; // 캘린더에 사용시간을 더하고 포맷 변경하여 출력
+
+	SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+	SimpleDateFormat newFormat2 = new SimpleDateFormat("HH:mm:ss");
 	
 	String info;
 	
@@ -35,7 +41,7 @@ public class OrderRoomUI extends JFrame {
 		this.info = info;
 		
 		setSize(1000,440);
-		setTitle("예약 정보 관리");
+		setTitle("주문 방 정보");
 		
 		c.setLayout(null);
 		
@@ -61,10 +67,16 @@ public class OrderRoomUI extends JFrame {
 			if (e.getClickCount() == 2) {
 				int row = reservetable.getSelectedRow();
 				TableModel tm = reservetable.getModel();
-				if (info.equals("음식")) {
-					FoodOrderUI fui = new FoodOrderUI();
-				} else if (info.equals("게임")) {
-					GameOrderUI gui = new GameOrderUI();
+				if (check(String.valueOf(tm.getValueAt(row, 5)), Integer.valueOf((String) tm.getValueAt(row,  6))) == true) {
+					if (info.equals("음식")) {
+						FoodOrderUI fui = new FoodOrderUI(String.valueOf(tm.getValueAt(row, 4)));
+						dispose();
+					} else if (info.equals("게임")) {
+						GameOrderUI gui = new GameOrderUI(String.valueOf(tm.getValueAt(row, 4)));
+						dispose();
+					}
+				} else {
+					JOptionPane.showMessageDialog(OrderRoomUI.this, "현재 주문 가능한 시간이 아닙니다.\n예약 시간 이후 주문해주세요.");
 				}
 			}
 			super.mouseClicked(e);
@@ -81,7 +93,7 @@ public class OrderRoomUI extends JFrame {
 		
 		for (int i = 0; i < vlist.size(); i++) {
 			ReserveBean bean = vlist.get(i);
-			if (check(bean.getResvtime(), bean.getResvusetime()) == true) {
+			if (resvlist(bean.getResvtime(), bean.getResvusetime()) == true) {
 				a++;
 			}
 		}
@@ -92,7 +104,7 @@ public class OrderRoomUI extends JFrame {
 		a = 0;
 		for (int i = 0; i < vlist.size(); i++) {
 			ReserveBean bean = vlist.get(i);
-			if (check(bean.getResvtime(), bean.getResvusetime()) == true) {
+			if (resvlist(bean.getResvtime(), bean.getResvusetime()) == true) {
 				conts[a][0] = String.valueOf(a + 1);
 				conts[a][1] = bean.getResvid();
 				conts[a][2] = bean.getResvname();
@@ -145,11 +157,42 @@ public class OrderRoomUI extends JFrame {
 		}
 	}
 	
+	public boolean resvlist(String time, int use) {
+		boolean flag = false;
+
+		String OriginalResvtime = time;
+		int resvtime = use;
+			
+		try {
+			Date date = originalFormat.parse(OriginalResvtime);
+			formattedDate = newFormat.format(date); // 포멧 변경 YY-MM-DD
+			
+			LocalDateTime currentTime = LocalDateTime.now();
+			LocalDate todayDate = currentTime.toLocalDate();
+			
+			LocalDate resv = LocalDate.parse(formattedDate);
+			
+                  Date currentDate = new Date();
+                  Calendar calendar = Calendar.getInstance();
+                  calendar.setTime(date); // 캘린더의 데이트를 받아온 시간으로 변경
+                  calendar.add(Calendar.HOUR_OF_DAY, resvtime); // 캘린더에 사용시간 더하기
+
+                  String EndformattedDate = originalFormat.format(calendar.getTime()); // 캘린더에 사용시간을 더하고 포맷 변경하여 출력
+                  Date endtime = originalFormat.parse(EndformattedDate);
+            
+			if (todayDate.isEqual(resv) && endtime.after(currentDate)) {
+				flag = true;
+			} else {
+				flag = false;
+			}
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}
+		return flag;
+	}
+	
 	public boolean check(String time, int use) {
 		boolean flag = false;
-		SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd"); 
-		SimpleDateFormat newFormat2 = new SimpleDateFormat("HH:mm:ss");
 
 		String OriginalResvtime = time;
 		int resvtime = use;
