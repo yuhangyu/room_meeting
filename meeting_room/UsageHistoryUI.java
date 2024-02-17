@@ -4,13 +4,13 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Timestamp;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -19,7 +19,9 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.text.DefaultFormatter;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
@@ -109,7 +111,8 @@ public class UsageHistoryUI extends JFrame implements ActionListener {
 		c.add(ok_btn);
 		c.add(search_btn);
 		c.add(historyPane);
-			
+
+		historyTable.addMouseListener(new MouseAction());
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -276,6 +279,21 @@ public class UsageHistoryUI extends JFrame implements ActionListener {
 		dialog = optionPane.createDialog(null, "오류 안내");
 		dialog.setLocationRelativeTo(null);
 		dialog.setVisible(true);
+	}
+	
+	private class MouseAction extends MouseAdapter {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			if (e.getClickCount() == 2) {
+				int row = historyTable.getSelectedRow();
+				TableModel model = historyTable.getModel();
+				String room = String.valueOf(model.getValueAt(row,  4));
+				String in_time = String.valueOf(model.getValueAt(row,  5));
+				int use_time = Integer.parseInt((String)model.getValueAt(row,  6));
+				UseDetailUI udui = new UseDetailUI(room, in_time, use_time);
+			}
+			super.mouseClicked(e);
+		}
 	}
 	
 	public static void main(String[] args) {

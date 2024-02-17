@@ -83,6 +83,8 @@ public class GameOrderUI extends JFrame implements Runnable, ActionListener {
 	JButton purchaseButton = new JButton("주문하기");
 	JFrame gameDetail;
 	String room;
+	String in_time;
+	JTextField requestField;
 	
 	public void updateTotalPrice() {
 	    int total = 0;
@@ -109,8 +111,10 @@ public class GameOrderUI extends JFrame implements Runnable, ActionListener {
 	 
 
 	
-	public GameOrderUI(String room) {
+	public GameOrderUI(String room, String in_time) {
 		this.room = room;
+		this.in_time = in_time;
+		
 		setTitle("게임 메뉴");
 		setSize(1000, 800);
 		setLocationRelativeTo(this);
@@ -185,7 +189,11 @@ public class GameOrderUI extends JFrame implements Runnable, ActionListener {
 		for (int i = 0; i < vlist.size(); i++) {
 			GameBean bean = vlist.get(i);
 			String name = bean.getGname().trim();
-			String img = "./Game/" + name + ".jpg";
+			String img;
+			if (name.contains(":"))
+				img = "./Game/" + name.replace(":", "_") + ".jpg";
+			else
+				img = "./Game/" + name + ".jpg";
 			int price = bean.getGprice();
 			games.add(new Game(bean.getGtype(), name, img, price));
 		}
@@ -253,7 +261,7 @@ public class GameOrderUI extends JFrame implements Runnable, ActionListener {
 				//주문 요청사항 입력 패널
 				JPanel requestPanel = new JPanel();
 				JLabel requestLabel = new JLabel("주문 요청사항: ");
-				JTextField requestField = new JTextField(20);
+				requestField = new JTextField(20);
 				requestField.setPreferredSize(new Dimension(200, 40));
 				requestPanel.add(requestLabel);
 				requestPanel.add(requestField);
@@ -303,6 +311,8 @@ public class GameOrderUI extends JFrame implements Runnable, ActionListener {
 		                bean4.setOrder_id(LoginUI.ID);
 		                bean4.setOrder_room(room);
 		                bean4.setOrder_total(total);
+						if (!"".equals(requestField.getText()))
+							bean4.setOrder_request(requestField.getText());
 		                
 		                LocalDateTime currentTime = LocalDateTime.now();
 		                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -310,10 +320,11 @@ public class GameOrderUI extends JFrame implements Runnable, ActionListener {
 		                TotalBean bean5 = mgr.useAll(room,  LoginUI.ID, day);
 		                bean5.setGame_total(bean5.getGame_total() + total);
 		                bean5.setTotal(bean5.getTotal() + total);
+		                bean5.setIntime(in_time);
 		                bean.setMoney(money - total);
 		                if (mgr.charge(bean) && mgr.order(bean4) && mgr.totalprice(bean5)) {
 		                    JOptionPane.showMessageDialog(null, "구매가 완료되었습니다.");
-					sendMessage(MeetingProtocol.ID + MeetingProtocol.MODE + LoginUI.ID);
+		                    sendMessage(MeetingProtocol.ID + MeetingProtocol.MODE + LoginUI.ID);
 		                    sendMessage(MeetingProtocol.ORDER + MeetingProtocol.MODE + room);
 		                    cartList.clear(); // 장바구니 비우기
 		                    ReserveUI.a.doClick();
@@ -528,6 +539,6 @@ public class GameOrderUI extends JFrame implements Runnable, ActionListener {
 	}
 	
 	public static void main(String[] args) {
-		new GameOrderUI("R01");
+		
 	}
 }

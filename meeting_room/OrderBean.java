@@ -5,6 +5,7 @@ public class OrderBean {
 	String order_room;
 	String order_time;
 	int order_total;
+	String order_request;
 	boolean order_state;
 	
 	
@@ -31,6 +32,12 @@ public class OrderBean {
 	}
 	public void setOrder_total(int order_total) {
 		this.order_total = order_total;
+	}
+	public String getOrder_request() {
+		return order_request;
+	}
+	public void setOrder_request(String order_request) {
+		this.order_request = order_request;
 	}
 	public boolean isOrder_state() {
 		return order_state;

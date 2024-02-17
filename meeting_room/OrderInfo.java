@@ -22,7 +22,6 @@ public class OrderInfo extends JFrame implements ActionListener{
 	static JTable orderTable;
 	JScrollPane pane;
 	static JButton jb = new JButton(" ");
-	String [][] id;
 	String [][] conts;
 	String [][] cont;
 	Container c = getContentPane();
@@ -65,7 +64,7 @@ public class OrderInfo extends JFrame implements ActionListener{
 				 if (row != -1) { // 선택된 행이 있는지 확인
 			            TableModel tm = orderTable.getModel();
 			            String no = tm.getValueAt(row,1).toString();
-			            OrderInfoDetail OID = new OrderInfoDetail(no, conts[row][2],conts[row][3], row);
+			            OrderInfoDetail OID = new OrderInfoDetail(no, conts[row][2],conts[row][3], row, cont[row][0]);
 				 } 
 			}
 			super.mouseClicked(e);
@@ -80,7 +79,8 @@ public class OrderInfo extends JFrame implements ActionListener{
 		
 			
 		String header[] = {"순서"/**/, "주문한 방","주문한 사람"/*room_num*/, "주문한 시간"/*ordertime*/,"총 금액"/*use_total*/, "주문 상태"/**/};
-		conts = new String [vlist.size()][header.length];	
+		conts = new String [vlist.size()][header.length];
+		cont = new String[vlist.size()][1];
 		
 //		id = new String [vlist.size()][header.length];	
 
@@ -92,7 +92,7 @@ public class OrderInfo extends JFrame implements ActionListener{
 				conts[i][3] = bean.getOrder_time();
 				conts[i][4] = String.valueOf(bean.getOrder_total());
 				conts[i][5] = String.valueOf(bean.isOrder_state()? "완료" : "대기중...");
-				
+				cont[i][0] = bean.getOrder_request();
 			
 			}
 		DefaultTableModel model = new DefaultTableModel(conts, header) {

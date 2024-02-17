@@ -35,6 +35,7 @@ private DBConnection pool;
 				bean.setOrder_room(rs.getString("order_room"));
 				bean.setOrder_time(rs.getString("order_time"));
 				bean.setOrder_total(rs.getInt("order_total"));
+				bean.setOrder_request(rs.getString("order_request"));
 				bean.setOrder_state(rs.getBoolean("order_state"));
 				vlist.addElement(bean);
 			}

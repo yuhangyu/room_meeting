@@ -33,7 +33,6 @@ public class OrderInfoMgr {
 				OrderInfoBean bean = new OrderInfoBean();
 				bean.setFoodname(rs.getString("foods"));
 				bean.setFoodcount(rs.getInt("food_count"));
-				bean.setFoodrequest(rs.getString("food_request"));
 				bean.setFoodprice(rs.getInt("Sales_amount"));
 				bean.setRoom_no(rs.getString("food_room"));
 				bean.setFoodstate(rs.getBoolean("food_state"));

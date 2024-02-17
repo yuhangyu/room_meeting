@@ -1,7 +1,10 @@
 package meeting_room;
 
 import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Timestamp;
@@ -16,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
@@ -41,6 +45,8 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 	
 	JTable gameTable;
 	JScrollPane gamePane;
+	
+	JLabel total;
 	
 	// 현재 날짜를 얻어옴
 	Date currentDate = new Date();
@@ -77,7 +83,7 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 		search_btn.addActionListener(this);
 		
 		setTitle(room + " - 판매 정보");
-		setSize(1000, 500);
+		setSize(1000, 550);
 		
 		//컨텐츠 패널의 객체 메소드 호출
 		Container c = getContentPane();
@@ -92,6 +98,7 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 		search_btn.setBounds(640, 60, 140, 70);
 		
 		viewSalesPane(); // 테이블 활성화 메서드 
+		
 		foodPane.setBounds(40, 150, 430, 270); 
 		gamePane.setBounds(500, 150, 430, 270);
 
@@ -104,11 +111,23 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 		
 		Font font = new Font("Dialog", Font.BOLD, 27);
 		Font font1 = new Font("Dialog", Font.BOLD, 18);
-
+		total.setFont(font);
 		sales_history_lb.setFont(font);
 		start_date_lb.setFont(font1);
 		end_date_lb.setFont(font1);
 		
+		JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        
+        // y값을 조정
+        constraints.gridy = 750;
+
+        // x값을 JFrame의 중앙에 위치시킴
+        constraints.gridx = GridBagConstraints.RELATIVE;
+        constraints.anchor = GridBagConstraints.CENTER;
+        
+        panel.add(total, constraints);
+        panel.setBounds(10, 430, 1000, 50);
 		c.add(sales_history_lb);
 		c.add(start_date_lb);
 		c.add(end_date_lb);
@@ -122,6 +141,7 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 		c.add(search_btn);
 		c.add(foodPane);
 		c.add(gamePane);
+		c.add(panel);
 		
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);
@@ -156,7 +176,9 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 		// 데이터 및 컬럼명 배열 정의
 		String[] columnNames = {"순번", "음식", "수량", "총 가격"};
 		String[][] data = new String[flist.size()][columnNames.length];
-
+		
+		int ftotal = 0, gtotal = 0;
+		
 		for(int i = 0; i < flist.size(); i++) {
 			FoodBean bean = flist.get(i);
 			int count = 0;
@@ -167,6 +189,7 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 				OrderInfoBean bean1 = fslist.get(j);
 				count += Integer.valueOf(bean1.getFoodcount());
 				amount += Integer.valueOf(bean1.getFoodprice());
+				ftotal += amount;
 			}
 
 			data[i][0] = String.valueOf(i + 1);
@@ -174,7 +197,7 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 			data[i][2] = String.valueOf(count);
 			data[i][3] = String.valueOf(amount);
 		}
-
+		
 		Vector<GameBean> glist;
 		Vector<OrderInfoBean> gslist;
 		glist = mgr.gameAll();
@@ -192,6 +215,7 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 				OrderInfoBean bean1 = gslist.get(j);
 				count += Integer.valueOf(bean1.getGamecount());
 				amount += Integer.valueOf(bean1.getGameprice());
+				gtotal += amount;
 			}
 			
 			data1[i][0] = String.valueOf(i + 1);
@@ -216,7 +240,9 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 		
 		gameTable = new JTable(model1);
 		gamePane = new JScrollPane(gameTable);
-				
+		
+		total = new JLabel("음식 : " + ftotal + "원, 게임 : " + gtotal + "원, 총 : " + (ftotal + gtotal) + "원");
+		
 		sales();
 	}
 	
@@ -276,8 +302,6 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 		} else if (obj.equals(search_btn)) {
 			salessearch();
 		}
-		
-		
 	}
 	
 	public void salessearch() {
@@ -315,6 +339,8 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 		String startday = syear + "-" + smonth + "-" + sday + " 00:00:00";
 		String endday = eyear + "-" + emonth + "-" + eday + " 23:59:59";
 
+		int ftotal = 0, gtotal = 0;
+		
 		MyInfoMgr mgr = new MyInfoMgr();
 		
 		Vector<OrderInfoBean> vlist;
@@ -341,6 +367,7 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 					OrderInfoBean bean2 = vlist.get(k);
 					count += Integer.valueOf(bean2.getFoodcount());
 					amount += Integer.valueOf(bean2.getFoodprice());
+					ftotal += amount;
 				}
 			}
 			
@@ -371,6 +398,7 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 					OrderInfoBean bean2 = vlist.get(k);
 					count += Integer.valueOf(bean2.getGamecount());
 					amount += Integer.valueOf(bean2.getGameprice());
+					gtotal += amount;
 				}
 			}
 			
@@ -389,6 +417,7 @@ public class SalesDetailUI extends JFrame implements ActionListener {
 			public boolean isCellEditable(int i, int c){ return false; }
 		};
 		gameTable.setModel(model1);
+		total.setText("음식 : " + ftotal + "원, 게임 : " + gtotal + "원, 총 : " + (ftotal + gtotal) + "원");
 		
 		sales();
 	}

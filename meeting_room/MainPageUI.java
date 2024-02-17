@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 
 public class MainPageUI extends JFrame implements ActionListener {
 	
+	private Thread thread;
 	String id;
 	String name;
 	int money;
@@ -147,15 +148,9 @@ public class MainPageUI extends JFrame implements ActionListener {
 		} else if (obj == deposit_btn ) {
 			RechargeUI rcg = new RechargeUI();
 		} else if (obj == purchasefood_btn) {
-			//if (check() == true) {
-				OrderRoomUI oui = new OrderRoomUI(new String("음식"));
-				//FoodOrderUI FUI = new FoodOrderUI();
-			//}
+			OrderRoomUI oui = new OrderRoomUI(new String("음식"));
 		} else if (obj == rentgame_btn) {
 			OrderRoomUI oui = new OrderRoomUI(new String("게임"));
-//			if (check() == true) {
-//				GameOrderUI GUI = new GameOrderUI();
-//			}
 		} else if (obj == myinfo_btn) {
 			MyInfoUI myinfo = new MyInfoUI();
 		} else if (obj == logout_btn) {
@@ -163,6 +158,7 @@ public class MainPageUI extends JFrame implements ActionListener {
 			LoginUI login = new LoginUI();
 		}
 	}
+	
 	
 	public boolean check() {
 		boolean flag = false;

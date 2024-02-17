@@ -62,6 +62,7 @@ public class FoodOrderUI extends JFrame implements Runnable, ActionListener {
 	List<Food> foods = new ArrayList<>();
 	JFrame detailDialog;
 	String room;
+	String in_time;
 	JLabel requestLabel = new JLabel("주문 요청사항: ");
 	JTextField requestField = new JTextField(20);
 	
@@ -85,8 +86,10 @@ public class FoodOrderUI extends JFrame implements Runnable, ActionListener {
 	    }
 
 
-	public FoodOrderUI(String room) {
+	public FoodOrderUI(String room, String in_time) {
 		this.room = room;
+		this.in_time = in_time;
+		
 		setTitle("음식 메뉴");
 		setSize(1000, 800);
 		setLocationRelativeTo(this);
@@ -264,8 +267,7 @@ public class FoodOrderUI extends JFrame implements Runnable, ActionListener {
 					JOptionPane.showMessageDialog(null, "잔액이 부족합니다.", "경고", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-
-		                new Thread(this).start();
+		        new Thread(this).start();
 				for (int i = 0; i < cartList.size(); i++) {
 					OrderInfoBean beans = new OrderInfoBean();
 					FoodBean bean2 = mgr.food(cartList.getElementAt(i).split(" ")[0]);
@@ -274,25 +276,22 @@ public class FoodOrderUI extends JFrame implements Runnable, ActionListener {
 					beans.setFoodid(LoginUI.ID);
 					beans.setFoodprice(bean2.getFprice() * Integer.parseInt(cartList.getElementAt(i).split("x")[1]));
 					beans.setFoodcount(Integer.parseInt(cartList.getElementAt(i).split("x")[1]));
-					if (!"".equals(requestField.getText()))
-						beans.setFoodrequest(requestField.getText());
 					mgr.foodsales(beans);
 				}
 				OrderBean bean4 = new OrderBean();
 		                bean4.setOrder_id(LoginUI.ID);
 		                bean4.setOrder_room(room);
 		                bean4.setOrder_total(total);
-		                
+						if (!"".equals(requestField.getText()))
+							bean4.setOrder_request(requestField.getText());
 		                LocalDateTime currentTime = LocalDateTime.now();
 		                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		                String day = currentTime.format(formatter);
-		                
 		                TotalBean bean5 = mgr.useAll(room, LoginUI.ID, day);
 		                bean5.setFood_total(bean5.getFood_total() + total);
 		                bean5.setTotal(bean5.getTotal() + total);
+		                bean5.setIntime(in_time);
 		                bean.setMoney(money - total);
-				
-				bean.setMoney(money - total);
 				if (mgr.charge(bean) && mgr.order(bean4) && mgr.totalprice(bean5)) {
 					JOptionPane.showMessageDialog(null, "구매가 완료되었습니다.");
 					sendMessage(MeetingProtocol.ID + MeetingProtocol.MODE + LoginUI.ID);
@@ -512,6 +511,6 @@ public class FoodOrderUI extends JFrame implements Runnable, ActionListener {
 	}
 	
 	public static void main(String[] args) {
-		new FoodOrderUI("R01");
+		
 	}
 }

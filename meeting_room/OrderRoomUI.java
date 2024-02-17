@@ -69,10 +69,10 @@ public class OrderRoomUI extends JFrame {
 				TableModel tm = reservetable.getModel();
 				if (check(String.valueOf(tm.getValueAt(row, 5)), Integer.valueOf((String) tm.getValueAt(row,  6))) == true) {
 					if (info.equals("음식")) {
-						FoodOrderUI fui = new FoodOrderUI(String.valueOf(tm.getValueAt(row, 4)));
+						FoodOrderUI fui = new FoodOrderUI(String.valueOf(tm.getValueAt(row, 4)), String.valueOf(tm.getValueAt(row, 5)));
 						dispose();
 					} else if (info.equals("게임")) {
-						GameOrderUI gui = new GameOrderUI(String.valueOf(tm.getValueAt(row, 4)));
+						GameOrderUI gui = new GameOrderUI(String.valueOf(tm.getValueAt(row, 4)), String.valueOf(tm.getValueAt(row, 5)));
 						dispose();
 					}
 				} else {
