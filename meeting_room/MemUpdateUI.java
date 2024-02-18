@@ -33,7 +33,7 @@ public class MemUpdateUI extends JFrame implements ActionListener {
 	public MemUpdateUI(String id) {
 		this.id = id;
 
-		setTitle("내 정보");
+		setTitle("회원 정보 수정");
 		setSize(400, 350);
 
 		//정보 저장 id, pw, name, phone(tel)
@@ -60,6 +60,8 @@ public class MemUpdateUI extends JFrame implements ActionListener {
 		phone_tf.setBounds(180, 130, 100, 40);
 		modify_info_btn.setBounds(85, 200, 90, 70);
 		ok_btn.setBounds(195, 200, 90, 70);
+		
+		id_tf.setEnabled(false);
 		
 		//폰트 설정
 		Font font = new Font("Dialog", Font.BOLD, 18);
@@ -110,8 +112,18 @@ public class MemUpdateUI extends JFrame implements ActionListener {
 	}
 	
 	public void change() {
-		bean.setName(name_tf.getText());
-		bean.setPhone(phone_tf.getText());
+		String name = name_tf.getText().trim();
+		String phone = phone_tf.getText().trim();
+		phone = phone_format(phone);
+		if ("".equals(name) || "".equals(phone)) {
+			JOptionPane.showMessageDialog(this, "공백인 칸을 입력해주세요.");
+			return;
+		} else if (phone.length() != 13) {
+			JOptionPane.showMessageDialog(this, "11자리 휴대전화 번호를 제대로 입력해주세요.");
+			return;
+		}
+		bean.setName(name);
+		bean.setPhone(phone);
 		if(mgr.update(bean)) {
 			name = bean.getName();
 			phone = bean.getPhone();
@@ -121,7 +133,9 @@ public class MemUpdateUI extends JFrame implements ActionListener {
 		}
 	}
 	
-	public static void main(String[] args) {
-		
+	//전화번호 입력 값을 000-0000-0000 형식으로 변경
+	public String phone_format(String number) {
+	      String regEx = "(\\d{3})(\\d{3,4})(\\d{4})";
+	      return number.replaceAll(regEx, "$1-$2-$3");
 	}
 }

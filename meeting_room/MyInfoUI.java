@@ -101,6 +101,7 @@ public class MyInfoUI extends JFrame implements ActionListener {
 		
 		id_lb.setFont(font);
 		pw_lb.setFont(font);
+		pwcheck_lb.setFont(font2);
 		name_lb.setFont(font);
 		phone_lb.setFont(font);
 		amount_lb.setFont(font);
@@ -154,7 +155,7 @@ public class MyInfoUI extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(this, "비밀번호와 비밀번호 확인에 입력한 비밀번호가 서로 다릅니다.");
 			} else if (name_tf.getText().equals(name) && phone_tf.getText().equals(phone) && new String(password).equals(pw)) {
 				JOptionPane.showMessageDialog(this, "변경할 정보가 없습니다.");
-			} else if ("".equals(name_tf.getText()) || "".equals(phone_tf.getText()) || "".equals(pw_tf.getText())) {
+			} else if ("".equals(name_tf.getText()) || "".equals(phone_tf.getText()) || "".equals(pw_tf.getText()) || "".equals(pwcheck_tf.getText())) {
 				JOptionPane.showMessageDialog(this, "공백으로 정보를 변경할 수 없습니다.");
 			} else {
 				change();
@@ -167,10 +168,23 @@ public class MyInfoUI extends JFrame implements ActionListener {
 	}
 	
 	public void change() {
-		byte[] password = SeedEncoding.encrypt(pw_tf.getText());
+		String pw = pw_tf.getText().trim();
+		String name = name_tf.getText().trim();
+		String phone = phone_tf.getText().trim();
+		
+		byte[] password = SeedEncoding.encrypt(pw);
 		bean.setPW(new String(password));
-		bean.setName(name_tf.getText());
-		bean.setPhone(phone_tf.getText());
+		
+		phone = phone_format(phone);
+		if ("".equals(name) || "".equals(phone)) {
+			JOptionPane.showMessageDialog(this, "공백인 칸을 입력해주세요.");
+			return;
+		} else if (phone.length() != 13) {
+			JOptionPane.showMessageDialog(this, "11자리 휴대전화 번호를 제대로 입력해주세요.");
+			return;
+		}
+		bean.setName(name);
+		bean.setPhone(phone);
 		if(mgr.update(bean)) {
 			pw = bean.getPW();
 			name = bean.getName();
@@ -179,6 +193,12 @@ public class MyInfoUI extends JFrame implements ActionListener {
 			MainPageUI.name_value_lb.setText(name);
 			dispose();
 		}
+	}
+	
+	//전화번호 입력 값을 000-0000-0000 형식으로 변경
+	public String phone_format(String number) {
+	      String regEx = "(\\d{3})(\\d{3,4})(\\d{4})";
+	      return number.replaceAll(regEx, "$1-$2-$3");
 	}
 
 	public static void main(String[] args) {
