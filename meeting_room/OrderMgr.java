@@ -3,6 +3,9 @@ package meeting_room;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Vector;
 
 public class OrderMgr {
@@ -26,8 +29,14 @@ private DBConnection pool;
 		Vector<OrderBean> vlist = new Vector<OrderBean>();
 		try {
 			con = pool.getConnection();
-			sql = "select * from `order`";
+			sql = "select * from `order` where order_time between ? and ?";
 			pstmt = con.prepareStatement(sql);
+			LocalDateTime now = LocalDateTime.now();
+			LocalDateTime startOfDay = now.with(LocalTime.MIN);
+			LocalDateTime endOfDay = now.with(LocalTime.MAX);
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			pstmt.setString(1,  String.valueOf(startOfDay.format(formatter)));
+			pstmt.setString(2,  String.valueOf(endOfDay.format(formatter)));
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				OrderBean bean = new OrderBean();
