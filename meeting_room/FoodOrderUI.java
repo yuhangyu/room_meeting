@@ -268,10 +268,6 @@ public class FoodOrderUI extends JFrame implements Runnable, ActionListener {
 					return;
 				}
 				new Thread(this).start();
-				if (in == null) {
-					JOptionPane.showMessageDialog(null, "현재 영업시간이 아닙니다.", "경고", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
 				for (int i = 0; i < cartList.size(); i++) {
 					OrderInfoBean beans = new OrderInfoBean();
 					FoodBean bean2 = mgr.food(cartList.getElementAt(i).split(" ")[0]);
@@ -476,13 +472,11 @@ public class FoodOrderUI extends JFrame implements Runnable, ActionListener {
 			connect(host, port);
 			
 			while(true) {
-				if (in != null) {
-					String line = in.readLine();
-					if(line==null)
-						break;
-					else
-						routine(line);
-				}
+				String line = in.readLine();
+				if(line==null)
+					break;
+				else
+					routine(line);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
