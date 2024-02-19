@@ -76,7 +76,6 @@ public class OrderInfo extends JFrame implements ActionListener{
 		Vector<OrderBean> vlist ;
 		OrderMgr mgr = new OrderMgr();
 		vlist = mgr.order();
-		
 			
 		String header[] = {"순서"/**/, "주문한 방","주문한 사람"/*room_num*/, "주문한 시간"/*ordertime*/,"총 금액"/*use_total*/, "주문 상태"/**/};
 		conts = new String [vlist.size()][header.length];
@@ -99,21 +98,22 @@ public class OrderInfo extends JFrame implements ActionListener{
 			public boolean isCellEditable(int i, int c) {return false;}
 			
 		};
-		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-		
 		orderTable = new JTable(model);
 		pane = new JScrollPane(orderTable);
 		
 		Font fnt = new Font("Dialog", Font.BOLD, 15);
 		orderTable.setFont(fnt);
+		orderTable.setRowHeight(30);
+		
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+		
 		
 		for (int i = 0; i < orderTable.getColumnCount(); i++) {
 			orderTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-			
 		}
 	}
 	public static void main(String[] args) {
-		OrderInfo OIF = new OrderInfo();
+		
 	}
 }

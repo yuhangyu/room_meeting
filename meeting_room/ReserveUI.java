@@ -210,6 +210,6 @@ public class ReserveUI extends JFrame implements ActionListener{
 	}
 
 	public static void main(String[] args) {
-		ReserveUI rsv = new ReserveUI();
+		
 	}
 }

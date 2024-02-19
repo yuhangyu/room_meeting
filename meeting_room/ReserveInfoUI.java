@@ -202,6 +202,6 @@ public class ReserveInfoUI extends JFrame implements ActionListener {
 	}
 	
 	public static void main(String[] args) {
-		new ReserveInfoUI();
+		
 	}
 }

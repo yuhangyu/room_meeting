@@ -108,7 +108,6 @@ public class MemberInfoUI extends JFrame implements ActionListener {
 		//선언
 		membertable = new JTable(model);
 		pane = new JScrollPane(membertable);
-		pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);// 항상 세로 스크롤바 표시
 		
 		//폰트 설정
 		Font font = new Font("Dialog", Font.BOLD, 16);
@@ -132,6 +131,6 @@ public class MemberInfoUI extends JFrame implements ActionListener {
 	}
 	
 	public static void main(String[] args) {
-		MemberInfoUI MIUI = new MemberInfoUI();
+		
 	}
 }

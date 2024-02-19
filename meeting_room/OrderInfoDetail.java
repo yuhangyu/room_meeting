@@ -128,8 +128,10 @@ public class OrderInfoDetail extends JFrame {
 		            glist = mgr.gameAll();
 		            for (int j = 0; j < glist.size(); j++) {
 		            	GameBean gbean = glist.get(j);
-		            	if (gbean.getGame().equals(bean.getGamename()))
+		            	if (gbean.getGame().equals(bean.getGamename())) {
 		            		row.add(gbean.getGname() + " (" + bean.getGamename() + ")");
+		            		break;
+		            	}
 		            }
 		            
 		            row.add(String.valueOf(bean.getGamecount()));
@@ -151,7 +153,8 @@ public class OrderInfoDetail extends JFrame {
         ODT = new JTable(model);
         ODT.getTableHeader().setReorderingAllowed(false);
         ODT.getTableHeader().setResizingAllowed(false);
-		ODT.setDefaultEditor(Object.class, null);
+        ODT.setDefaultEditor(Object.class, null);
+        
         // 胶农费 菩澄 积己
         pane = new JScrollPane(ODT);
         pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -164,7 +167,7 @@ public class OrderInfoDetail extends JFrame {
         ODT.getColumnModel().getColumn(4).setPreferredWidth(50);
         ODT.getColumnModel().getColumn(5).setPreferredWidth(50);
         ODT.getColumnModel().getColumn(6).setPreferredWidth(50);
-        ODT.setRowHeight(20);
+        ODT.setRowHeight(30);
         
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -249,7 +252,7 @@ public class OrderInfoDetail extends JFrame {
     }  
     
     public static void main(String[] args) {
-		OrderInfo ori = new OrderInfo();
+	    
 	}
 
 }
