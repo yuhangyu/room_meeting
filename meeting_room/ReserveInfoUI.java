@@ -10,6 +10,7 @@ import java.awt.event.MouseListener;
 import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Vector;
 
@@ -41,6 +42,8 @@ public class ReserveInfoUI extends JFrame implements ActionListener {
 	SimpleDateFormat newFormat2 = new SimpleDateFormat("HH:mm:ss");
 	
 	Container c = getContentPane();
+	int a = 0;
+	boolean flag = false;
 	
 	public ReserveInfoUI() {
 		setSize(1000,440);
@@ -89,32 +92,34 @@ public class ReserveInfoUI extends JFrame implements ActionListener {
 						Date currentDate = new Date();
 						
 						if (resvday.before(currentDate)) {
-							JOptionPane.showMessageDialog(null, "시간이 지난 예약은 취소할 수 없습니다.");
-							return;
+							int option1 = JOptionPane.showOptionDialog(null, "이미 시작된 예약입니다.\n정말 해당 예약을 취소하시겠습니까?", "예약 확인", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"예약취소", "취소"}, "취소");
+							if (option1 == JOptionPane.YES_OPTION) {
+								MyInfoMgr mgr = new MyInfoMgr();
+								ReserveBean bean = new ReserveBean();
+								bean.setResvid((String) reservetable.getValueAt(row, 1));
+								bean.setResvroom((String) reservetable.getValueAt(row, 4));
+								bean.setResvtime((String) reservetable.getValueAt(row, 5));
+								
+								String id = bean.getResvid();
+								String room = bean.getResvroom();
+								String time2 = bean.getResvtime();
+								
+								MyInfoBean bean2 = mgr.select(id);
+								int usermoney = bean2.getMoney();
+								
+								bean2.setID(id);
+								bean2.setMoney(usermoney + money[row]);
+								
+								if (mgr.cancelresv(id, room, time2) && mgr.charge(bean2)) {
+									JOptionPane.showMessageDialog(null, "예약이 취소되었습니다.");
+									prviewlist();
+								}
+							} else {
+								return;
+							}
 						}
 					} catch (ParseException e1) {
 						e1.printStackTrace();
-					}
-					
-					MyInfoMgr mgr = new MyInfoMgr();
-					ReserveBean bean = new ReserveBean();
-					bean.setResvid((String) reservetable.getValueAt(row, 1));
-					bean.setResvroom((String) reservetable.getValueAt(row, 4));
-					bean.setResvtime((String) reservetable.getValueAt(row, 5));
-					
-					String id = bean.getResvid();
-					String room = bean.getResvroom();
-					String time2 = bean.getResvtime();
-					
-					MyInfoBean bean2 = mgr.select(id);
-					int usermoney = bean2.getMoney();
-					
-					bean2.setID(id);
-					bean2.setMoney(usermoney + money[row]);
-					
-					if (mgr.cancelresv(id, room, time2) && mgr.charge(bean2)) {
-						JOptionPane.showMessageDialog(null, "예약이 취소되었습니다.");
-						prviewlist();
 					}
 				}
 			}
@@ -127,38 +132,32 @@ public class ReserveInfoUI extends JFrame implements ActionListener {
 		MyInfoMgr mgr = new MyInfoMgr();
 		
 		vlist = mgr.reserveAll();
-		
-		String header[] = {"번호", "아이디", "이름", "전화번호","방 번호", "예약 날짜", "이용 시간", "이용 인원"};
-		String [][] conts = new String[vlist.size()][header.length];
-		money = new int[vlist.size()];
-		
 		for (int i = 0; i < vlist.size(); i++) {
 			ReserveBean bean = vlist.get(i);
 			
-			try {
-				reservationDate = originalFormat.parse(bean.getResvtime());
-				calendar = Calendar.getInstance();
-				calendar.setTime(reservationDate);
-				calendar.add(Calendar.HOUR_OF_DAY, bean.getResvusetime());
-				
-				EndformattedDate = originalFormat.format(calendar.getTime());
-				EndformattedDate2 = newFormat2.format(calendar.getTime());
-				endtime = originalFormat.parse(EndformattedDate);
-				formattedDate = newFormat.format(reservationDate);
-				formattedDate2 = newFormat2.format(reservationDate);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
+			if (getlist(bean)) a++;
+		}
+		
+		String header[] = {"번호", "아이디", "이름", "전화번호","방 번호", "예약 날짜", "이용 시간", "이용 인원"};
+		String [][] conts = new String[a][header.length];
+		money = new int[a];
+		
+		a = 0;
+		for (int i = 0; i < vlist.size(); i++) {
+			ReserveBean bean = vlist.get(i);
 			
-			conts[i][0] = String.valueOf(i+1);
-			conts[i][1] = bean.getResvid();
-			conts[i][2] = bean.getResvname();
-			conts[i][3] = bean.getResvphone();
-			conts[i][4] = bean.getResvroom();
-			conts[i][5] = bean.getResvtime();
-			conts[i][6] = String.valueOf(bean.getResvusetime());
-			conts[i][7] = String.valueOf(bean.getResvperson());
-			money[i] = bean.getResvtotal();
+			if (getlist(bean)) {
+				conts[a][0] = String.valueOf(a + 1);
+				conts[a][1] = bean.getResvid();
+				conts[a][2] = bean.getResvname();
+				conts[a][3] = bean.getResvphone();
+				conts[a][4] = bean.getResvroom();
+				conts[a][5] = bean.getResvtime();
+				conts[a][6] = String.valueOf(bean.getResvusetime());
+				conts[a][7] = String.valueOf(bean.getResvperson());
+				money[a] = bean.getResvtotal();
+				a++;
+			}
 		}
 				
 		DefaultTableModel model = new DefaultTableModel(conts, header) {
@@ -201,7 +200,33 @@ public class ReserveInfoUI extends JFrame implements ActionListener {
 		}
 	}
 	
+	public boolean getlist(ReserveBean bean) {
+		flag = false;
+		try {
+			reservationDate = originalFormat.parse(bean.getResvtime());
+			calendar = Calendar.getInstance();
+			calendar.setTime(reservationDate);
+			calendar.add(Calendar.HOUR_OF_DAY, bean.getResvusetime());
+			
+			EndformattedDate = originalFormat.format(calendar.getTime());
+			EndformattedDate2 = newFormat2.format(calendar.getTime());
+			endtime = originalFormat.parse(EndformattedDate);
+			formattedDate = newFormat.format(reservationDate);
+			formattedDate2 = newFormat2.format(reservationDate);
+			
+			LocalDate currentDate = LocalDate.now();
+			LocalDate resvDate = LocalDate.parse(formattedDate);
+			
+			if (resvDate.isAfter(currentDate) || resvDate.equals(currentDate)) {
+				flag = true;
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return flag;
+	}
+	
 	public static void main(String[] args) {
-		
+		new ReserveInfoUI();
 	}
 }
