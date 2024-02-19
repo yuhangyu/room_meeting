@@ -12,6 +12,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -118,7 +120,7 @@ public class ReserveInfoUI extends JFrame implements ActionListener {
 	}
 	
 	public void prviewlist() {		
-		Vector<ReserveBean>vlist;
+		Vector<ReserveBean> vlist;
 		MyInfoMgr mgr = new MyInfoMgr();
 		
 		vlist = mgr.reserveAll();
@@ -132,6 +134,22 @@ public class ReserveInfoUI extends JFrame implements ActionListener {
 		money = new int[a];
 		
 		a = 0;
+		
+		Collections.sort(vlist, new Comparator<ReserveBean>() {
+			@Override
+			public int compare(ReserveBean bean1, ReserveBean bean2) {
+				Date date1 = null;
+				Date date2 = null;
+		
+				try {
+					date1 = originalFormat.parse(bean1.getResvtime());
+					date2 = originalFormat.parse(bean2.getResvtime());
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				return date1.compareTo(date2);
+			}
+		});
 		
 		for (int i = 0; i < vlist.size(); i++) {
 			ReserveBean bean = vlist.get(i);

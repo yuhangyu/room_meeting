@@ -6,6 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
@@ -23,6 +26,8 @@ import javax.swing.table.TableModel;
 import javax.swing.text.DefaultFormatter;
 
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Vector;
 
@@ -62,6 +67,8 @@ public class UsageHistoryUI extends JFrame implements ActionListener {
 	SpinnerNumberModel spinnerNumberModel6 = new SpinnerNumberModel(currentDay, 1, 31, 1);
 	JSpinner DaySpinner2 = new JSpinner(spinnerNumberModel6);
 
+	SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
 	UsageHistoryUI(){
 		//버튼 이벤트 추가
 		ok_btn.addActionListener(this);
@@ -145,6 +152,23 @@ public class UsageHistoryUI extends JFrame implements ActionListener {
 		// 데이터 및 컬럼명 배열 정의
 		String[] columnNames = {"순번", "ID", "이름", "전화번호", "이용 룸", "예약 날짜", "이용 시간", "이용 인원"};
 		String[][] data = new String[vlist.size()][columnNames.length];
+		
+		//reservelist를 날짜에 따라 정렬
+		Collections.sort(vlist, new Comparator<ReserveBean>() {
+			@Override
+			public int compare(ReserveBean bean1, ReserveBean bean2) {
+				Date date1 = null;
+				Date date2 = null;
+		
+				try {
+					date1 = originalFormat.parse(bean1.getResvtime());
+					date2 = originalFormat.parse(bean2.getResvtime());
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				return date1.compareTo(date2);
+			}
+		});
 		
 		//순번, 아이디, 이름, 전화번호, 현재잔액 값 conts 배열에 저장
 		for(int i = 0; i < vlist.size(); i++) {
@@ -251,6 +275,23 @@ public class UsageHistoryUI extends JFrame implements ActionListener {
 		// 데이터 및 컬럼명 배열 정의
 		String[] columnNames = {"순번", "ID", "이름", "전화번호", "이용 룸", "예약 날짜", "이용 시간", "이용 인원"};
 		String[][] data = new String[vlist.size()][columnNames.length];
+		
+		//reservelist를 날짜에 따라 정렬
+		Collections.sort(vlist, new Comparator<ReserveBean>() {
+			@Override
+			public int compare(ReserveBean bean1, ReserveBean bean2) {
+				Date date1 = null;
+				Date date2 = null;
+		
+				try {
+					date1 = originalFormat.parse(bean1.getResvtime());
+					date2 = originalFormat.parse(bean2.getResvtime());
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				return date1.compareTo(date2);
+			}
+		});
 		
 		for (int i = 0; i < vlist.size(); i++) {
 			ReserveBean bean = vlist.get(i);

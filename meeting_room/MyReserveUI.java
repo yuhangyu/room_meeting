@@ -168,7 +168,6 @@ public class MyReserveUI extends JFrame implements ActionListener, ListSelection
 					MainPageUI.balance_value_lb.setText(String.valueOf(bean2.getMoney()) + "원");
 					RechargeUI.recharge_value_tf.setText("0");
 					RechargeUI.cancel_btn.doClick();
-					dispose();
 					viewlist();
 				}
 			}
@@ -217,6 +216,23 @@ public class MyReserveUI extends JFrame implements ActionListener, ListSelection
 		String[] columnNames = {"예약 날짜", "시작 시간", "종료 시간", "예약 룸"};
 		String[][] data = new String[a][columnNames.length];
 		
+		//reservelist를 날짜에 따라 정렬
+				Collections.sort(reservelist, new Comparator<ReserveBean>() {
+					@Override
+					public int compare(ReserveBean bean1, ReserveBean bean2) {
+						Date date1 = null;
+						Date date2 = null;
+				
+						try {
+							date1 = originalFormat.parse(bean1.getResvtime());
+							date2 = originalFormat.parse(bean2.getResvtime());
+						} catch (ParseException e) {
+							e.printStackTrace();
+						}
+						return date1.compareTo(date2);
+					}
+				});
+		
 		a = 0;
 		for(int i = 0; i < reservelist.size(); i++ ) {
 			ReserveBean bean = reservelist.get(i);
@@ -260,15 +276,14 @@ public class MyReserveUI extends JFrame implements ActionListener, ListSelection
 			for (int i = 0; i < a; i++) {
 				model.addRow(data[i]);// 새로운 데이터로 모델 업데이트
 			}
+		} else {
+			reserveTable = new JTable(model);
+			reserveTable.getTableHeader().setReorderingAllowed(false);
+			reserveTable.getTableHeader().setResizingAllowed(false);
+			reserveTable.setDefaultEditor(Object.class, null);
+			
+			reservePane = new JScrollPane(reserveTable);
 		}
-		
-		reserveTable = new JTable(model);
-		reserveTable.getTableHeader().setReorderingAllowed(false);
-		reserveTable.getTableHeader().setResizingAllowed(false);
-		reserveTable.setDefaultEditor(Object.class, null);
-		
-		reservePane = new JScrollPane(reserveTable);
-
 		// 수평 스크롤바 비활성화
 		reservePane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -286,23 +301,6 @@ public class MyReserveUI extends JFrame implements ActionListener, ListSelection
 		for (int i = 0; i < reserveTable.getColumnCount(); i++) {
 			reserveTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
 		}
-
-		//reservelist를 날짜에 따라 정렬
-		Collections.sort(reservelist, new Comparator<ReserveBean>() {
-			@Override
-			public int compare(ReserveBean bean1, ReserveBean bean2) {
-				Date date1 = null;
-				Date date2 = null;
-		
-				try {
-					date1 = originalFormat.parse(bean1.getResvtime());
-					date2 = originalFormat.parse(bean2.getResvtime());
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-				return date1.compareTo(date2);
-			}
-		});
 	}
 	
 	public static void main(String[] args) {
