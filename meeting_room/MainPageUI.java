@@ -42,8 +42,8 @@ public class MainPageUI extends JFrame implements ActionListener {
 	JButton deposit_btn = new JButton("충전");
 	JButton myinfo_btn = new JButton("내 정보");
 	JButton logout_btn = new JButton("로그아웃");
-	static JButton purchasefood_btn = new JButton("음식 주문하기");
-	static JButton rentgame_btn = new JButton("보드게임 대여");
+	JButton purchasefood_btn = new JButton("음식 주문하기");
+	JButton rentgame_btn = new JButton("보드게임 대여");
 	static JButton as = new JButton("");
 
 	public MainPageUI() {
