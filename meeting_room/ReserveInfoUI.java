@@ -61,6 +61,10 @@ public class ReserveInfoUI extends JFrame implements ActionListener {
 		
 		c.add(jb);
 
+		reservetable.addMouseListener(new MouseAction());
+		pane.setBounds(0,0,986,440);
+		c.add(pane);
+		
 		//화면 중앙에 오게 설정
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -162,6 +166,8 @@ public class ReserveInfoUI extends JFrame implements ActionListener {
 					a++;
 				}
 			}
+			
+			reservetable.repaint();
 		} else {
 			reservetable = new JTable(model);
 			pane = new JScrollPane(reservetable);
@@ -190,10 +196,6 @@ public class ReserveInfoUI extends JFrame implements ActionListener {
 		for (int i = 0; i < reservetable.getColumnCount(); i++) {
 			reservetable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
 		}
-
-		reservetable.addMouseListener(new MouseAction());
-		pane.setBounds(0,0,986,440);
-		c.add(pane);
 	}
 	
 	public boolean getlist(ReserveBean bean) {
