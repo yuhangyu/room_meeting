@@ -44,6 +44,8 @@ public class ReserveInfoUI extends JFrame implements ActionListener {
 	Container c = getContentPane();
 	int a = 0;
 	boolean flag = false;
+	String header[] = {"번호", "아이디", "이름", "전화번호","방 번호", "예약 날짜", "이용 시간", "이용 인원"};
+	String [][] conts;
 	
 	public ReserveInfoUI() {
 		setSize(1000,440);
@@ -55,10 +57,8 @@ public class ReserveInfoUI extends JFrame implements ActionListener {
 		
 		pane.setBounds(0,0,986,440);	
 		
-		reservetable.addMouseListener(new MouseAction());
 		jb.addActionListener(this);
-			
-		c.add(pane);
+		
 		c.add(jb);
 
 		//화면 중앙에 오게 설정
@@ -81,45 +81,31 @@ public class ReserveInfoUI extends JFrame implements ActionListener {
 		public void mouseClicked(MouseEvent e) {
 			if (e.getClickCount() == 2) {
 				int row = reservetable.getSelectedRow();
-				TableModel tm = reservetable.getModel();
-				String time = (String)tm.getValueAt(row, 5) + " " + (String) tm.getValueAt(row, 6);
 				
-				int option = JOptionPane.showOptionDialog(null, "해당 예약을 취소하시겠습니까?", "예약 확인", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"예약취소", "취소"}, "취소");
-				
-				if (option == JOptionPane.YES_OPTION) {
-					try {
-						Date resvday = originalFormat.parse(time);
-						Date currentDate = new Date();
-						
-						if (resvday.before(currentDate)) {
-							int option1 = JOptionPane.showOptionDialog(null, "이미 시작된 예약입니다.\n정말 해당 예약을 취소하시겠습니까?", "예약 확인", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"예약취소", "취소"}, "취소");
-							if (option1 == JOptionPane.YES_OPTION) {
-								MyInfoMgr mgr = new MyInfoMgr();
-								ReserveBean bean = new ReserveBean();
-								bean.setResvid((String) reservetable.getValueAt(row, 1));
-								bean.setResvroom((String) reservetable.getValueAt(row, 4));
-								bean.setResvtime((String) reservetable.getValueAt(row, 5));
-								
-								String id = bean.getResvid();
-								String room = bean.getResvroom();
-								String time2 = bean.getResvtime();
-								
-								MyInfoBean bean2 = mgr.select(id);
-								int usermoney = bean2.getMoney();
-								
-								bean2.setID(id);
-								bean2.setMoney(usermoney + money[row]);
-								
-								if (mgr.cancelresv(id, room, time2) && mgr.charge(bean2)) {
-									JOptionPane.showMessageDialog(null, "예약이 취소되었습니다.");
-									prviewlist();
+				if (row != -1) {
+					TableModel tm = reservetable.getModel();
+					String time = (String)tm.getValueAt(row, 5) + " " + (String) tm.getValueAt(row, 6);
+					
+					int option = JOptionPane.showOptionDialog(null, "해당 예약을 취소하시겠습니까?", "예약 확인", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"예약취소", "취소"}, "취소");
+					
+					if (option == JOptionPane.YES_OPTION) {
+						try {
+							Date resvday = originalFormat.parse(time);
+							Date currentDate = new Date();
+							
+							if (resvday.before(currentDate)) {
+								int option1 = JOptionPane.showOptionDialog(null, "이미 시작된 예약입니다.\n정말 해당 예약을 취소하시겠습니까?", "예약 확인", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"예약취소", "취소"}, "취소");
+								if (option1 == JOptionPane.YES_OPTION) {
+									cancelresv(row);
+								} else {
+									return;
 								}
 							} else {
-								return;
+								cancelresv(row);
 							}
+						} catch (ParseException e1) {
+							e1.printStackTrace();
 						}
-					} catch (ParseException e1) {
-						e1.printStackTrace();
 					}
 				}
 			}
@@ -138,11 +124,11 @@ public class ReserveInfoUI extends JFrame implements ActionListener {
 			if (getlist(bean)) a++;
 		}
 		
-		String header[] = {"번호", "아이디", "이름", "전화번호","방 번호", "예약 날짜", "이용 시간", "이용 인원"};
 		String [][] conts = new String[a][header.length];
 		money = new int[a];
 		
 		a = 0;
+		
 		for (int i = 0; i < vlist.size(); i++) {
 			ReserveBean bean = vlist.get(i);
 			
@@ -168,16 +154,22 @@ public class ReserveInfoUI extends JFrame implements ActionListener {
 			model = (DefaultTableModel) reservetable.getModel();  // 기존 모델 가져오기
 			model.setRowCount(0);  // 모델의 행 초기화
 			
+			a = 0;
 			for (int i = 0; i < vlist.size(); i++) {
-				model.addRow(conts[i]);  // 새로운 데이터로 모델 업데이트
+				ReserveBean bean = vlist.get(i);
+				if (getlist(bean)) {
+					model.addRow(conts[a]);  // 새로운 데이터로 모델 업데이트
+					a++;
+				}
 			}
+		} else {
+			reservetable = new JTable(model);
+			pane = new JScrollPane(reservetable);
 		}
 		
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		
-		reservetable = new JTable(model);
-		pane = new JScrollPane(reservetable);
 		
 		Font font = new Font("Dialog",Font.BOLD, 16);
 		reservetable.setFont(font);
@@ -198,6 +190,10 @@ public class ReserveInfoUI extends JFrame implements ActionListener {
 		for (int i = 0; i < reservetable.getColumnCount(); i++) {
 			reservetable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
 		}
+
+		reservetable.addMouseListener(new MouseAction());
+		pane.setBounds(0,0,986,440);
+		c.add(pane);
 	}
 	
 	public boolean getlist(ReserveBean bean) {
@@ -224,6 +220,29 @@ public class ReserveInfoUI extends JFrame implements ActionListener {
 			e.printStackTrace();
 		}
 		return flag;
+	}
+	
+	public void cancelresv(int row) {
+		MyInfoMgr mgr = new MyInfoMgr();
+		ReserveBean bean = new ReserveBean();
+		bean.setResvid((String) reservetable.getValueAt(row, 1));
+		bean.setResvroom((String) reservetable.getValueAt(row, 4));
+		bean.setResvtime((String) reservetable.getValueAt(row, 5));
+		
+		String id = bean.getResvid();
+		String room = bean.getResvroom();
+		String time2 = bean.getResvtime();
+		
+		MyInfoBean bean2 = mgr.select(id);
+		int usermoney = bean2.getMoney();
+		
+		bean2.setID(id);
+		bean2.setMoney(usermoney + money[row]);
+
+		if (mgr.cancelresv(id, room, time2) && mgr.charge(bean2)) {
+			JOptionPane.showMessageDialog(null, "예약이 취소되었습니다.");
+			prviewlist();
+		}
 	}
 	
 	public static void main(String[] args) {
