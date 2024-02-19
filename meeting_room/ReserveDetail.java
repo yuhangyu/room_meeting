@@ -2,6 +2,7 @@ package meeting_room;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -140,27 +141,27 @@ public class ReserveDetail implements ActionListener {
 		}
 		
 		// 현재 시간 보다 이전 시간에 예약 하는 경우에 대한 예외 처리 
-				if (currentYear == ((Integer)selectYear).intValue()) {
-					if (currentMonth == ((Integer)selectMonth).intValue()) {
-						if (currentDay > ((Integer)selectDay).intValue()) {
+		if (currentYear == ((Integer)selectYear).intValue()) {
+			if (currentMonth == ((Integer)selectMonth).intValue()) {
+				if (currentDay > ((Integer)selectDay).intValue()) {
+					errorMsg();
+					return;
+				} else if (currentDay == ((Integer)selectDay).intValue()) {
+					if (currentHour == ((Integer)selectHour).intValue()) {
+						if (currentMin > ((Integer)selectMin).intValue() || currentMin == ((Integer)selectMin).intValue()) {
 							errorMsg();
 							return;
-						} else if (currentDay == ((Integer)selectDay).intValue()) {
-							if (currentHour == ((Integer)selectHour).intValue()) {
-								if (currentMin > ((Integer)selectMin).intValue() || currentMin == ((Integer)selectMin).intValue()) {
-									errorMsg();
-									return;
-								}
-							} else if (currentHour > ((Integer)selectHour).intValue()) {
-								errorMsg();
-								return;
-							}
 						}
-					} else if (currentMonth > ((Integer)selectMonth).intValue()) {
+					} else if (currentHour > ((Integer)selectHour).intValue()) {
 						errorMsg();
 						return;
 					}
 				}
+			} else if (currentMonth > ((Integer)selectMonth).intValue()) {
+				errorMsg();
+				return;
+			}
+		}
 		
 		
 		// 선택한 룸에 예약할 때 선택한 시간에 이미 예약이 차 있는 경우에 대한 예외 처리 
@@ -184,12 +185,6 @@ public class ReserveDetail implements ActionListener {
 		        }
 			}
 		}
-		
-		
-		
-		
-		
-		
 		
 		ReserveBean bean = new ReserveBean();
 		mgr = new MyInfoMgr();
@@ -243,24 +238,40 @@ public class ReserveDetail implements ActionListener {
 			Date date = originalFormat.parse(str + ":00");
 			
 			// getResvusetime()을 시간으로 변환하고 더하기
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date); // 캘린더의 데이트를 받아온 시간으로 변경
-            calendar.add(Calendar.HOUR_OF_DAY, resvtime); // 캘린더에 사용시간 더하기
+	            Calendar calendar = Calendar.getInstance();
+	            calendar.setTime(date); // 캘린더의 데이트를 받아온 시간으로 변경
+	            calendar.add(Calendar.HOUR_OF_DAY, resvtime); // 캘린더에 사용시간 더하기
 			
 			String formattedDate = newFormat.format(date); // 포멧 변경 YY-MM-DD
 			String formattedDate2 = newFormat2.format(date); // 포멧 변경 HH:MM:SS
 			String EndformattedDate2 = newFormat2.format(calendar.getTime()); // 캘린더에 사용시간을 더하고 포맷 변경하여 출력
 			
-			bean4.setRoom(roomInfo);
-			bean4.setID(id);
-			bean4.setDay(day);
-			bean4.setIntime(formattedDate + " " + formattedDate2);
-			bean4.setOuttime(formattedDate + " " + EndformattedDate2);
-			bean4.setRoom_total(totalPrice);
-			bean4.setTotal(totalPrice);
+			Date aTime = parseTime(formattedDate2);
+			Date bTime = parseTime(EndformattedDate2);
+			Date startTime = parseTime("09:00:00");
+			Date endTime = parseTime("23:00:01");
+			
+			
+			if (isTimeInRange(aTime, startTime, endTime) && isTimeInRange(bTime, startTime, endTime)) {
+				bean4.setRoom(roomInfo);
+				bean4.setID(id);
+				bean4.setDay(day);
+				bean4.setIntime(formattedDate + " " + formattedDate2);
+				bean4.setOuttime(formattedDate + " " + EndformattedDate2);
+				bean4.setRoom_total(totalPrice);
+				bean4.setTotal(totalPrice);
+			} else {
+				optionPane = new JOptionPane("영업 시간은 09시부터 23시까지 입니다. \n예약 시간을 확인해주세요.", JOptionPane.ERROR_MESSAGE);
+				dialog = optionPane.createDialog(rdUI, "예약 시간 오류 안내");
+				dialog.setLocationRelativeTo(rdUI);
+				dialog.setVisible(true);
+				return;
+			}
 		} catch (Exception e) {
 			return;
 		}
+		
+		
 		
 		if(mgr.reserve(bean)) {
 			if (mgr.total(bean4)) {
@@ -276,6 +287,20 @@ public class ReserveDetail implements ActionListener {
 				}
 			}
 		}
+	}
+	
+	private static Date parseTime(String timeStr) {
+		try {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+			return dateFormat.parse(timeStr);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private static boolean isTimeInRange(Date time, Date startTime, Date endTime) {
+		return time.compareTo(startTime) >= 0 && time.compareTo(endTime) <= 0;
 	}
 	
 	private void updatePrice() {   

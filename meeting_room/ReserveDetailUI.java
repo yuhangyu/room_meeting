@@ -62,7 +62,7 @@ public class ReserveDetailUI extends JFrame implements ActionListener {
 	
 	// SpinnerNumberModel을 사용하여 JSpinner 초기화 (9부터 시작, 24까지) 시를 조정
 	// 현재 시간의 '시' 를 디폴트로 
-	SpinnerNumberModel spinnerNumberModel1 = new SpinnerNumberModel(currentHour, 9, 25, 1);
+	SpinnerNumberModel spinnerNumberModel1 = new SpinnerNumberModel(currentHour, 9, 24, 1);
 	JSpinner hourSpinner = new JSpinner(spinnerNumberModel1);
 	
 	// SpinnerNumberModel을 사용하여 JSpinner 초기화 (0부터 시작, 60까지) 분을 조정
@@ -130,7 +130,11 @@ public class ReserveDetailUI extends JFrame implements ActionListener {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				int newValue = (int) hourSpinner.getValue();
-				if (newValue > 24) {
+				int newValue2 = (int) minSpinner.getValue();
+				if ((newValue == 23 && newValue2 > 0)) {
+					hourSpinner.setValue(9);
+					minSpinner.setValue(0);
+				} else if (newValue > 23) {
 					hourSpinner.setValue(9); // 24를 초과하면 9로 변경
 				}
 			}
@@ -141,8 +145,15 @@ public class ReserveDetailUI extends JFrame implements ActionListener {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				int newValue = (int) minSpinner.getValue();
+				int newValue2 = (int) hourSpinner.getValue();
 				if (newValue >= 60) {
-					minSpinner.setValue(0); // 60 이상이면 0으로 변경
+					if (newValue2 == 22) {
+						hourSpinner.setValue(9);
+						minSpinner.setValue(0); // 60 이상이면 0으로 변경
+					} else {
+						minSpinner.setValue(0); // 60 이상이면 0으로 변경
+						hourSpinner.setValue(newValue2 + 1);
+					}
 				}
 			}
 		});

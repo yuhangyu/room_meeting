@@ -295,8 +295,11 @@ public class GameOrderUI extends JFrame implements Runnable, ActionListener {
 		                    JOptionPane.showMessageDialog(null, "잔액이 부족합니다.", "경고", JOptionPane.ERROR_MESSAGE);
 		                    return;
 		                }
-
 		                new Thread(this).start();
+		                if (in == null) {
+						JOptionPane.showMessageDialog(null, "현재 영업시간이 아닙니다.", "경고", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 		                for (int i = 0; i < cartList.size(); i++) {
 		                    OrderInfoBean beans = new OrderInfoBean();
 		                        GameBean bean2 = mgr.game(cartList.getElementAt(i).split(" - ")[0]);
@@ -500,11 +503,13 @@ public class GameOrderUI extends JFrame implements Runnable, ActionListener {
 			connect(host, port);
 			
 			while(true) {
-				String line = in.readLine();
-				if(line==null)
-					break;
-				else
-					routine(line);
+				if (in != null) {
+					String line = in.readLine();
+					if(line==null)
+						break;
+					else
+						routine(line);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

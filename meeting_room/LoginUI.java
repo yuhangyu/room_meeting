@@ -8,10 +8,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -26,9 +22,6 @@ import javax.swing.JTextField;
 
 public class LoginUI extends JFrame implements ActionListener, ItemListener, KeyListener {
 	public static String ID;
-	Socket sock;
-	BufferedReader in;
-	PrintWriter out;
 	
 	//요소생성
 	JLabel id_lb = new JLabel("아이디");	
@@ -168,50 +161,6 @@ public class LoginUI extends JFrame implements ActionListener, ItemListener, Key
 			//체크박스가 선택 해제되면 실행되는 코드
 			check_action = 1;
 		}
-	}
-	
-	public void run() {
-		try {
-			String host = "127.0.0.1";
-			int port = MeetingServer.PORT;
-			connect(host, port);
-			
-			while(true) {
-				String line = in.readLine();
-				if(line==null)
-					break;
-				else
-					routine(line);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void connect(String host, int port) {
-		try {
-			sock = new Socket(host, port);
-			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-			out = new PrintWriter(sock.getOutputStream(),true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void routine(String line) {
-		int idx = line.indexOf(MeetingProtocol.MODE);
-		String cmd = line.substring(0, idx);
-		String data = line.substring(idx + 1);
-		
-		if (cmd.equals(MeetingProtocol.MESSAGE)) {
-			idx = data.indexOf(';');
-			cmd = data.substring(0, idx);
-			data = data.substring(idx + 1);
-		}
-	}
-	
-	public void sendMessage(String msg) {
-		out.println(msg);
 	}
 	
 	public static void main(String[] args) {
