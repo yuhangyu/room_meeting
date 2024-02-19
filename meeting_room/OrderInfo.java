@@ -96,7 +96,6 @@ public class OrderInfo extends JFrame implements ActionListener{
 			}
 		DefaultTableModel model = new DefaultTableModel(conts, header) {
 			public boolean isCellEditable(int i, int c) {return false;}
-			
 		};
 		orderTable = new JTable(model);
 		pane = new JScrollPane(orderTable);
@@ -108,6 +107,8 @@ public class OrderInfo extends JFrame implements ActionListener{
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		
+		orderTable.getTableHeader().setResizingAllowed(false);
+		orderTable.getTableHeader().setReorderingAllowed(false);
 		
 		for (int i = 0; i < orderTable.getColumnCount(); i++) {
 			orderTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);

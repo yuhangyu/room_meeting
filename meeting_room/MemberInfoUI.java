@@ -115,6 +115,7 @@ public class MemberInfoUI extends JFrame implements ActionListener {
 
 		//크기 조절 불가능
 		membertable.getTableHeader().setResizingAllowed(false);
+		membertable.getTableHeader().setReorderingAllowed(false);
 		
 		//컬럼 사이즈 지정
 		membertable.getColumnModel().getColumn(0).setPreferredWidth(25);
