@@ -65,6 +65,7 @@ public class FoodOrderUI extends JFrame implements Runnable, ActionListener {
 	String in_time;
 	JLabel requestLabel = new JLabel("주문 요청사항: ");
 	JTextField requestField = new JTextField(20);
+	boolean flag = false;
 	
 	 public void updateTotalPrice() {
 	        int total = 0;
@@ -256,6 +257,11 @@ public class FoodOrderUI extends JFrame implements Runnable, ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == purchaseButton) {
 			try {
+				new Thread(this).start();
+				if (flag == false) {
+					JOptionPane.showMessageDialog(null, "현재 영업 시간이 아닙니다.", "경고", JOptionPane.WARNING_MESSAGE);
+					return;
+				} else if (flag == true) {
 			if (cartList.isEmpty()) {
 				JOptionPane.showMessageDialog(null, "장바구니가 비어있습니다.", "경고", JOptionPane.WARNING_MESSAGE);
 			} else {
@@ -267,7 +273,6 @@ public class FoodOrderUI extends JFrame implements Runnable, ActionListener {
 					JOptionPane.showMessageDialog(null, "잔액이 부족합니다.", "경고", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				new Thread(this).start();
 				for (int i = 0; i < cartList.size(); i++) {
 					OrderInfoBean beans = new OrderInfoBean();
 					FoodBean bean2 = mgr.food(cartList.getElementAt(i).split(" ")[0]);
@@ -303,6 +308,7 @@ public class FoodOrderUI extends JFrame implements Runnable, ActionListener {
 				}
 			}
 			totalLabel.setText("총 주문 금액: 0");
+				}
 		        } catch (Exception ex) {
 			            ex.printStackTrace();
 			        }
@@ -470,7 +476,7 @@ public class FoodOrderUI extends JFrame implements Runnable, ActionListener {
 			String host = "127.0.0.1";
 			int port = MeetingServer.PORT;
 			connect(host, port);
-			
+			flag = true;
 			while(true) {
 				String line = in.readLine();
 				if(line==null)
@@ -479,6 +485,7 @@ public class FoodOrderUI extends JFrame implements Runnable, ActionListener {
 					routine(line);
 			}
 		} catch (Exception e) {
+			flag = false;
 			e.printStackTrace();
 		}
 	}
